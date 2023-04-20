@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 // @mui
-import { Link, Stack, IconButton, InputAdornment, TextField, Checkbox } from '@mui/material';
+import { Link, Stack, IconButton, Typography, InputAdornment, TextField, Checkbox } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 // components
 import Iconify from '../../../components/iconify';
@@ -20,11 +20,11 @@ export default function LoginForm() {
   return (
     <>
       <Stack spacing={3}>
-        <TextField name="email" label="Email address" />
+        <TextField name="email" label="Adres email" />
 
         <TextField
           name="password"
-          label="Password"
+          label="Hasło"
           type={showPassword ? 'text' : 'password'}
           InputProps={{
             endAdornment: (
@@ -39,14 +39,17 @@ export default function LoginForm() {
       </Stack>
 
       <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ my: 2 }}>
-        <Checkbox name="remember" label="Remember me" />
-        <Link variant="subtitle2" underline="hover">
-          Forgot password?
-        </Link>
+      <Stack direction="row" alignItems="center" spacing={0}>
+        <Checkbox name="remember" label="Remember me"/>
+        <Typography variant="body2">Zapamiętaj mnie</Typography>
       </Stack>
+      <Link variant="subtitle2" underline="hover">
+        Nie pamiętasz hasła?
+      </Link>
+    </Stack>
 
       <LoadingButton fullWidth size="large" type="submit" variant="contained" onClick={handleClick}>
-        Login
+        Zaloguj
       </LoadingButton>
     </>
   );
