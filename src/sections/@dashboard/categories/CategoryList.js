@@ -6,22 +6,23 @@ import ListItemText from "@mui/material/ListItemText";
 import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@mui/icons-material/Delete";
 import SearchField from "./SearchField";
-import SelectCategory from "./SelectCategory";
+import RadioGroup from "./RadioGroup";
 
+// aby ta implementacja wyszukiwania działała wartości muszą być unikalne
 export default function CheckboxList() {
-  const [searchText, setSearchText] = useState("");
+  const [searchText, setSearchText] = useState(""); // Dodaj stan dla tekstu wyszukiwania
   const handleToggle = (value) => () => {
     // logika
   };
 
   const handleSearch = (newSearchText) => {
-    setSearchText(newSearchText);
+    setSearchText(newSearchText); // Aktualizuj stan z tekstem wyszukiwania
   };
 
 return (
     <div>
       <SearchField handleSearch={handleSearch} />
-      <SelectCategory />
+      <RadioGroup />
       <List
         sx={{
           width: "100%",
