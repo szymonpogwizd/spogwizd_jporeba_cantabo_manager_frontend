@@ -52,7 +52,7 @@ const navConfig = [
     icon: icon('playlist_add_black_24dp'),
   },
   {
-    title: 'Kategorie',
+    title: 'categories',
     path: '/dashboard/categories',
     icon: icon('category_black_24dp'),
   },
