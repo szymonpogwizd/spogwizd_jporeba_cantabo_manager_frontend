@@ -32,7 +32,7 @@ const navConfig = [
     icon: icon('insights_black_24dp'),
   },
   {
-    title: 'Pieśni',
+    title: 'songs',
     path: '/dashboard/songs',
     icon: icon('library_music_black_24dp'),
   },
@@ -68,7 +68,7 @@ const navConfig = [
   },
   {
     title: 'Kontakt',
-    path: '/dashboard/contacts',
+    path: '/dashboard/contact',
     icon: icon('chat_bubble_black_24dp'),
   },
   {
