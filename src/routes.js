@@ -11,6 +11,7 @@ import ProductsPage from './pages/ProductsPage';
 import DashboardAppPage from './pages/DashboardAppPage';
 import Songs from './pages/Songs';
 import Categories from './pages/Categories';
+import Users from './pages/Users';
 
 // ----------------------------------------------------------------------
 
@@ -27,6 +28,7 @@ export default function Router() {
         { path: 'blog', element: <BlogPage /> },
         { path: 'songs', element: <Songs /> },
         { path: 'categories', element: <Categories /> },
+        { path: 'users', element: <Users /> },
       ],
     },
     {

@@ -72,7 +72,7 @@ const navConfig = [
     icon: icon('chat_bubble_black_24dp'),
   },
   {
-    title: 'Użytkownicy',
+    title: 'users',
     path: '/dashboard/users',
     icon: icon('people_black_24dp'),
   },
