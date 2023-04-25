@@ -17,6 +17,10 @@ export default function LoginForm() {
     navigate('/dashboard', { replace: true });
   };
 
+   const handleGoToPasswordRecovery = () => {
+     navigate('/passwordRecovery');
+   };
+
   return (
     <>
       <Stack spacing={3}>
@@ -43,7 +47,11 @@ export default function LoginForm() {
         <Checkbox name="remember" label="Remember me"/>
         <Typography variant="body2">Zapamiętaj mnie</Typography>
       </Stack>
-      <Link variant="subtitle2" underline="hover">
+      <Link
+        variant="subtitle2"
+        underline="hover"
+        style={{cursor: 'pointer' }}
+        onClick={handleGoToPasswordRecovery}>
         Nie pamiętasz hasła?
       </Link>
     </Stack>
