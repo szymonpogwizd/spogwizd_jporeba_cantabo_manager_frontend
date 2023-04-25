@@ -87,9 +87,9 @@ const navConfig = [
     icon: icon('ic_lock'),
   },
   {
-      title: 'Odzyskiwanie hasła',
-      path: '/passwordRecovery',
-      icon: icon('ic_lock'),
+    title: 'passwordRecovery',
+    path: '/passwordRecovery',
+    icon: icon('ic_lock'),
     },
   {
     title: 'Error 404',
