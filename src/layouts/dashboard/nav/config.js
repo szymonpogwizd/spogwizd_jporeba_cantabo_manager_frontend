@@ -57,7 +57,7 @@ const navConfig = [
     icon: icon('category_black_24dp'),
   },
   {
-    title: 'Profile',
+    title: 'profiles',
     path: '/dashboard/profiles',
     icon: icon('portrait_black_24dp'),
   },

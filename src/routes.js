@@ -13,6 +13,7 @@ import DashboardAppPage from './pages/DashboardAppPage';
 import Songs from './pages/Songs';
 import Categories from './pages/Categories';
 import Users from './pages/Users';
+import Profiles from './pages/Profiles';
 
 // ----------------------------------------------------------------------
 
@@ -30,6 +31,7 @@ export default function Router() {
         { path: 'songs', element: <Songs /> },
         { path: 'categories', element: <Categories /> },
         { path: 'users', element: <Users /> },
+        { path: 'profiles', element: <Profiles /> },
       ],
     },
     {
