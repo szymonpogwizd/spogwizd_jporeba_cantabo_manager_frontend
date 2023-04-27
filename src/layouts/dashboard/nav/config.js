@@ -37,7 +37,7 @@ const navConfig = [
     icon: icon('library_music_black_24dp'),
   },
   {
-    title: 'Zarządzanie pieśniami',
+    title: 'songManager',
     path: '/dashboard/songManager',
     icon: icon('lyrics_black_24dp'),
   },
