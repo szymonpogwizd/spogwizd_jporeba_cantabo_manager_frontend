@@ -15,6 +15,7 @@ import Categories from './pages/Categories';
 import Users from './pages/Users';
 import Profiles from './pages/Profiles';
 import SongManager from './pages/SongManager';
+import Groups from './pages/Groups'
 
 // ----------------------------------------------------------------------
 
@@ -34,6 +35,7 @@ export default function Router() {
         { path: 'users', element: <Users /> },
         { path: 'profiles', element: <Profiles /> },
         { path: 'songManager', element: <SongManager /> },
+        {path: 'groups', element: <Groups/> },
       ],
     },
     {
