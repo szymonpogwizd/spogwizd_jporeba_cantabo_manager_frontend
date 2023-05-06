@@ -11,6 +11,7 @@ import SelectType from "./SelectType";
 export default function CheckboxList() {
   const [searchText, setSearchText] = useState("");
   const [data, setData] = useState([]);
+  const [itemToDelete, setItemToDelete] = useState(null);
 
   useEffect(() => {
     fetch("http://localhost:8080/dashboard/users")
@@ -18,12 +19,35 @@ export default function CheckboxList() {
       .then((data) => {
         console.log(data);
         setData(data);
+
+        if (itemToDelete !== null) {
+          setData((prevState) => {
+            const index = prevState.findIndex((item) => item.id === itemToDelete);
+            if (index !== -1) {
+              prevState.splice(index, 1);
+              return [...prevState];
+            }
+            return prevState;
+          });
+          setItemToDelete(null);
+        }
       });
-  }, []);
+  }, [itemToDelete]);
+
+  const handleDelete = (value) => () => {
+    console.log(value);
+    fetch(`http://localhost:8080/dashboard/users/${value}`, { method: "DELETE" })
+      .then(() => {
+        setItemToDelete(value);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
 
   const handleToggle = (value) => () => {
-    // logika
-  };
+    // logika do zrobienia
+  }
 
   const handleSearch = (newSearchText) => {
     setSearchText(newSearchText);
@@ -55,7 +79,11 @@ return (
             <ListItem
               key={item.id}
               secondaryAction={
-                <IconButton edge="end" aria-label="delete">
+                <IconButton
+                  edge="end"
+                  aria-label="delete"
+                  onClick={handleDelete(item.id)}
+                >
                   <DeleteIcon />
                 </IconButton>
               }
