@@ -18,7 +18,7 @@ export default function Grupy() {
 return (
     <>
       <Helmet>
-        <title> Użytkownicy | Cantabo Manager </title>
+        <title> Grupy | Cantabo Manager </title>
       </Helmet>
 
       <Container maxWidth="xl">

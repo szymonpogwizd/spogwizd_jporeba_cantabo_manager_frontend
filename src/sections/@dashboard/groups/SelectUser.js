@@ -13,7 +13,7 @@ export default function SelectLabels() {
 
   return (
     <div>
-      <FormControl sx={{ width: "100%", marginBottom: 2 }}>
+      <FormControl sx={{ width: "100%", marginBottom: 2, marginTop: 2 }}>
         <InputLabel id="demo-simple-select-helper-label">Dodaj Użytkownika</InputLabel>
         <Select
           labelId="demo-simple-select-helper-label"
