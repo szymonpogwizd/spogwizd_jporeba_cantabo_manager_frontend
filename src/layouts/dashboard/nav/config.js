@@ -67,7 +67,7 @@ const navConfig = [
     icon: icon('people_black_24dp'),
   },
   {
-    title: 'Grupy',
+    title: 'grupy',
     path: '/dashboard/groups',
     icon: icon('groups_black_24dp'),
   },
