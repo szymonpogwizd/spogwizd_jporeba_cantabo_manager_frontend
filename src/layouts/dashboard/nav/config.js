@@ -33,7 +33,7 @@ const navConfig = [
   },
   {
     title: 'Playlisty',
-    path: '/dashboard/playlists',
+    path: '/dashboard/playlist',
     icon: icon('queue_music_black_24dp'),
   },
   {
