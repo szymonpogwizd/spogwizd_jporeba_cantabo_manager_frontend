@@ -17,7 +17,6 @@ export default function CheckboxList() {
     fetch("http://localhost:8080/dashboard/users")
       .then((response) => response.json())
       .then((data) => {
-        console.log(data);
         setData(data);
 
         if (itemToDelete !== null) {
@@ -35,7 +34,6 @@ export default function CheckboxList() {
   }, [itemToDelete]);
 
   const handleDelete = (value) => () => {
-    console.log(value);
     fetch(`http://localhost:8080/dashboard/users/${value}`, { method: "DELETE" })
       .then(() => {
         setItemToDelete(value);

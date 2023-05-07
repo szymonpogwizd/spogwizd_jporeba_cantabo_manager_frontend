@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useState, useEffect } from "react";
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
@@ -6,6 +6,15 @@ import Select, { SelectChangeEvent } from '@mui/material/Select';
 
 export default function SelectLabels() {
   const [songCategory, setSongCategory] = React.useState('');
+    const [data, setData] = useState([]);
+
+    useEffect(() => {
+      fetch("http://localhost:8080/dashboard/songs/categories")
+        .then((response) => response.json())
+        .then((data) => {
+          setData(data);
+        });
+    }, []);
 
   const handleChange = (event: SelectChangeEvent) => {
     setSongCategory(event.target.value);
@@ -25,9 +34,11 @@ export default function SelectLabels() {
           <MenuItem value="">
             <em>None</em>
           </MenuItem>
-          <MenuItem value={10}>Ten</MenuItem>
-          <MenuItem value={20}>Twenty</MenuItem>
-          <MenuItem value={30}>Thirty</MenuItem>
+          {data.map((category) => (
+            <MenuItem key={category.id} value={category.id}>
+              {category.name}
+            </MenuItem>
+          ))}
         </Select>
       </FormControl>
     </div>

@@ -12,7 +12,6 @@ export default function SelectLabels() {
     fetch("http://localhost:8080/dashboard/users/userTypes")
       .then((response) => response.json())
       .then((data) => {
-        console.log(data);
         setData(data);
       });
   }, []);
