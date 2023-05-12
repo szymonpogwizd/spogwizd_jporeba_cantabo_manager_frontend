@@ -5,9 +5,8 @@ import ListItemButton from "@mui/material/ListItemButton";
 import ListItemText from "@mui/material/ListItemText";
 import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@mui/icons-material/Delete";
-
+import SearchField from "./SearchField";
 import SelectType from "./SelectType";
-import TextFieldName from "./TextFieldName"
 
 export default function CheckboxList() {
   const [searchText, setSearchText] = useState("");
@@ -15,7 +14,7 @@ export default function CheckboxList() {
   const [itemToDelete, setItemToDelete] = useState(null);
 
   useEffect(() => {
-    fetch("http://localhost:8080/dashboard/users")
+    fetch("http://localhost:8080/dashboard/playlists")
       .then((response) => response.json())
       .then((data) => {
         console.log(data);
@@ -37,7 +36,7 @@ export default function CheckboxList() {
 
   const handleDelete = (value) => () => {
     console.log(value);
-    fetch(`http://localhost:8080/dashboard/users/${value}`, { method: "DELETE" })
+    fetch(`http://localhost:8080/dashboard/playlists/${value}`, { method: "DELETE" })
       .then(() => {
         setItemToDelete(value);
       })
@@ -56,7 +55,7 @@ export default function CheckboxList() {
 
 return (
     <div>
-      <TextFieldName handleSearch={handleSearch} />
+      <SearchField handleSearch={handleSearch} />
       <SelectType />
       <List
         sx={{

@@ -6,11 +6,11 @@ import { Grid, Container, Typography } from '@mui/material';
 import {
    SearchField,
    SelectCategory,
-   CategoryList,
    TextFieldName,
-   PlaylistList,
+   PlaylistEditList,
    FloatingActionButtonsSave,
    FloatingActionButtonsAdd,
+   PlaylistList,
 
 } from '../sections/@dashboard/Playlists';
 
@@ -30,7 +30,7 @@ return (
                     <Grid item xs ={12} sm={6}>
                          {/* Lewa strona */}
                         <Grid>
-                            <CategoryList/>
+                            <PlaylistList/>
                         </Grid>
                         <Grid>
                             <FloatingActionButtonsAdd />
@@ -40,7 +40,7 @@ return (
                          {/* Prawa strona */}
                         <Grid>
                             <Grid item xs={12}>
-                                <PlaylistList />
+                                <PlaylistEditList />
                             </Grid>
                             <Grid>
                                 <FloatingActionButtonsSave />
