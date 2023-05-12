@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 // @mui
 import { useTheme } from '@mui/material/styles';
@@ -19,6 +20,44 @@ import {
 
 export default function Users() {
   const theme = useTheme();
+    const [nameValue, setTextValue] = useState('');
+    const [emailValue, setEmailValue] = useState('');
+    const [activeValue, setActive] = useState(false);
+
+
+    const handleSaveClick = () => {
+      const data = {
+        name: nameValue,
+        email: emailValue,
+        active: activeValue,
+      };
+
+      fetch("http://localhost:8080/dashboard/users", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          console.log("Odpowiedź z serwera:", data);
+        });
+    };
+
+    const handleTextChange = (event) => {
+    const value = event.target.value;
+      setTextValue(value);
+    }
+
+    const handleEmailChange = (event) => {
+      const value = event.target.value;
+      setEmailValue(value);
+    }
+
+    const handleSwitchChange = (value) => {
+      setActive(value);
+    };
 
   return (
     <>
@@ -51,10 +90,10 @@ export default function Users() {
             {/* Prawa strona */}
             <Grid>
               <Grid item xs={12}>
-                <TextFieldName />
+                <TextFieldName onChange={handleTextChange}/>
               </Grid>
               <Grid item xs={12}>
-                <TextFieldEmail />
+                <TextFieldEmail onChange={handleEmailChange} />
               </Grid>
               <Grid item xs={12}>
                 <SelectRole />
@@ -63,17 +102,16 @@ export default function Users() {
                 <SelectGroup />
               </Grid>
               <Grid item xs={12}>
-                <SwitchActive />
+                <SwitchActive onSwitchChange={handleSwitchChange} />
               </Grid>
               <Grid item xs={12}>
-                <SetPassword />
+                <SetPassword onSwitchChange={handleSwitchChange}/>
               </Grid>
               <Grid item xs={12}>
-                <FloatingActionButtonsSave />
+                <FloatingActionButtonsSave onClick={handleSaveClick}/>
               </Grid>
             </Grid>
           </Grid>
-
         </Grid>
 
       </Container>
