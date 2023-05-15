@@ -24,6 +24,7 @@ export default function Users() {
   const [emailValue, setEmailValue] = useState('');
   const [activeValue, setActiveValue] = useState(true);
   const [roleValue, setRoleValue] = useState('');
+  const [groupValue, setGroupValue] = useState();
 
   const handleSaveClick = () => {
     const data = {
@@ -31,6 +32,7 @@ export default function Users() {
       email: emailValue,
       active: activeValue,
       userType: roleValue,
+      group: groupValue,
     };
 
     fetch("http://localhost:8080/dashboard/users", {
@@ -62,6 +64,10 @@ export default function Users() {
 
     const handleRoleChange = (value) => {
         setRoleValue(value);
+    };
+
+    const handleGroupChange = (value) => {
+        setGroupValue(value);
     };
 
   return (
@@ -103,7 +109,7 @@ export default function Users() {
                 <SelectRole onChange={handleRoleChange} />
               </Grid>
               <Grid item xs={12}>
-                <SelectGroup />
+                <SelectGroup onChange={handleGroupChange}/>
               </Grid>
               <Grid item xs={12}>
                 <SwitchActive onChange={handleSwitchChange} />
