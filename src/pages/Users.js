@@ -20,43 +20,48 @@ import {
 
 export default function Users() {
   const theme = useTheme();
-    const [nameValue, setTextValue] = useState('');
-    const [emailValue, setEmailValue] = useState('');
-    const [activeValue, setActive] = useState(false);
+  const [nameValue, setNameValue] = useState('');
+  const [emailValue, setEmailValue] = useState('');
+  const [activeValue, setActiveValue] = useState(true);
+  const [roleValue, setRoleValue] = useState('');
 
-
-    const handleSaveClick = () => {
-      const data = {
-        name: nameValue,
-        email: emailValue,
-        active: activeValue,
-      };
-
-      fetch("http://localhost:8080/dashboard/users", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          console.log("Odpowiedź z serwera:", data);
-        });
+  const handleSaveClick = () => {
+    const data = {
+      name: nameValue,
+      email: emailValue,
+      active: activeValue,
+      userType: roleValue,
     };
 
-    const handleTextChange = (event) => {
+    fetch("http://localhost:8080/dashboard/users", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("Odpowiedź z serwera:", data);
+      });
+  };
+
+  const handleTextChange = (event) => {
     const value = event.target.value;
-      setTextValue(value);
-    }
+    setNameValue(value);
+  }
 
-    const handleEmailChange = (event) => {
-      const value = event.target.value;
-      setEmailValue(value);
-    }
+  const handleEmailChange = (event) => {
+    const value = event.target.value;
+    setEmailValue(value);
+  }
 
-    const handleSwitchChange = (value) => {
-      setActive(value);
+  const handleSwitchChange = (value) => {
+    setActiveValue(value);
+  };
+
+    const handleRoleChange = (value) => {
+        setRoleValue(value);
     };
 
   return (
@@ -70,14 +75,13 @@ export default function Users() {
           Użytkownicy
         </Typography>
 
-         <Grid container spacing={10}>
-
+        <Grid container spacing={10}>
           <Grid item xs={12} sm={6}>
             {/* Lewa strona */}
             <Grid>
               <Grid item xs={12}>
                 {/* Pierwszy element */}
-                 <UserList />
+                <UserList />
               </Grid>
               <Grid item xs={12}>
                 {/* Drugi element */}
@@ -90,22 +94,22 @@ export default function Users() {
             {/* Prawa strona */}
             <Grid>
               <Grid item xs={12}>
-                <TextFieldName onChange={handleTextChange}/>
+                <TextFieldName onChange={handleTextChange} />
               </Grid>
               <Grid item xs={12}>
                 <TextFieldEmail onChange={handleEmailChange} />
               </Grid>
               <Grid item xs={12}>
-                <SelectRole />
+                <SelectRole onChange={handleRoleChange} />
               </Grid>
               <Grid item xs={12}>
                 <SelectGroup />
               </Grid>
               <Grid item xs={12}>
-                <SwitchActive onSwitchChange={handleSwitchChange} />
+                <SwitchActive onChange={handleSwitchChange} />
               </Grid>
               <Grid item xs={12}>
-                <SetPassword onSwitchChange={handleSwitchChange}/>
+                <SetPassword />
               </Grid>
               <Grid item xs={12}>
                 <FloatingActionButtonsSave onClick={handleSaveClick}/>

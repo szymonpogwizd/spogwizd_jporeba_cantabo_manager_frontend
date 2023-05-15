@@ -4,7 +4,7 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 
-export default function SelectLabels() {
+export default function SelectLabels({ onChange }) {
   const [songCategory, setSongCategory] = React.useState('');
   const [data, setData] = useState([]);
 
@@ -13,11 +13,14 @@ export default function SelectLabels() {
       .then((response) => response.json())
       .then((data) => {
         setData(data);
+        setSongCategory('USER');
+        onChange('USER');
       });
   }, []);
 
   const handleChange = (event: SelectChangeEvent) => {
     setSongCategory(event.target.value);
+    onChange(event.target.value);
   };
 
   return (
@@ -31,12 +34,9 @@ export default function SelectLabels() {
           label="SongCategory"
           onChange={handleChange}
         >
-          <MenuItem value="">
-              <em>None</em>
-            </MenuItem>
-            {data.map((item) => (
-              <MenuItem value={item} key={item}>{item}</MenuItem>
-            ))}
+          {data.map((item) => (
+            <MenuItem value={item} key={item}>{item}</MenuItem>
+          ))}
         </Select>
       </FormControl>
     </div>
