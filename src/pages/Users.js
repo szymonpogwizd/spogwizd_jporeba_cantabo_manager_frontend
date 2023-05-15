@@ -14,6 +14,7 @@ import {
   SwitchActive,
   TextFieldEmail,
   SetPassword,
+  AlertMessage,
 } from '../sections/@dashboard/users';
 
 // ----------------------------------------------------------------------   
@@ -27,10 +28,11 @@ export default function Users() {
   const [groupValue, setGroupValue] = useState();
   const [passwordValue, setPasswordValue] = useState('');
   const [passwordsMatch, setPasswordsMatch] = useState(false);
+  const [showAlert, setShowAlert] = useState(false);
 
   const handleSaveClick = () => {
     if (!passwordsMatch) {
-          alert('Hasła nie są zgodne!');
+          setShowAlert(true);
           return;
         }
 
@@ -86,11 +88,24 @@ export default function Users() {
     setPasswordsMatch(value);
   };
 
+    const handleCloseAlert = () => {
+      setShowAlert(false);
+    };
+
   return (
     <>
       <Helmet>
         <title> Użytkownicy | Cantabo Manager </title>
       </Helmet>
+
+      {showAlert && (
+              <AlertMessage
+                severity="error"
+                title="Error"
+                message="Hasła nie są zgodne!"
+                onClose={handleCloseAlert}
+              />
+        )}
 
       <Container maxWidth="xl">
         <Typography variant="h4" sx={{ mb: 5 }}>
