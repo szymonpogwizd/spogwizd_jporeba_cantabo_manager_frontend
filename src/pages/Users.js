@@ -21,12 +21,12 @@ import {
 
 export default function Users() {
   const theme = useTheme();
-  const [nameValue, setNameValue] = useState('');
-  const [emailValue, setEmailValue] = useState('');
+  const [nameValue, setNameValue] = useState();
+  const [emailValue, setEmailValue] = useState();
   const [activeValue, setActiveValue] = useState(true);
   const [roleValue, setRoleValue] = useState('');
   const [groupValue, setGroupValue] = useState();
-  const [passwordValue, setPasswordValue] = useState('');
+  const [passwordValue, setPasswordValue] = useState();
   const [passwordsMatch, setPasswordsMatch] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
 
