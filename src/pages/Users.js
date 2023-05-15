@@ -25,14 +25,22 @@ export default function Users() {
   const [activeValue, setActiveValue] = useState(true);
   const [roleValue, setRoleValue] = useState('');
   const [groupValue, setGroupValue] = useState();
+  const [passwordValue, setPasswordValue] = useState('');
+  const [passwordsMatch, setPasswordsMatch] = useState(false);
 
   const handleSaveClick = () => {
+    if (!passwordsMatch) {
+          alert('Hasła nie są zgodne!');
+          return;
+        }
+
     const data = {
       name: nameValue,
       email: emailValue,
       active: activeValue,
       userType: roleValue,
       group: groupValue,
+      password: passwordValue,
     };
 
     fetch("http://localhost:8080/dashboard/users", {
@@ -62,13 +70,21 @@ export default function Users() {
     setActiveValue(value);
   };
 
-    const handleRoleChange = (value) => {
-        setRoleValue(value);
-    };
+  const handleRoleChange = (value) => {
+    setRoleValue(value);
+  };
 
-    const handleGroupChange = (value) => {
-        setGroupValue(value);
-    };
+  const handleGroupChange = (value) => {
+      setGroupValue(value);
+  };
+
+  const handlePasswordChange = (value) => {
+    setPasswordValue(value);
+  };
+
+  const handlePasswordsMatchChange = (value) => {
+    setPasswordsMatch(value);
+  };
 
   return (
     <>
@@ -115,10 +131,10 @@ export default function Users() {
                 <SwitchActive onChange={handleSwitchChange} />
               </Grid>
               <Grid item xs={12}>
-                <SetPassword />
+                <SetPassword onPasswordChange={handlePasswordChange} onPasswordsMatchChange={handlePasswordsMatchChange} />
               </Grid>
               <Grid item xs={12}>
-                <FloatingActionButtonsSave onClick={handleSaveClick}/>
+                <FloatingActionButtonsSave onClick={handleSaveClick} disabled={!passwordsMatch}/>
               </Grid>
             </Grid>
           </Grid>
