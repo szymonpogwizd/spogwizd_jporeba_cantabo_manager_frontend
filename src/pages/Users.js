@@ -21,8 +21,8 @@ import {
 
 export default function Users() {
   const theme = useTheme();
-  const [nameValue, setNameValue] = useState();
-  const [emailValue, setEmailValue] = useState();
+  const [nameValue, setNameValue] = useState("");
+  const [emailValue, setEmailValue] = useState("");
   const [activeValue, setActiveValue] = useState(true);
   const [roleValue, setRoleValue] = useState('');
   const [groupValue, setGroupValue] = useState();
@@ -34,6 +34,11 @@ export default function Users() {
   const [successAlertMessage, setSuccessAlertMessage] = useState("");
 
    const handleSaveClick = () => {
+
+  const resetForm = () => {
+    setNameValue("");
+    setEmailValue("");
+  };
 
     const data = {
       name: nameValue,
@@ -59,6 +64,7 @@ export default function Users() {
           }
             setSuccessAlertMessage(`Pomyślnie utworzono użytkownika ${nameValue}`);
             setShowSuccessAlert(true);
+            resetForm();
             return response.json();
         })
         .catch((error) => {
@@ -159,10 +165,10 @@ export default function Users() {
             {/* Prawa strona */}
             <Grid>
               <Grid item xs={12}>
-                <TextFieldName onChange={handleTextChange} />
+                <TextFieldName onChange={handleTextChange} value={nameValue} />
               </Grid>
               <Grid item xs={12}>
-                <TextFieldEmail onChange={handleEmailChange} />
+                <TextFieldEmail onChange={handleEmailChange} value={emailValue}/>
               </Grid>
               <Grid item xs={12}>
                 <SelectRole onChange={handleRoleChange} />
