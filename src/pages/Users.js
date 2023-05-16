@@ -29,12 +29,9 @@ export default function Users() {
   const [passwordValue, setPasswordValue] = useState();
   const [passwordsMatch, setPasswordsMatch] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
+  const [alertMessage, setAlertMessage] = useState("");
 
-  const handleSaveClick = () => {
-    if (!passwordsMatch) {
-          setShowAlert(true);
-          return;
-        }
+   const handleSaveClick = () => {
 
     const data = {
       name: nameValue,
@@ -52,11 +49,19 @@ export default function Users() {
       },
       body: JSON.stringify(data),
     })
-      .then((response) => response.json())
-      .then((data) => {
-        console.log("Odpowiedź z serwera:", data);
+      .then((response) => {
+        if (!response.ok) {
+          return response.text().then((errorText) => {
+            throw new Error(errorText);
+          });
+        }
+        return response.json();
+      })
+      .catch((error) => {
+        setAlertMessage(`${error.message}`);
+        setShowAlert(true);
       });
-  };
+    };
 
   const handleTextChange = (event) => {
     const value = event.target.value;
@@ -98,13 +103,13 @@ export default function Users() {
         <title> Użytkownicy | Cantabo Manager </title>
       </Helmet>
 
-      {showAlert && (
-              <AlertMessage
-                severity="error"
-                title="Error"
-                message="Hasła nie są zgodne!"
-                onClose={handleCloseAlert}
-              />
+        {showAlert && (
+          <AlertMessage
+            severity="error"
+            title="Error"
+            message={alertMessage}
+            onClose={handleCloseAlert}
+          />
         )}
 
       <Container maxWidth="xl">
