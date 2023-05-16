@@ -57,9 +57,9 @@ export default function Users() {
               throw new Error(errorText);
             });
           }
-          setSuccessAlertMessage("Pomyślnie utworzono użytkownika");
-          setShowSuccessAlert(true);
-          return response.json();
+            setSuccessAlertMessage(`Pomyślnie utworzono użytkownika ${nameValue}`);
+            setShowSuccessAlert(true);
+            return response.json();
         })
         .catch((error) => {
           setAlertMessage(`${error.message}`);
@@ -67,38 +67,42 @@ export default function Users() {
         });
     };
 
-  const handleTextChange = (event) => {
-    const value = event.target.value;
-    setNameValue(value);
-  }
+    const handleTextChange = (event) => {
+      const value = event.target.value;
+      setNameValue(value);
+    }
 
-  const handleEmailChange = (event) => {
-    const value = event.target.value;
-    setEmailValue(value);
-  }
+    const handleEmailChange = (event) => {
+      const value = event.target.value;
+      setEmailValue(value);
+    }
 
-  const handleSwitchChange = (value) => {
-    setActiveValue(value);
-  };
+    const handleSwitchChange = (value) => {
+      setActiveValue(value);
+    };
 
-  const handleRoleChange = (value) => {
-    setRoleValue(value);
-  };
+    const handleRoleChange = (value) => {
+      setRoleValue(value);
+    };
 
-  const handleGroupChange = (value) => {
-      setGroupValue(value);
-  };
+    const handleGroupChange = (value) => {
+        setGroupValue(value);
+    };
 
-  const handlePasswordChange = (value) => {
-    setPasswordValue(value);
-  };
+    const handlePasswordChange = (value) => {
+      setPasswordValue(value);
+    };
 
-  const handlePasswordsMatchChange = (value) => {
-    setPasswordsMatch(value);
-  };
+    const handlePasswordsMatchChange = (value) => {
+      setPasswordsMatch(value);
+    };
 
     const handleCloseAlert = () => {
       setShowAlert(false);
+    };
+
+    const handleCloseSuccessAlert = () => {
+      setShowSuccessAlert(false);
     };
 
     const resetAlert = () => {
@@ -126,7 +130,8 @@ export default function Users() {
             severity="success"
             title="Sukces"
             message={successAlertMessage}
-            onClose={() => setShowSuccessAlert(false)}
+            onClose={handleCloseSuccessAlert}
+            resetAlert={resetAlert}
           />
         )}
 
