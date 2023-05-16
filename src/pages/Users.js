@@ -30,6 +30,8 @@ export default function Users() {
   const [passwordsMatch, setPasswordsMatch] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
   const [alertMessage, setAlertMessage] = useState("");
+  const [showSuccessAlert, setShowSuccessAlert] = useState(false);
+  const [successAlertMessage, setSuccessAlertMessage] = useState("");
 
    const handleSaveClick = () => {
 
@@ -42,25 +44,27 @@ export default function Users() {
       password: passwordValue,
     };
 
-    fetch("http://localhost:8080/dashboard/users", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
-    })
-      .then((response) => {
-        if (!response.ok) {
-          return response.text().then((errorText) => {
-            throw new Error(errorText);
-          });
-        }
-        return response.json();
+      fetch("http://localhost:8080/dashboard/users", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
       })
-      .catch((error) => {
-        setAlertMessage(`${error.message}`);
-        setShowAlert(true);
-      });
+        .then((response) => {
+          if (!response.ok) {
+            return response.text().then((errorText) => {
+              throw new Error(errorText);
+            });
+          }
+          setSuccessAlertMessage("Pomyślnie utworzono użytkownika");
+          setShowSuccessAlert(true);
+          return response.json();
+        })
+        .catch((error) => {
+          setAlertMessage(`${error.message}`);
+          setShowAlert(true);
+        });
     };
 
   const handleTextChange = (event) => {
@@ -97,6 +101,10 @@ export default function Users() {
       setShowAlert(false);
     };
 
+    const resetAlert = () => {
+      setAlertMessage("");
+    };
+
   return (
     <>
       <Helmet>
@@ -106,9 +114,19 @@ export default function Users() {
         {showAlert && (
           <AlertMessage
             severity="error"
-            title="Error"
+            title="Błąd"
             message={alertMessage}
             onClose={handleCloseAlert}
+            resetAlert={resetAlert}
+          />
+        )}
+
+        {showSuccessAlert && (
+          <AlertMessage
+            severity="success"
+            title="Sukces"
+            message={successAlertMessage}
+            onClose={() => setShowSuccessAlert(false)}
           />
         )}
 
