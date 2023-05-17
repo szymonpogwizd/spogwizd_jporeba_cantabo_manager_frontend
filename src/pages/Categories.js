@@ -22,6 +22,8 @@ export default function Categories() {
     const [alertMessage, setAlertMessage] = useState("");
     const [showSuccessAlert, setShowSuccessAlert] = useState(false);
     const [successAlertMessage, setSuccessAlertMessage] = useState("");
+    const [refreshKeySongCategories, setRefreshKeySongCategories] = useState(0);
+    const [refreshKeyPlaylistCategories, setRefreshKeyPlaylistCategories] = useState(0);
 
      const handleSaveSongCategoryClick = () => {
 
@@ -49,6 +51,7 @@ export default function Categories() {
               setSuccessAlertMessage(`Pomyślnie utworzono kategorie pieśni ${nameSongCategoryValue}`);
               setShowSuccessAlert(true);
               resetFormSongCategories();
+              setRefreshKeySongCategories(prevKey => prevKey + 1);
               return response.json();
           })
           .catch((error) => {
@@ -83,6 +86,7 @@ export default function Categories() {
                 setSuccessAlertMessage(`Pomyślnie utworzono kategorie playlisty ${namePlaylistCategoryValue}`);
                 setShowSuccessAlert(true);
                 resetFormPlaylistCategories();
+                setRefreshKeyPlaylistCategories(prevKey => prevKey + 1);
                 return response.json();
             })
             .catch((error) => {
@@ -151,7 +155,7 @@ export default function Categories() {
             </Typography>
             <Grid>
               <Grid item xs={12}>
-                <SongCategoryList />
+                <SongCategoryList refreshKey={refreshKeySongCategories} />
               </Grid>
               <Grid item xs={12}>
                 <TextFieldNameSongCategories onChange={handleSongCategoryNameChange} value={nameSongCategoryValue} />
@@ -169,7 +173,7 @@ export default function Categories() {
             </Typography>
             <Grid>
               <Grid item xs={12}>
-                <PlaylistCategoryList />
+                <PlaylistCategoryList refreshKey={refreshKeyPlaylistCategories} />
               </Grid>
               <Grid item xs={12}>
                 <TextFieldNamePlaylistCategories onChange={handlePlaylistCategoryNameChange} value={namePlaylistCategoryValue} />

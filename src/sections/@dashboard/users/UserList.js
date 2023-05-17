@@ -9,7 +9,7 @@ import SearchField from "./SearchField";
 import SelectType from "./SelectType";
 import AlertMessage from '../common/AlertMessage';
 
-export default function CheckboxList() {
+export default function UserList({ refreshKey }) {
     const [searchText, setSearchText] = useState("");
     const [data, setData] = useState([]);
     const [itemToDelete, setItemToDelete] = useState(null);
@@ -36,7 +36,7 @@ export default function CheckboxList() {
           setItemToDelete(null);
         }
       });
-  }, [itemToDelete]);
+  }, [itemToDelete, refreshKey]);
 
     const handleDelete = (id) => () => {
       const item = data.find((item) => item.id === id);

@@ -33,6 +33,7 @@ export default function Users() {
   const [showSuccessAlert, setShowSuccessAlert] = useState(false);
   const [successAlertMessage, setSuccessAlertMessage] = useState("");
   const [resetPasswords, setResetPasswords] = useState(false);
+  const [refreshKey, setRefreshKey] = useState(0);
 
    const handleSaveClick = () => {
 
@@ -70,6 +71,7 @@ export default function Users() {
             setSuccessAlertMessage(`Pomyślnie utworzono użytkownika ${nameValue}`);
             setShowSuccessAlert(true);
             resetForm();
+            setRefreshKey(prevKey => prevKey + 1);
             return response.json();
         })
         .catch((error) => {
@@ -156,7 +158,7 @@ export default function Users() {
             {/* Lewa strona */}
             <Grid>
               <Grid item xs={12}>
-                <UserList />
+                <UserList refreshKey={refreshKey} />
               </Grid>
               <Grid item xs={12}>
                 <FloatingActionButtonsAdd />
