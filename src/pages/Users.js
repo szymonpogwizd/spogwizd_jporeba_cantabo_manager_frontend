@@ -34,6 +34,7 @@ export default function Users() {
   const [successAlertMessage, setSuccessAlertMessage] = useState("");
   const [resetPasswords, setResetPasswords] = useState(false);
   const [refreshKey, setRefreshKey] = useState(0);
+  const [errorCount, setErrorCount] = useState(0);
 
    const handleSaveClick = () => {
 
@@ -68,6 +69,7 @@ export default function Users() {
               throw new Error(errorText);
             });
           }
+            handleCloseAlert();
             setSuccessAlertMessage(`Pomyślnie utworzono użytkownika ${nameValue}`);
             setShowSuccessAlert(true);
             resetForm();
@@ -75,7 +77,9 @@ export default function Users() {
             return response.json();
         })
         .catch((error) => {
-          setAlertMessage(`${error.message}`);
+          handleCloseSuccessAlert();
+          setErrorCount(prevCount => prevCount + 1);
+          setAlertMessage(`[${errorCount}] ${error.message}`);
           setShowAlert(true);
         });
     };

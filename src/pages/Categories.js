@@ -24,6 +24,7 @@ export default function Categories() {
     const [successAlertMessage, setSuccessAlertMessage] = useState("");
     const [refreshKeySongCategories, setRefreshKeySongCategories] = useState(0);
     const [refreshKeyPlaylistCategories, setRefreshKeyPlaylistCategories] = useState(0);
+    const [errorCount, setErrorCount] = useState(0);
 
      const handleSaveSongCategoryClick = () => {
 
@@ -49,13 +50,16 @@ export default function Categories() {
               });
             }
               setSuccessAlertMessage(`Pomyślnie utworzono kategorie pieśni ${nameSongCategoryValue}`);
+              handleCloseAlert();
               setShowSuccessAlert(true);
               resetFormSongCategories();
               setRefreshKeySongCategories(prevKey => prevKey + 1);
               return response.json();
           })
           .catch((error) => {
-            setAlertMessage(`${error.message}`);
+            handleCloseSuccessAlert();
+            setErrorCount(prevCount => prevCount + 1);
+            setAlertMessage(`[${errorCount}] ${error.message}`);
             setShowAlert(true);
           });
       };
@@ -84,13 +88,16 @@ export default function Categories() {
                 });
               }
                 setSuccessAlertMessage(`Pomyślnie utworzono kategorie playlisty ${namePlaylistCategoryValue}`);
+                handleCloseAlert();
                 setShowSuccessAlert(true);
                 resetFormPlaylistCategories();
                 setRefreshKeyPlaylistCategories(prevKey => prevKey + 1);
                 return response.json();
             })
             .catch((error) => {
-              setAlertMessage(`${error.message}`);
+              handleCloseSuccessAlert();
+              setErrorCount(prevCount => prevCount + 1);
+              setAlertMessage(`[${errorCount}] ${error.message}`);
               setShowAlert(true);
             });
         };
