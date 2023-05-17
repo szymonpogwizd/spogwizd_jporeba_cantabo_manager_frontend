@@ -7,11 +7,16 @@ import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@mui/icons-material/Delete";
 import SearchField from "./SearchField";
 import SelectType from "./SelectType";
+import AlertMessage from '../common/AlertMessage';
 
 export default function CheckboxList() {
-  const [searchText, setSearchText] = useState("");
-  const [data, setData] = useState([]);
-  const [itemToDelete, setItemToDelete] = useState(null);
+    const [searchText, setSearchText] = useState("");
+    const [data, setData] = useState([]);
+    const [itemToDelete, setItemToDelete] = useState(null);
+    const [showAlert, setShowAlert] = useState(false);
+    const [alertMessage, setAlertMessage] = useState("");
+    const [showSuccessAlert, setShowSuccessAlert] = useState(false);
+    const [successAlertMessage, setSuccessAlertMessage] = useState("");
 
   useEffect(() => {
     fetch("http://localhost:8080/dashboard/users")
@@ -33,15 +38,35 @@ export default function CheckboxList() {
       });
   }, [itemToDelete]);
 
-  const handleDelete = (value) => () => {
-    fetch(`http://localhost:8080/dashboard/users/${value}`, { method: "DELETE" })
-      .then(() => {
-        setItemToDelete(value);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-  };
+    const handleDelete = (id) => () => {
+      const item = data.find((item) => item.id === id);
+      if (!item) {
+        return;
+      }
+
+      fetch(`http://localhost:8080/dashboard/users/${id}`, { method: "DELETE" })
+        .then(() => {
+          setItemToDelete(id);
+          setSuccessAlertMessage(`Pomyślnie usunięto kategorię pieśni ${item.name}`);
+          setShowSuccessAlert(true);
+        })
+        .catch((error) => {
+          setAlertMessage(`${error.message}`);
+          setShowAlert(true);
+        });
+    };
+
+    const handleCloseAlert = () => {
+      setShowAlert(false);
+    };
+
+    const handleCloseSuccessAlert = () => {
+      setShowSuccessAlert(false);
+    };
+
+    const resetAlert = () => {
+      setAlertMessage("");
+    };
 
   const handleToggle = (value) => () => {
     // logika do zrobienia
@@ -54,6 +79,26 @@ export default function CheckboxList() {
 return (
     <div>
       <SearchField handleSearch={handleSearch} />
+
+      {showAlert && (
+        <AlertMessage
+          severity="error"
+          title="Błąd"
+          message={alertMessage}
+          onClose={handleCloseAlert}
+        />
+      )}
+
+        {showSuccessAlert && (
+          <AlertMessage
+            severity="success"
+            title="Sukces"
+            message={successAlertMessage}
+            onClose={handleCloseSuccessAlert}
+            resetAlert={resetAlert}
+          />
+        )}
+
       <SelectType />
       <List
         sx={{
