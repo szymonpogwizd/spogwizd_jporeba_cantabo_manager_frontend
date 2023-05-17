@@ -5,7 +5,7 @@ import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 
 export default function SelectLabels({ onChange, value }) {
-  const [songCategory, setSongCategory] = React.useState('');
+  const [role, setRole] = React.useState('');
   const [data, setData] = useState([]);
 
   useEffect(() => {
@@ -13,13 +13,13 @@ export default function SelectLabels({ onChange, value }) {
       .then((response) => response.json())
       .then((data) => {
         setData(data);
-        setSongCategory('USER');
+        setRole('USER');
         onChange('USER');
       });
   }, []);
 
   const handleChange = (event: SelectChangeEvent) => {
-    setSongCategory(event.target.value);
+    setRole(event.target.value);
     onChange(event.target.value);
   };
 

@@ -40,6 +40,7 @@ export default function Users() {
     setEmailValue("");
     setActiveValue(true);
     setRoleValue('USER');
+    setGroupValue(null);
   };
 
     const data = {
@@ -176,7 +177,7 @@ export default function Users() {
                 <SelectRole onChange={handleRoleChange} value={roleValue} />
               </Grid>
               <Grid item xs={12}>
-                <SelectGroup onChange={handleGroupChange}/>
+                <SelectGroup onChange={handleGroupChange} value={groupValue || ""} />
               </Grid>
               <Grid item xs={12}>
                 <SwitchActive onSwitchChange={handleSwitchChange} activeValue={activeValue} />
