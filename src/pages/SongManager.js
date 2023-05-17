@@ -44,7 +44,7 @@ export default function SongManager() {
         name: nameValue,
         musicAuthor: musicAuthorValue,
         wordsAuthor: wordsAuthorValue,
-        categories: selectedCategories,
+        songCategories: selectedCategories,
       };
 
         fetch("http://localhost:8080/dashboard/songManager", {
@@ -86,10 +86,11 @@ export default function SongManager() {
         setWordsAuthorValue(value);
       }
 
-      const handleCategoriesChange = (event) => {
-        const value = event.target.value;
-        setSelectedCategories(value);
-        }
+const handleCategoriesChange = (newValue) => {
+    console.log(newValue);
+    setSelectedCategories(newValue);
+}
+
 
           const handleCloseAlert = () => {
             setShowAlert(false);
@@ -141,7 +142,7 @@ export default function SongManager() {
                 <TextFieldName onChange={handleNameChange} value={nameValue}/>
               </Grid>
               <Grid item xs={12}>
-                <CheckboxCategories />
+                <CheckboxCategories onChange={handleCategoriesChange} value={selectedCategories}/>
               </Grid>
               <Grid item xs={12} container spacing={8}>
                 <Grid item xs={6}>

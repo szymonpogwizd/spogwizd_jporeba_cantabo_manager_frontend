@@ -8,7 +8,7 @@ import CheckBoxIcon from "@mui/icons-material/CheckBox";
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkedIcon = <CheckBoxIcon fontSize="small" />;
 
-export default function CheckboxesTags() {
+export default function CheckboxCategories({ onChange, value }) {
   const [options, setOptions] = React.useState([]);
 
   React.useEffect(() => {
@@ -48,6 +48,8 @@ export default function CheckboxesTags() {
           label="Wybierz kategorie"
         />
       )}
+      onChange={(event, newValue) => onChange(newValue)} // Dodane
+      value={value} // Dodane
     />
   );
 }
