@@ -38,6 +38,7 @@ export default function Users() {
   const resetForm = () => {
     setNameValue("");
     setEmailValue("");
+    setActiveValue(true);
   };
 
     const data = {
@@ -177,7 +178,7 @@ export default function Users() {
                 <SelectGroup onChange={handleGroupChange}/>
               </Grid>
               <Grid item xs={12}>
-                <SwitchActive onChange={handleSwitchChange} />
+                <SwitchActive onSwitchChange={handleSwitchChange} activeValue={activeValue} />
               </Grid>
               <Grid item xs={12}>
                 <SetPassword onPasswordChange={handlePasswordChange} onPasswordsMatchChange={handlePasswordsMatchChange} />

@@ -1,12 +1,16 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import FormGroup from "@mui/material/FormGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Switch from "@mui/material/Switch";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 
-export default function SwitchLabels({ onSwitchChange }) {
-  const [isChecked, setIsChecked] = useState(true);
+export default function SwitchLabels({ onSwitchChange, activeValue }) {
+  const [isChecked, setIsChecked] = useState(activeValue);
+
+  useEffect(() => {
+    setIsChecked(activeValue);
+  }, [activeValue]);
 
   const handleSwitchChange = (event) => {
     const value = event.target.checked;
