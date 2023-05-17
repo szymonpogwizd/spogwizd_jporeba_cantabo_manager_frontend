@@ -39,6 +39,7 @@ export default function Users() {
     setNameValue("");
     setEmailValue("");
     setActiveValue(true);
+    setRoleValue('USER');
   };
 
     const data = {
@@ -172,7 +173,7 @@ export default function Users() {
                 <TextFieldEmail onChange={handleEmailChange} value={emailValue}/>
               </Grid>
               <Grid item xs={12}>
-                <SelectRole onChange={handleRoleChange} />
+                <SelectRole onChange={handleRoleChange} value={roleValue} />
               </Grid>
               <Grid item xs={12}>
                 <SelectGroup onChange={handleGroupChange}/>

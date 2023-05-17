@@ -4,7 +4,7 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 
-export default function SelectLabels({ onChange }) {
+export default function SelectLabels({ onChange, value }) {
   const [songCategory, setSongCategory] = React.useState('');
   const [data, setData] = useState([]);
 
@@ -30,8 +30,8 @@ export default function SelectLabels({ onChange }) {
         <Select
           labelId="demo-simple-select-helper-label"
           id="demo-simple-select-helper"
-          value={songCategory}
-          label="SongCategory"
+          value={value}
+          label="Rola"
           onChange={handleChange}
         >
           {data.map((item) => (
