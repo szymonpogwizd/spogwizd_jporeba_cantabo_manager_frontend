@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 // @mui
 import { useTheme } from '@mui/material/styles';
@@ -9,17 +10,135 @@ import {
   SongCategoryList,
   TextFieldNamePlaylistCategories,
   TextFieldNameSongCategories,
+  AlertMessage,
 } from '../sections/@dashboard/categories';
 // ----------------------------------------------------------------------
 
 export default function Categories() {
   const theme = useTheme();
+    const [nameSongCategoryValue, setNameSongCategoryValue] = useState("");
+    const [namePlaylistCategoryValue, setNamePlaylistCategoryValue] = useState("");
+    const [showAlert, setShowAlert] = useState(false);
+    const [alertMessage, setAlertMessage] = useState("");
+    const [showSuccessAlert, setShowSuccessAlert] = useState(false);
+    const [successAlertMessage, setSuccessAlertMessage] = useState("");
+
+     const handleSaveSongCategoryClick = () => {
+
+    const resetFormSongCategories = () => {
+      setNameSongCategoryValue("");
+    };
+
+      const dataSongCategories = {
+        name: nameSongCategoryValue,
+      };
+
+        fetch("http://localhost:8080/dashboard/songCategories", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(dataSongCategories),
+        })
+          .then((response) => {
+            if (!response.ok) {
+              return response.text().then((errorText) => {
+                throw new Error(errorText);
+              });
+            }
+              setSuccessAlertMessage(`Pomyślnie utworzono kategorie pieśni ${nameSongCategoryValue}`);
+              setShowSuccessAlert(true);
+              resetFormSongCategories();
+              return response.json();
+          })
+          .catch((error) => {
+            setAlertMessage(`${error.message}`);
+            setShowAlert(true);
+          });
+      };
+
+      const handleSavePlaylistCategoryClick = () => {
+
+      const resetFormPlaylistCategories = () => {
+        setNamePlaylistCategoryValue("");
+      };
+
+        const dataPlaylistCategories = {
+          name: namePlaylistCategoryValue,
+        };
+
+          fetch("http://localhost:8080/dashboard/playlistCategories", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(dataPlaylistCategories),
+          })
+            .then((response) => {
+              if (!response.ok) {
+                return response.text().then((errorText) => {
+                  throw new Error(errorText);
+                });
+              }
+                setSuccessAlertMessage(`Pomyślnie utworzono kategorie playlisty ${namePlaylistCategoryValue}`);
+                setShowSuccessAlert(true);
+                resetFormPlaylistCategories();
+                return response.json();
+            })
+            .catch((error) => {
+              setAlertMessage(`${error.message}`);
+              setShowAlert(true);
+            });
+        };
+
+
+    const handleSongCategoryNameChange = (event) => {
+      const value = event.target.value;
+      setNameSongCategoryValue(value);
+    }
+
+    const handlePlaylistCategoryNameChange = (event) => {
+      const value = event.target.value;
+      setNamePlaylistCategoryValue(value);
+    }
+
+    const handleCloseAlert = () => {
+      setShowAlert(false);
+    };
+
+    const handleCloseSuccessAlert = () => {
+      setShowSuccessAlert(false);
+    };
+
+    const resetAlert = () => {
+      setAlertMessage("");
+    };
 
   return (
     <>
       <Helmet>
         <title> Kategorie | Cantabo Manager </title>
       </Helmet>
+
+      {showAlert && (
+        <AlertMessage
+          severity="error"
+          title="Błąd"
+          message={alertMessage}
+          onClose={handleCloseAlert}
+          resetAlert={resetAlert}
+        />
+      )}
+
+      {showSuccessAlert && (
+        <AlertMessage
+          severity="success"
+          title="Sukces"
+          message={successAlertMessage}
+          onClose={handleCloseSuccessAlert}
+          resetAlert={resetAlert}
+        />
+      )}
 
       <Container maxWidth="xl">
 
@@ -35,10 +154,10 @@ export default function Categories() {
                 <SongCategoryList />
               </Grid>
               <Grid item xs={12}>
-                <TextFieldNameSongCategories />
+                <TextFieldNameSongCategories onChange={handleSongCategoryNameChange} value={nameSongCategoryValue} />
               </Grid>
               <Grid item xs={12}>
-                <FloatingActionButtonsSave />
+                <FloatingActionButtonsSave onClick={handleSaveSongCategoryClick} />
               </Grid>
             </Grid>
           </Grid>
@@ -53,10 +172,10 @@ export default function Categories() {
                 <PlaylistCategoryList />
               </Grid>
               <Grid item xs={12}>
-                <TextFieldNamePlaylistCategories />
+                <TextFieldNamePlaylistCategories onChange={handlePlaylistCategoryNameChange} value={namePlaylistCategoryValue} />
               </Grid>
               <Grid item xs={12}>
-                <FloatingActionButtonsSave />
+                <FloatingActionButtonsSave onClick={handleSavePlaylistCategoryClick} />
               </Grid>
             </Grid>
           </Grid>
