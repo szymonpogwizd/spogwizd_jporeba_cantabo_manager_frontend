@@ -6,71 +6,116 @@ import ListItemText from "@mui/material/ListItemText";
 import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@mui/icons-material/Delete";
 import SearchField from "./SearchField";
+import AlertMessage from '../common/AlertMessage';
 
 export default function CheckboxList() {
   const [searchText, setSearchText] = useState("");
   const [data, setData] = useState([]);
   const [itemToDelete, setItemToDelete] = useState(null);
+  const [showAlert, setShowAlert] = useState(false);
+  const [alertMessage, setAlertMessage] = useState("");
+  const [showSuccessAlert, setShowSuccessAlert] = useState(false);
+  const [successAlertMessage, setSuccessAlertMessage] = useState("");
 
-    useEffect(() => {
-      fetch("http://localhost:8080/dashboard/songCategories")
-        .then((response) => response.json())
-        .then((data) => {
-          setData(data);
+  useEffect(() => {
+    fetch("http://localhost:8080/dashboard/songCategories")
+      .then((response) => response.json())
+      .then((data) => {
+        setData(data);
 
-          if (itemToDelete !== null) {
-            setData((prevState) => {
-              const index = prevState.findIndex((item) => item.id === itemToDelete);
-              if (index !== -1) {
-                prevState.splice(index, 1);
-                return [...prevState];
-              }
-              return prevState;
-            });
-            setItemToDelete(null);
-          }
-        });
-    }, [itemToDelete]);
+        if (itemToDelete !== null) {
+          setData((prevState) => {
+            const index = prevState.findIndex((item) => item.id === itemToDelete);
+            if (index !== -1) {
+              prevState.splice(index, 1);
+              return [...prevState];
+            }
+            return prevState;
+          });
+          setItemToDelete(null);
+        }
+      });
+  }, [itemToDelete]);
 
-    const handleDelete = (value) => () => {
-      fetch(`http://localhost:8080/dashboard/songCategories/${value}`, { method: "DELETE" })
+    const handleDelete = (id) => () => {
+      const item = data.find((item) => item.id === id);
+      if (!item) {
+        return;
+      }
+
+      fetch(`http://localhost:8080/dashboard/songCategories/${id}`, { method: "DELETE" })
         .then(() => {
-          setItemToDelete(value);
+          setItemToDelete(id);
+          setSuccessAlertMessage(`Pomyślnie usunięto kategorię pieśni ${item.name}`);
+          setShowSuccessAlert(true);
         })
         .catch((error) => {
-          console.error(error);
+          setAlertMessage(`${error.message}`);
+          setShowAlert(true);
         });
-    };
+};
+
+  const handleCloseAlert = () => {
+    setShowAlert(false);
+  };
+
+      const handleCloseSuccessAlert = () => {
+        setShowSuccessAlert(false);
+      };
+
+      const resetAlert = () => {
+        setAlertMessage("");
+      };
 
   const handleToggle = (value) => () => {
-    // logika
-  };
+      // logika
+    };
 
-  const handleSearch = (newSearchText) => {
-    setSearchText(newSearchText);
-  };
+    const handleSearch = (newSearchText) => {
+      setSearchText(newSearchText);
+    };
 
-return (
-    <div>
-      <SearchField handleSearch={handleSearch} />
-      <List
-        sx={{
-          width: "100%",
-          bgcolor: "background.paper",
-          height: "50vh",
-          overflow: "auto",
-          marginBottom: 2,
-        }}
-      >
-        {data.map((item) => {
-          const labelId = `checkbox-list-label-${item.id}`;
+    return (
+      <div>
+        <SearchField handleSearch={handleSearch} />
 
-          if (
-            searchText &&
-            !item.name.toLowerCase().includes(searchText.toLowerCase())
-          ) {
-            return null;
-          }
+        {showAlert && (
+          <AlertMessage
+            severity="error"
+            title="Błąd"
+            message={alertMessage}
+            onClose={handleCloseAlert}
+          />
+        )}
+
+          {showSuccessAlert && (
+            <AlertMessage
+              severity="success"
+              title="Sukces"
+              message={successAlertMessage}
+              onClose={handleCloseSuccessAlert}
+              resetAlert={resetAlert}
+            />
+          )}
+
+        <List
+          sx={{
+            width: "100%",
+            bgcolor: "background.paper",
+            height: "50vh",
+            overflow: "auto",
+            marginBottom: 2,
+          }}
+        >
+          {data.map((item) => {
+            const labelId = `checkbox-list-label-${item.id}`;
+
+            if (
+              searchText &&
+              !item.name.toLowerCase().includes(searchText.toLowerCase())
+            ) {
+              return null;
+            }
 
           return (
             <ListItem
