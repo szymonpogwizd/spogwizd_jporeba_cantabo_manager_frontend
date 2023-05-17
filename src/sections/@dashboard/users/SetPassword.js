@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import TextField from "@mui/material/TextField";
 import IconButton from "@mui/material/IconButton";
 import InputAdornment from "@mui/material/InputAdornment";
@@ -7,7 +7,7 @@ import { Icon } from "@iconify/react";
 import eyeFill from "@iconify-icons/eva/eye-fill";
 import eyeOffFill from "@iconify-icons/eva/eye-off-fill";
 
-const PasswordFields = ({ onPasswordChange, onPasswordsMatchChange }) => {
+const PasswordFields = ({ onPasswordChange, onPasswordsMatchChange, resetPasswords, onReset }) => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -28,6 +28,14 @@ const PasswordFields = ({ onPasswordChange, onPasswordsMatchChange }) => {
   };
 
   const isPasswordsMatch = password === confirmPassword;
+
+  useEffect(() => {
+      if (resetPasswords) {
+        setPassword("");
+        setConfirmPassword("");
+        onReset();
+      }
+    }, [resetPasswords, onReset]);
 
   return (
     <div>

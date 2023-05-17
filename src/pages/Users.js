@@ -32,6 +32,7 @@ export default function Users() {
   const [alertMessage, setAlertMessage] = useState("");
   const [showSuccessAlert, setShowSuccessAlert] = useState(false);
   const [successAlertMessage, setSuccessAlertMessage] = useState("");
+  const [resetPasswords, setResetPasswords] = useState(false);
 
    const handleSaveClick = () => {
 
@@ -41,6 +42,7 @@ export default function Users() {
     setActiveValue(true);
     setRoleValue('USER');
     setGroupValue(null);
+    setResetPasswords(true);
   };
 
     const data = {
@@ -183,7 +185,12 @@ export default function Users() {
                 <SwitchActive onSwitchChange={handleSwitchChange} activeValue={activeValue} />
               </Grid>
               <Grid item xs={12}>
-                <SetPassword onPasswordChange={handlePasswordChange} onPasswordsMatchChange={handlePasswordsMatchChange} />
+                <SetPassword
+                    onPasswordChange={handlePasswordChange}
+                    onPasswordsMatchChange={handlePasswordsMatchChange}
+                    resetPasswords={resetPasswords}
+                    onReset={() => setResetPasswords(false)}
+                />
               </Grid>
               <Grid item xs={12}>
                 <FloatingActionButtonsSave onClick={handleSaveClick} disabled={!passwordsMatch}/>
