@@ -23,6 +23,7 @@ export default function SongManager() {
     const [alertMessage, setAlertMessage] = useState("");
     const [showSuccessAlert, setShowSuccessAlert] = useState(false);
     const [successAlertMessage, setSuccessAlertMessage] = useState("");
+    const [selectedCategories, setSelectedCategories] = useState([]);
 
   const [previewHtml, setPreviewHtml] = useState('');
 
@@ -36,12 +37,14 @@ export default function SongManager() {
       setNameValue("");
       setMusicAuthorValue("");
       setWordsAuthorValue("");
+      setSelectedCategories([]);
     };
 
       const data = {
         name: nameValue,
         musicAuthor: musicAuthorValue,
         wordsAuthor: wordsAuthorValue,
+        categories: selectedCategories,
       };
 
         fetch("http://localhost:8080/dashboard/songManager", {
@@ -82,6 +85,11 @@ export default function SongManager() {
         const value = event.target.value;
         setWordsAuthorValue(value);
       }
+
+      const handleCategoriesChange = (event) => {
+        const value = event.target.value;
+        setSelectedCategories(value);
+        }
 
           const handleCloseAlert = () => {
             setShowAlert(false);
