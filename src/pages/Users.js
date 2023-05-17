@@ -78,7 +78,7 @@ export default function Users() {
         });
     };
 
-    const handleTextChange = (event) => {
+    const handleNameChange = (event) => {
       const value = event.target.value;
       setNameValue(value);
     }
@@ -156,11 +156,9 @@ export default function Users() {
             {/* Lewa strona */}
             <Grid>
               <Grid item xs={12}>
-                {/* Pierwszy element */}
                 <UserList />
               </Grid>
               <Grid item xs={12}>
-                {/* Drugi element */}
                 <FloatingActionButtonsAdd />
               </Grid>
             </Grid>
@@ -170,7 +168,7 @@ export default function Users() {
             {/* Prawa strona */}
             <Grid>
               <Grid item xs={12}>
-                <TextFieldName onChange={handleTextChange} value={nameValue} />
+                <TextFieldName onChange={handleNameChange} value={nameValue} />
               </Grid>
               <Grid item xs={12}>
                 <TextFieldEmail onChange={handleEmailChange} value={emailValue}/>
