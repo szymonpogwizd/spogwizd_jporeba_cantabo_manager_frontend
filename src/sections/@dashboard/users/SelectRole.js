@@ -4,8 +4,8 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 
-export default function SelectLabels() {
-  const [songCategory, setSongCategory] = React.useState('');
+export default function SelectLabels({ onChange, value }) {
+  const [role, setRole] = React.useState('');
   const [data, setData] = useState([]);
 
   useEffect(() => {
@@ -13,11 +13,14 @@ export default function SelectLabels() {
       .then((response) => response.json())
       .then((data) => {
         setData(data);
+        setRole('USER');
+        onChange('USER');
       });
   }, []);
 
   const handleChange = (event: SelectChangeEvent) => {
-    setSongCategory(event.target.value);
+    setRole(event.target.value);
+    onChange(event.target.value);
   };
 
   return (
@@ -27,16 +30,13 @@ export default function SelectLabels() {
         <Select
           labelId="demo-simple-select-helper-label"
           id="demo-simple-select-helper"
-          value={songCategory}
-          label="SongCategory"
+          value={value}
+          label="Rola"
           onChange={handleChange}
         >
-          <MenuItem value="">
-              <em>None</em>
-            </MenuItem>
-            {data.map((item) => (
-              <MenuItem value={item} key={item}>{item}</MenuItem>
-            ))}
+          {data.map((item) => (
+            <MenuItem value={item} key={item}>{item}</MenuItem>
+          ))}
         </Select>
       </FormControl>
     </div>
