@@ -24,6 +24,7 @@ export default function SongManager() {
     const [showSuccessAlert, setShowSuccessAlert] = useState(false);
     const [successAlertMessage, setSuccessAlertMessage] = useState("");
     const [selectedCategories, setSelectedCategories] = useState([]);
+    const [errorCount, setErrorCount] = useState(0);
 
   const [previewHtml, setPreviewHtml] = useState('');
 
@@ -60,13 +61,16 @@ export default function SongManager() {
                 throw new Error(errorText);
               });
             }
+              handleCloseAlert();
               setSuccessAlertMessage(`Pomyślnie utworzono pieśń ${nameValue}`);
               setShowSuccessAlert(true);
               resetForm();
               return response.json();
           })
           .catch((error) => {
-            setAlertMessage(`${error.message}`);
+            handleCloseSuccessAlert();
+            setErrorCount(prevCount => prevCount + 1);
+            setAlertMessage(`[${errorCount}] ${error.message}`);
             setShowAlert(true);
           });
       };
