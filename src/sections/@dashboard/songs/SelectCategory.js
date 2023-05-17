@@ -9,7 +9,7 @@ export default function SelectLabels() {
     const [data, setData] = useState([]);
 
     useEffect(() => {
-      fetch("http://localhost:8080/dashboard/songs/categories")
+      fetch("http://localhost:8080/dashboard/songCategories")
         .then((response) => response.json())
         .then((data) => {
           setData(data);
