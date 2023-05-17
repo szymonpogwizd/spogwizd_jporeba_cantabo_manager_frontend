@@ -4,10 +4,11 @@ import { useTheme } from '@mui/material/styles';
 import { Grid, Container, Typography } from '@mui/material';
 // sections
 import {
-  FloatingActionButtonsAdd,
   FloatingActionButtonsSave,
-  CategoryList,
-  TextFieldName,
+  PlaylistCategoryList,
+  SongCategoryList,
+  TextFieldNamePlaylistCategories,
+  TextFieldNameSongCategories,
 } from '../sections/@dashboard/categories';
 // ----------------------------------------------------------------------
 
@@ -21,35 +22,40 @@ export default function Categories() {
       </Helmet>
 
       <Container maxWidth="xl">
-        <Typography variant="h4" sx={{ mb: 5 }}>
-          Kategorie
-        </Typography>
 
         <Grid container spacing={10}>
 
           <Grid item xs={12} sm={6}>
             {/* Lewa strona */}
+            <Typography variant="h4" sx={{ mb: 5 }}>
+              Kategorie pieśni
+            </Typography>
             <Grid>
               <Grid item xs={12}>
-                {/* Pierwszy element */}
-                <CategoryList />
+                <SongCategoryList />
               </Grid>
               <Grid item xs={12}>
-                {/* Drugi element */}
-                <FloatingActionButtonsAdd />
+                <TextFieldNameSongCategories />
+              </Grid>
+              <Grid item xs={12}>
+                <FloatingActionButtonsSave />
               </Grid>
             </Grid>
           </Grid>
 
           <Grid item xs={12} sm={6}>
             {/* Prawa strona */}
+            <Typography variant="h4" sx={{ mb: 5 }}>
+              Kategorie playlist
+            </Typography>
             <Grid>
               <Grid item xs={12}>
-                {/* Trzeci element */}
-                <TextFieldName />
+                <PlaylistCategoryList />
               </Grid>
               <Grid item xs={12}>
-                {/* Czwarty element */}
+                <TextFieldNamePlaylistCategories />
+              </Grid>
+              <Grid item xs={12}>
                 <FloatingActionButtonsSave />
               </Grid>
             </Grid>
