@@ -2,6 +2,7 @@ import { Navigate, useRoutes } from 'react-router-dom';
 // layouts
 import DashboardLayout from './layouts/dashboard';
 import SimpleLayout from './layouts/simple';
+import PrivateRoute from './PrivateRoute';
 //
 import UserPage from './pages/UserPage';
 import LoginPage from './pages/LoginPage';
@@ -13,8 +14,8 @@ import Categories from './pages/Categories';
 import Users from './pages/Users';
 import Profiles from './pages/Profiles';
 import SongManager from './pages/SongManager';
-import Groups from './pages/Groups'
-import Settings from './pages/Settings'
+import Groups from './pages/Groups';
+import Settings from './pages/Settings';
 
 // ----------------------------------------------------------------------
 
@@ -25,16 +26,15 @@ export default function Router() {
       element: <DashboardLayout />,
       children: [
         { element: <Navigate to="/dashboard/app" />, index: true },
-        { path: 'app', element: <DashboardAppPage /> },
-        { path: 'user', element: <UserPage /> },
-        { path: 'songs', element: <Songs /> },
-        { path: 'categories', element: <Categories /> },
-        { path: 'users', element: <Users /> },
-        { path: 'profiles', element: <Profiles /> },
-        { path: 'songManager', element: <SongManager /> },
-        {path: 'groups', element: <Groups/> },
-        {path: 'settings', element: <Settings/>}
-
+        { path: 'app', element: <PrivateRoute element={<DashboardAppPage />} /> },
+        { path: 'user', element: <PrivateRoute element={<UserPage />} /> },
+        { path: 'songs', element: <PrivateRoute element={<Songs />} /> },
+        { path: 'categories', element: <PrivateRoute element={<Categories />} /> },
+        { path: 'users', element: <PrivateRoute element={<Users />} /> },
+        { path: 'profiles', element: <PrivateRoute element={<Profiles />} /> },
+        { path: 'songManager', element: <PrivateRoute element={<SongManager />} /> },
+        { path: 'groups', element: <PrivateRoute element={<Groups />} /> },
+        { path: 'settings', element: <PrivateRoute element={<Settings />} /> },
       ],
     },
     {
