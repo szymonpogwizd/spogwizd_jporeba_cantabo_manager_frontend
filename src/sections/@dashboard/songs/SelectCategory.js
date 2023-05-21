@@ -5,11 +5,15 @@ import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 
 export default function SelectLabels() {
-  const [songCategory, setSongCategory] = React.useState('');
+    const [songCategory, setSongCategory] = React.useState('');
     const [data, setData] = useState([]);
 
+    const headers = {
+      Authorization: `Bearer ${localStorage.getItem('token')}`
+    };
+
     useEffect(() => {
-      fetch("http://localhost:8080/dashboard/songCategories")
+      fetch("http://localhost:8080/dashboard/songCategories", { headers })
         .then((response) => response.json())
         .then((data) => {
           setData(data);

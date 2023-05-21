@@ -17,8 +17,12 @@ export default function PlaylistCategoryList({ refreshKey }) {
   const [showSuccessAlert, setShowSuccessAlert] = useState(false);
   const [successAlertMessage, setSuccessAlertMessage] = useState("");
 
+  const headers = {
+    Authorization: `Bearer ${localStorage.getItem('token')}`
+  };
+
     useEffect(() => {
-          fetch("http://localhost:8080/dashboard/playlistCategories")
+          fetch("http://localhost:8080/dashboard/playlistCategories", { headers })
             .then((response) => response.json())
             .then((data) => {
               setData(data);
@@ -43,7 +47,10 @@ export default function PlaylistCategoryList({ refreshKey }) {
         return;
       }
 
-      fetch(`http://localhost:8080/dashboard/playlistCategories/${id}`, { method: "DELETE" })
+      fetch(`http://localhost:8080/dashboard/playlistCategories/${id}`, {
+          method: "DELETE",
+          headers
+        })
         .then(() => {
           setItemToDelete(id);
           setSuccessAlertMessage(`Pomyślnie usunięto kategorię playlisty ${item.name}`);

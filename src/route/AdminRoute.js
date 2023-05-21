@@ -14,10 +14,6 @@ function AdminRoute({ children }) {
     setIsLoading(false);
   }, []);
 
-  useEffect(() => {
-    console.log(role);
-  }, [role]);
-
   if (isLoading) {
     return null;
   }

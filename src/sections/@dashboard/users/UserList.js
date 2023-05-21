@@ -18,8 +18,12 @@ export default function UserList({ refreshKey }) {
     const [showSuccessAlert, setShowSuccessAlert] = useState(false);
     const [successAlertMessage, setSuccessAlertMessage] = useState("");
 
+    const headers = {
+      Authorization: `Bearer ${localStorage.getItem('token')}`
+    };
+
   useEffect(() => {
-    fetch("http://localhost:8080/dashboard/users")
+    fetch("http://localhost:8080/dashboard/users", { headers })
       .then((response) => response.json())
       .then((data) => {
         setData(data);
@@ -44,7 +48,10 @@ export default function UserList({ refreshKey }) {
         return;
       }
 
-      fetch(`http://localhost:8080/dashboard/users/${id}`, { method: "DELETE" })
+      fetch(`http://localhost:8080/dashboard/users/${id}`, {
+         method: "DELETE",
+         headers
+       })
         .then(() => {
           setItemToDelete(id);
           setSuccessAlertMessage(`Pomyślnie usunięto kategorię pieśni ${item.name}`);

@@ -57,7 +57,7 @@ export default function LoginForm() {
           } catch (error) {
             handleCloseAlert();
             setErrorCount(prevCount => prevCount + 1);
-            setAlertMessage(`[${errorCount}] Błąd żądania logowania: ${error.message}`);
+            setAlertMessage(`[${errorCount}] Błędny login lub hasło`);
             setShowAlert(true);
           }
     };

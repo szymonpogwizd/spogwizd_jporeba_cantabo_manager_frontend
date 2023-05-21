@@ -11,12 +11,16 @@ const checkedIcon = <CheckBoxIcon fontSize="small" />;
 export default function CheckboxCategories({ onChange, value }) {
   const [options, setOptions] = React.useState([]);
 
+  const headers = {
+    Authorization: `Bearer ${localStorage.getItem('token')}`
+  };
+
   React.useEffect(() => {
     fetchOptions();
   }, []);
 
   const fetchOptions = () => {
-    fetch("http://localhost:8080/dashboard/songCategories")
+    fetch("http://localhost:8080/dashboard/songCategories", { headers })
       .then((response) => response.json())
       .then((data) => {
         setOptions(data);

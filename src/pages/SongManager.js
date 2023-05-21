@@ -52,6 +52,7 @@ export default function SongManager() {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
+            "Authorization": `Bearer ${localStorage.getItem('token')}`
           },
           body: JSON.stringify(data),
         })
@@ -90,23 +91,22 @@ export default function SongManager() {
         setWordsAuthorValue(value);
       }
 
-const handleCategoriesChange = (newValue) => {
-    console.log(newValue);
-    setSelectedCategories(newValue);
-}
+      const handleCategoriesChange = (newValue) => {
+        console.log(newValue);
+        setSelectedCategories(newValue);
+      }
 
+      const handleCloseAlert = () => {
+        setShowAlert(false);
+      };
 
-          const handleCloseAlert = () => {
-            setShowAlert(false);
-          };
+      const handleCloseSuccessAlert = () => {
+        setShowSuccessAlert(false);
+      };
 
-          const handleCloseSuccessAlert = () => {
-            setShowSuccessAlert(false);
-          };
-
-          const resetAlert = () => {
-            setAlertMessage("");
-          };
+      const resetAlert = () => {
+        setAlertMessage("");
+      };
 
   return (
     <>
