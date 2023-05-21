@@ -22,7 +22,7 @@ function SuperAdminRoute({ children }) {
     return null;
   }
 
-  return (token && role === 'SUPER_ADMINISTRATOR') ? children : <Navigate to="/401" />;
+  return (token && role === 'SUPER_ADMINISTRATOR') ? children : <Navigate to="/403" />;
 }
 
 export default SuperAdminRoute;
