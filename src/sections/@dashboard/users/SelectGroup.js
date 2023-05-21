@@ -8,8 +8,12 @@ export default function SelectLabels({ onChange, value }) {
   const [group, setGroup] = React.useState('');
   const [data, setData] = useState([]);
 
+  const headers = {
+    Authorization: `Bearer ${localStorage.getItem('token')}`
+  };
+
     useEffect(() => {
-      fetch("http://localhost:8080/dashboard/users/groups")
+      fetch("http://localhost:8080/dashboard/users/groups", { headers })
         .then((response) => response.json())
         .then((data) => {
           setData(data);

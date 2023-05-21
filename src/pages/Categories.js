@@ -40,6 +40,7 @@ export default function Categories() {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
+            "Authorization": `Bearer ${localStorage.getItem('token')}`
           },
           body: JSON.stringify(dataSongCategories),
         })
@@ -78,6 +79,7 @@ export default function Categories() {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
+              "Authorization": `Bearer ${localStorage.getItem('token')}`
             },
             body: JSON.stringify(dataPlaylistCategories),
           })

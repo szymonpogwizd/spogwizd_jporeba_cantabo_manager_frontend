@@ -14,10 +14,6 @@ function SuperAdminRoute({ children }) {
     setIsLoading(false);
   }, []);
 
-  useEffect(() => {
-    console.log(role);
-  }, [role]);
-
   if (isLoading) {
     return null;
   }

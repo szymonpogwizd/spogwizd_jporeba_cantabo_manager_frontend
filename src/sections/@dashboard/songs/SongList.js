@@ -10,18 +10,23 @@ import SelectCategory from "./SelectCategory";
 import AlertMessage from '../common/AlertMessage';
 
 export default function CheckboxList() {
-  const [searchText, setSearchText] = useState("");
+    const [searchText, setSearchText] = useState("");
     const [data, setData] = useState([]);
     const [itemToDelete, setItemToDelete] = useState(null);
     const [showAlert, setShowAlert] = useState(false);
     const [alertMessage, setAlertMessage] = useState("");
     const [showSuccessAlert, setShowSuccessAlert] = useState(false);
     const [successAlertMessage, setSuccessAlertMessage] = useState("");
+    const [errorCount, setErrorCount] = useState(0);
+
+    const headers = {
+      Authorization: `Bearer ${localStorage.getItem('token')}`
+    };
 
     useEffect(() => {
-      fetch("http://localhost:8080/dashboard/songs")
-        .then((response) => response.json())
-        .then((data) => {
+        fetch("http://localhost:8080/dashboard/songs", { headers })
+          .then((response) => response.json())
+          .then((data) => {
           setData(data);
 
         if (itemToDelete !== null) {
@@ -44,17 +49,32 @@ export default function CheckboxList() {
         return;
       }
 
-      fetch(`http://localhost:8080/dashboard/songs/${id}`, { method: "DELETE" })
-        .then(() => {
-          setItemToDelete(id);
-          setSuccessAlertMessage(`Pomyślnie usunięto pieśń ${item.name}`);
-          setShowSuccessAlert(true);
+        fetch(`http://localhost:8080/dashboard/songs/${id}`, {
+          method: "DELETE",
+          headers
         })
-        .catch((error) => {
-          setAlertMessage(`${error.message}`);
-          setShowAlert(true);
-        });
-      };
+          .then((response) => {
+            if (response.ok) {
+              setItemToDelete(id);
+              setSuccessAlertMessage(`Pomyślnie usunięto pieśń ${item.name}`);
+              setShowSuccessAlert(true);
+            } else if (response.status === 401) {
+              handleCloseSuccessAlert();
+              setErrorCount(prevCount => prevCount + 1);
+              setAlertMessage(`[${errorCount}] Błąd autoryzacji`);
+              setShowAlert(true);
+            } else {
+              handleCloseSuccessAlert();
+              setErrorCount(prevCount => prevCount + 1);
+              setAlertMessage(`[${errorCount}] Wystąpił błąd`);
+              setShowAlert(true);
+            }
+          })
+          .catch((error) => {
+            setAlertMessage(error.message);
+            setShowAlert(true);
+          });
+        };
 
     const handleCloseAlert = () => {
       setShowAlert(false);
