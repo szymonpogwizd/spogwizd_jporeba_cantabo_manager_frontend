@@ -16,7 +16,9 @@ import SongManager from './pages/SongManager';
 import Groups from './pages/Groups';
 import Settings from './pages/Settings';
 
-import ProtectedRoute from './ProtectedRoute';
+import ProtectedRoute from './route/ProtectedRoute';
+import SuperAdminRoute from './route/SuperAdminRoute';
+import AdminRoute from './route/AdminRoute';
 // ----------------------------------------------------------------------
 
 export default function Router() {
@@ -30,11 +32,11 @@ export default function Router() {
         { path: 'user', element: <ProtectedRoute><UserPage /></ProtectedRoute> },
         { path: 'songs', element: <ProtectedRoute><Songs /></ProtectedRoute> },
         { path: 'categories', element: <ProtectedRoute><Categories /></ProtectedRoute> },
-        { path: 'users', element: <ProtectedRoute><Users /></ProtectedRoute> },
+        { path: 'users', element: <AdminRoute><Users /></AdminRoute> },
         { path: 'profiles', element: <ProtectedRoute><Profiles /></ProtectedRoute> },
         { path: 'songManager', element: <ProtectedRoute><SongManager /></ProtectedRoute> },
-        {path: 'groups', element: <ProtectedRoute><Groups /></ProtectedRoute> },
-        {path: 'settings', element: <ProtectedRoute><Settings /></ProtectedRoute> }
+        { path: 'groups', element: <SuperAdminRoute><Groups /></SuperAdminRoute> },
+        { path: 'settings', element: <ProtectedRoute><Settings /></ProtectedRoute> }
       ],
     },
     {
