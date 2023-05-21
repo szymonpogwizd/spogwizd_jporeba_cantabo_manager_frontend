@@ -13,9 +13,10 @@ import Categories from './pages/Categories';
 import Users from './pages/Users';
 import Profiles from './pages/Profiles';
 import SongManager from './pages/SongManager';
-import Groups from './pages/Groups'
-import Settings from './pages/Settings'
+import Groups from './pages/Groups';
+import Settings from './pages/Settings';
 
+import ProtectedRoute from './ProtectedRoute';
 // ----------------------------------------------------------------------
 
 export default function Router() {
@@ -25,16 +26,15 @@ export default function Router() {
       element: <DashboardLayout />,
       children: [
         { element: <Navigate to="/dashboard/app" />, index: true },
-        { path: 'app', element: <DashboardAppPage /> },
-        { path: 'user', element: <UserPage /> },
-        { path: 'songs', element: <Songs /> },
-        { path: 'categories', element: <Categories /> },
-        { path: 'users', element: <Users /> },
-        { path: 'profiles', element: <Profiles /> },
-        { path: 'songManager', element: <SongManager /> },
-        {path: 'groups', element: <Groups/> },
-        {path: 'settings', element: <Settings/>}
-
+        { path: 'app', element: <ProtectedRoute><DashboardAppPage /></ProtectedRoute> },
+        { path: 'user', element: <ProtectedRoute><UserPage /></ProtectedRoute> },
+        { path: 'songs', element: <ProtectedRoute><Songs /></ProtectedRoute> },
+        { path: 'categories', element: <ProtectedRoute><Categories /></ProtectedRoute> },
+        { path: 'users', element: <ProtectedRoute><Users /></ProtectedRoute> },
+        { path: 'profiles', element: <ProtectedRoute><Profiles /></ProtectedRoute> },
+        { path: 'songManager', element: <ProtectedRoute><SongManager /></ProtectedRoute> },
+        {path: 'groups', element: <ProtectedRoute><Groups /></ProtectedRoute> },
+        {path: 'settings', element: <ProtectedRoute><Settings /></ProtectedRoute> }
       ],
     },
     {

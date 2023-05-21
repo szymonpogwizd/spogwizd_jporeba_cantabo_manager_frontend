@@ -14,7 +14,7 @@ import {
 } from '../sections/@dashboard/groups';
 
 
-export default function Grupy() {
+export default function Groups() {
 return (
     <>
       <Helmet>
@@ -54,16 +54,9 @@ return (
                         <Grid item xs={12}>
                         <UserList />
                         </Grid>
-
-
-
-
                     </Grid>
                   </Grid>
-
-
             </Grid>
-
       </Container>
     </>
   );

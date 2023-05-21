@@ -27,36 +27,40 @@ export default function LoginForm() {
     setPassword(event.target.value);
   };
 
-  const handleLogin = async () => {
-    try {
-      const params = new URLSearchParams();
-      params.append('username', usernameValue);
-      params.append('password', passwordValue);
+    const handleLogin = async () => {
+      try {
+        const credentials = {
+          username: usernameValue,
+          password: passwordValue
+        };
 
-      const response = await axios.post('http://127.0.0.1:8080/login', params);
+        const response = await axios.post('http://127.0.0.1:8080/login', credentials, {
+          responseType: 'json',
+        });
 
-      if (response.status === 200) {
-        if (response.data.includes('Invalid credentials')) {
-           handleCloseAlert();
-           setErrorCount(prevCount => prevCount + 1);
-           setAlertMessage(`[${errorCount}] Błędne dane logowania`);
-           setShowAlert(true);
-        } else {
+        if (response.status === 200) {
+
+        const authorizationHeader = response.headers.authorization;
+
+          if (authorizationHeader) {
+            const token = authorizationHeader.split(' ')[1];
+            localStorage.setItem('token', token);
+          }
+
           navigate('/dashboard', { replace: true });
-        }
-      } else {
-        handleCloseAlert();
-        setErrorCount(prevCount => prevCount + 1);
-        setAlertMessage(`[${errorCount}] Błąd logowania`);
-        setShowAlert(true);
-      }
-    } catch (error) {
-      handleCloseAlert();
-      setErrorCount(prevCount => prevCount + 1);
-      setAlertMessage(`[${errorCount}] Błąd żądania logowania: ${error.message}`);
-      setShowAlert(true);
-    }
-  };
+        } else {
+              handleCloseAlert();
+              setErrorCount(prevCount => prevCount + 1);
+              setAlertMessage(`[${errorCount}] Błąd logowania`);
+              setShowAlert(true);
+            }
+          } catch (error) {
+            handleCloseAlert();
+            setErrorCount(prevCount => prevCount + 1);
+            setAlertMessage(`[${errorCount}] Błąd żądania logowania: ${error.message}`);
+            setShowAlert(true);
+          }
+    };
 
       const handleCloseAlert = () => {
         setShowAlert(false);
