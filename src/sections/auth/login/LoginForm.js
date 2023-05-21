@@ -40,15 +40,11 @@ export default function LoginForm() {
 
         if (response.status === 200) {
 
-          // Sprawdź nagłówek "Authorization"
         const authorizationHeader = response.headers.authorization;
-        console.log('Authorization Header:', authorizationHeader);
-        console.log('Response:', response);
-        console.log(response.headers.get('Authorization'));
-        console.log(response.headers.authorization);
+
           if (authorizationHeader) {
-            const token = authorizationHeader.split(' ')[1]; // Pobierz wartość tokena bez słowa "Bearer"
-            console.log('Token JWT:', token);
+            const token = authorizationHeader.split(' ')[1];
+            localStorage.setItem('token', token);
           }
 
           navigate('/dashboard', { replace: true });
