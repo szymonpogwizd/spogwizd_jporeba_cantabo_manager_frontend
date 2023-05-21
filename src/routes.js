@@ -7,6 +7,7 @@ import UserPage from './pages/UserPage';
 import LoginPage from './pages/LoginPage';
 import PasswordRecovery from './pages/PasswordRecovery';
 import Page404 from './pages/Page404';
+import Page403 from './pages/Page403';
 import DashboardAppPage from './pages/DashboardAppPage';
 import Songs from './pages/Songs';
 import Categories from './pages/Categories';
@@ -52,6 +53,7 @@ export default function Router() {
       children: [
         { element: <Navigate to="/dashboard/app" />, index: true },
         { path: '404', element: <Page404 /> },
+        { path: '403', element: <Page403 /> },
         { path: '*', element: <Navigate to="/404" /> },
       ],
     },
