@@ -3,7 +3,6 @@ import { Navigate, useRoutes } from 'react-router-dom';
 import DashboardLayout from './layouts/dashboard';
 import SimpleLayout from './layouts/simple';
 //
-import UserPage from './pages/UserPage';
 import LoginPage from './pages/LoginPage';
 import PasswordRecovery from './pages/PasswordRecovery';
 import Page404 from './pages/Page404';
@@ -30,7 +29,6 @@ export default function Router() {
       children: [
         { element: <Navigate to="/dashboard/app" />, index: true },
         { path: 'app', element: <ProtectedRoute><DashboardAppPage /></ProtectedRoute> },
-        { path: 'user', element: <ProtectedRoute><UserPage /></ProtectedRoute> },
         { path: 'songs', element: <ProtectedRoute><Songs /></ProtectedRoute> },
         { path: 'categories', element: <ProtectedRoute><Categories /></ProtectedRoute> },
         { path: 'users', element: <AdminRoute><Users /></AdminRoute> },

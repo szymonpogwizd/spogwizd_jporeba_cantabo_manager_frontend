@@ -47,6 +47,13 @@ export default function LoginForm() {
             localStorage.setItem('token', token);
           }
 
+          const data = JSON.parse(response.config.data);
+
+          const email = data.username;
+          if (email) {
+            localStorage.setItem('email', email);
+          }
+
           navigate('/dashboard', { replace: true });
         } else {
               handleCloseAlert();

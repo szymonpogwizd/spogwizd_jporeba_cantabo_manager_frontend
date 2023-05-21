@@ -91,10 +91,9 @@ export default function SongManager() {
         setWordsAuthorValue(value);
       }
 
-      const handleCategoriesChange = (newValue) => {
-        console.log(newValue);
+    const handleCategoriesChange = (newValue) => {
         setSelectedCategories(newValue);
-      }
+    }
 
       const handleCloseAlert = () => {
         setShowAlert(false);
