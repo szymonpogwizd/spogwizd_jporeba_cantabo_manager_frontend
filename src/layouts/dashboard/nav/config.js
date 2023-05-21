@@ -12,11 +12,6 @@ const navConfig = [
     icon: icon('ic_analytics'),
   },
   {
-    title: 'user',
-    path: '/dashboard/user',
-    icon: icon('ic_user'),
-  },
-  {
     title: 'Strona główna',
     path: '/dashboard/mainPage',
     icon: icon('insights_black_24dp'),
@@ -70,21 +65,6 @@ const navConfig = [
     title: 'grupy',
     path: '/dashboard/groups',
     icon: icon('groups_black_24dp'),
-  },
-  {
-    title: 'Logowanie',
-    path: '/login',
-    icon: icon('ic_lock'),
-  },
-  {
-    title: 'passwordRecovery',
-    path: '/passwordRecovery',
-    icon: icon('ic_lock'),
-    },
-  {
-    title: 'Error 404',
-    path: '/404',
-    icon: icon('ic_disabled'),
   },
 ];
 

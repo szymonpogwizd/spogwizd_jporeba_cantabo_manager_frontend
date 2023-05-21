@@ -1,8 +1,7 @@
-// ----------------------------------------------------------------------
+const storedEmail = localStorage.getItem('email');
 
 const account = {
-  displayName: 'Jaydon Frankie',
-  email: 'demo@minimals.cc',
+  displayName: storedEmail || 'Default Username',
   photoURL: '/assets/images/avatars/avatar_default.jpg',
 };
 
