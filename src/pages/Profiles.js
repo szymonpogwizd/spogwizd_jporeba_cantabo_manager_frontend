@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 // @mui
 import { useTheme } from '@mui/material/styles';
@@ -22,18 +23,116 @@ import {
   ColorPickerBackground,
   ColorPickerText,
   ColorPickerStop,
+  AlertMessage,
 } from '../sections/@dashboard/profiles';
 
 // ----------------------------------------------------------------------
 
 export default function Profiles() {
-  const theme = useTheme();
+    const theme = useTheme();
+    const [nameValue, setNameValue] = useState("");
+    const [activeValue, setActiveValue] = useState(false);
+    const [sortByUsedValue, setSortByUsedValue] = useState(false);
+    const [showAlert, setShowAlert] = useState(false);
+    const [alertMessage, setAlertMessage] = useState("");
+    const [showSuccessAlert, setShowSuccessAlert] = useState(false);
+    const [successAlertMessage, setSuccessAlertMessage] = useState("");
+    const [refreshKey, setRefreshKey] = useState(0);
+    const [errorCount, setErrorCount] = useState(0);
+
+    const handleSaveClick = () => {
+
+      const resetForm = () => {
+        setNameValue("");
+        setActiveValue(false);
+        setSortByUsedValue(false);
+      };
+
+      const data = {
+        name: nameValue,
+        active: activeValue,
+        sortByUsed: sortByUsedValue,
+      };
+
+        fetch("http://localhost:8080/dashboard/profiles", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${localStorage.getItem('token')}`
+          },
+          body: JSON.stringify(data),
+        })
+          .then((response) => {
+            if (!response.ok) {
+              return response.text().then((errorText) => {
+                throw new Error(errorText);
+              });
+            }
+              handleCloseAlert();
+              setSuccessAlertMessage(`Pomyślnie utworzono profil ${nameValue}`);
+              setShowSuccessAlert(true);
+              resetForm();
+              setRefreshKey(prevKey => prevKey + 1);
+              return response.json();
+          })
+          .catch((error) => {
+            handleCloseSuccessAlert();
+            setErrorCount(prevCount => prevCount + 1);
+            setAlertMessage(`[${errorCount}] ${error.message}`);
+            setShowAlert(true);
+          });
+      };
+
+      const handleNameChange = (event) => {
+        const value = event.target.value;
+        setNameValue(value);
+      }
+
+      const handleCloseAlert = () => {
+        setShowAlert(false);
+      };
+
+      const handleCloseSuccessAlert = () => {
+        setShowSuccessAlert(false);
+      };
+
+      const resetAlert = () => {
+        setAlertMessage("");
+      };
+
+      const handleSwitchChange = (value) => {
+        setActiveValue(value);
+      };
+
+      const handleSortByUsedChange = (value) => {
+        setSortByUsedValue(value);
+      };
 
   return (
     <>
       <Helmet>
         <title> Profile | Cantabo Manager </title>
       </Helmet>
+
+        {showAlert && (
+        <AlertMessage
+          severity="error"
+          title="Błąd"
+          message={alertMessage}
+          onClose={handleCloseAlert}
+          resetAlert={resetAlert}
+        />
+        )}
+
+        {showSuccessAlert && (
+        <AlertMessage
+          severity="success"
+          title="Sukces"
+          message={successAlertMessage}
+          onClose={handleCloseSuccessAlert}
+          resetAlert={resetAlert}
+        />
+        )}
 
       <Container maxWidth="xl">
         <Typography variant="h4" sx={{ mb: 5 }}>
@@ -46,11 +145,9 @@ export default function Profiles() {
             {/* Lewa strona */}
             <Grid>
               <Grid item xs={12}>
-                {/* Pierwszy element */}
-                 <ProfileList />
+                <ProfileList refreshKey={refreshKey} />
               </Grid>
               <Grid item xs={12}>
-                {/* Drugi element */}
                 <FloatingActionButtonsAdd />
               </Grid>
             </Grid>
@@ -67,13 +164,13 @@ export default function Profiles() {
             >
             <Grid>
               <Grid item xs={12}>
-                <TextFieldName />
+                <TextFieldName onChange={handleNameChange} value={nameValue} />
               </Grid>
               <Grid item xs={12}>
-                <SwitchActive />
+                <SwitchActive onSwitchChange={handleSwitchChange} activeValue={activeValue}/>
               </Grid>
               <Grid item xs={12}>
-                <SwitchSortByUsed />
+                <SwitchSortByUsed onSwitchChange={handleSortByUsedChange} sortByUsedValue={sortByUsedValue} />
               </Grid>
               <Grid item xs={12}>
                 <RadioGroupAlign />
@@ -114,7 +211,7 @@ export default function Profiles() {
             </Grid>
             </Box>
             <Grid item xs={12}>
-             <FloatingActionButtonsSave />
+             <FloatingActionButtonsSave onClick={handleSaveClick}/>
            </Grid>
           </Grid>
 
