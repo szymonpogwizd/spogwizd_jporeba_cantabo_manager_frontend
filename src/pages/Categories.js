@@ -18,6 +18,7 @@ export default function Categories() {
   const theme = useTheme();
     const [nameSongCategoryValue, setNameSongCategoryValue] = useState("");
     const [namePlaylistCategoryValue, setNamePlaylistCategoryValue] = useState("");
+    const [idPlaylistCategoryValue, setIdPlaylistCategoryValue] = useState("");
     const [showAlert, setShowAlert] = useState(false);
     const [alertMessage, setAlertMessage] = useState("");
     const [showSuccessAlert, setShowSuccessAlert] = useState(false);
@@ -25,6 +26,7 @@ export default function Categories() {
     const [refreshKeySongCategories, setRefreshKeySongCategories] = useState(0);
     const [refreshKeyPlaylistCategories, setRefreshKeyPlaylistCategories] = useState(0);
     const [errorCount, setErrorCount] = useState(0);
+    const [isUpdateMode, setIsUpdateMode] = useState(false);
 
      const handleSaveSongCategoryClick = () => {
 
@@ -104,6 +106,48 @@ export default function Categories() {
             });
         };
 
+        const handleUpdatePlaylistCategoryClick = () => {
+
+          const resetFormPlaylistCategories = () => {
+            setNamePlaylistCategoryValue("");
+            setIdPlaylistCategoryValue("");
+          };
+
+          const dataPlaylistCategories = {
+            name: namePlaylistCategoryValue,
+          };
+
+          fetch(`http://localhost:8080/dashboard/playlistCategories/${idPlaylistCategoryValue}`, {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+              "Authorization": `Bearer ${localStorage.getItem('token')}`
+            },
+            body: JSON.stringify(dataPlaylistCategories),
+          })
+            .then((response) => {
+              if (!response.ok) {
+                return response.text().then((errorText) => {
+                  throw new Error(errorText);
+                });
+              }
+              setSuccessAlertMessage(`Pomyślnie zaktualizowano kategorię playlisty ${namePlaylistCategoryValue}`);
+              handleCloseAlert();
+              setShowSuccessAlert(true);
+              resetFormPlaylistCategories();
+              setRefreshKeyPlaylistCategories(prevKey => prevKey + 1);
+              setIsUpdateMode(false);
+              return response.json();
+            })
+            .catch((error) => {
+              handleCloseSuccessAlert();
+              setErrorCount(prevCount => prevCount + 1);
+              setAlertMessage(`[${errorCount}] ${error.message}`);
+              setShowAlert(true);
+            });
+        };
+
+
 
     const handleSongCategoryNameChange = (event) => {
       const value = event.target.value;
@@ -182,13 +226,19 @@ export default function Categories() {
             </Typography>
             <Grid>
               <Grid item xs={12}>
-                <PlaylistCategoryList refreshKey={refreshKeyPlaylistCategories} />
+                <PlaylistCategoryList
+                    refreshKey={refreshKeyPlaylistCategories}
+                    setNamePlaylistCategoryValue={setNamePlaylistCategoryValue}
+                    setIdPlaylistCategoryValue={setIdPlaylistCategoryValue}
+                    setIsUpdateMode={setIsUpdateMode}/>
               </Grid>
               <Grid item xs={12}>
                 <TextFieldNamePlaylistCategories onChange={handlePlaylistCategoryNameChange} value={namePlaylistCategoryValue} />
               </Grid>
               <Grid item xs={12}>
-                <FloatingActionButtonsSave onClick={handleSavePlaylistCategoryClick} />
+                <FloatingActionButtonsSave
+                  onClick={isUpdateMode ? handleUpdatePlaylistCategoryClick : handleSavePlaylistCategoryClick}
+                />
               </Grid>
             </Grid>
           </Grid>

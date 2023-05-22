@@ -7,22 +7,17 @@ const icon = (name) => <SvgColor src={`/assets/icons/navbar/${name}.svg`} sx={{ 
 
 const navConfig = [
   {
-    title: 'dashboard',
+    title: 'Strona główna',
     path: '/dashboard/app',
     icon: icon('ic_analytics'),
   },
   {
-    title: 'Strona główna',
-    path: '/dashboard/mainPage',
-    icon: icon('insights_black_24dp'),
-  },
-  {
-    title: 'songs',
+    title: 'Pieśni',
     path: '/dashboard/songs',
     icon: icon('library_music_black_24dp'),
   },
   {
-    title: 'songManager',
+    title: 'Zarządzanie pieśniami',
     path: '/dashboard/songManager',
     icon: icon('lyrics_black_24dp'),
   },
@@ -37,12 +32,12 @@ const navConfig = [
     icon: icon('playlist_add_black_24dp'),
   },
   {
-    title: 'categories',
+    title: 'Kategorie',
     path: '/dashboard/categories',
     icon: icon('category_black_24dp'),
   },
   {
-    title: 'profiles',
+    title: 'Profile',
     path: '/dashboard/profiles',
     icon: icon('portrait_black_24dp'),
   },
@@ -57,12 +52,12 @@ const navConfig = [
     icon: icon('chat_bubble_black_24dp'),
   },
   {
-    title: 'users',
+    title: 'Użytkownicy',
     path: '/dashboard/users',
     icon: icon('people_black_24dp'),
   },
   {
-    title: 'grupy',
+    title: 'Grupy',
     path: '/dashboard/groups',
     icon: icon('groups_black_24dp'),
   },
