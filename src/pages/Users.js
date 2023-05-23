@@ -35,6 +35,8 @@ export default function Users() {
   const [resetPasswords, setResetPasswords] = useState(false);
   const [refreshKey, setRefreshKey] = useState(0);
   const [errorCount, setErrorCount] = useState(0);
+  const [idValue, setIdValue] = useState("");
+  const [isUpdateMode, setIsUpdateMode] = useState(false);
 
    const handleSaveClick = () => {
 
@@ -84,6 +86,56 @@ export default function Users() {
           setShowAlert(true);
         });
     };
+
+      const handleUpdateClick = () => {
+            const resetFormUsers = () => {
+              setIdValue("");
+              setNameValue("");
+              setEmailValue("");
+              setRoleValue('USER');
+              setGroupValue(null);
+              setActiveValue(true);
+              setResetPasswords(true);
+            };
+
+            const dataUsers = {
+              name: nameValue,
+              email: emailValue,
+              userType: roleValue,
+              group: groupValue,
+              active: activeValue,
+              password: passwordValue,
+            };
+
+            fetch(`http://localhost:8080/dashboard/users/${idValue}`, {
+              method: "PUT",
+              headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${localStorage.getItem('token')}`
+              },
+              body: JSON.stringify(dataUsers),
+            })
+              .then((response) => {
+                if (!response.ok) {
+                  return response.text().then((errorText) => {
+                    throw new Error(errorText);
+                  });
+                }
+                setSuccessAlertMessage(`Pomyślnie zaktualizowano użytkownika ${nameValue}`);
+                handleCloseAlert();
+                setShowSuccessAlert(true);
+                resetFormUsers();
+                setRefreshKey(prevKey => prevKey + 1);
+                setIsUpdateMode(false);
+                return response.json();
+              })
+              .catch((error) => {
+                handleCloseSuccessAlert();
+                setErrorCount(prevCount => prevCount + 1);
+                setAlertMessage(`[${errorCount}] ${error.message}`);
+                setShowAlert(true);
+              });
+          };
 
     const handleNameChange = (event) => {
       const value = event.target.value;
@@ -163,7 +215,16 @@ export default function Users() {
             {/* Lewa strona */}
             <Grid>
               <Grid item xs={12}>
-                <UserList refreshKey={refreshKey} />
+                <UserList
+                    refreshKey={refreshKey}
+                    setNameValue={setNameValue}
+                    setIdValue={setIdValue}
+                    setIsUpdateMode={setIsUpdateMode}
+                    setEmailValue={setEmailValue}
+                    setRoleValue={setRoleValue}
+                    setGroupValue={setGroupValue}
+                    setActiveValue={setActiveValue}
+                />
               </Grid>
               <Grid item xs={12}>
                 <FloatingActionButtonsAdd />
@@ -198,7 +259,9 @@ export default function Users() {
                 />
               </Grid>
               <Grid item xs={12}>
-                <FloatingActionButtonsSave onClick={handleSaveClick} disabled={!passwordsMatch}/>
+                <FloatingActionButtonsSave
+                    onClick={isUpdateMode ? handleUpdateClick : handleSaveClick}
+                />
               </Grid>
             </Grid>
           </Grid>
