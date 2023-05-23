@@ -33,6 +33,7 @@ export default function Profiles() {
     const [nameValue, setNameValue] = useState("");
     const [activeValue, setActiveValue] = useState(false);
     const [sortByUsedValue, setSortByUsedValue] = useState(false);
+    const [showTitleValue, setShowTitleValue] = useState(false);
     const [showAlert, setShowAlert] = useState(false);
     const [alertMessage, setAlertMessage] = useState("");
     const [showSuccessAlert, setShowSuccessAlert] = useState(false);
@@ -46,12 +47,14 @@ export default function Profiles() {
         setNameValue("");
         setActiveValue(false);
         setSortByUsedValue(false);
+        setShowTitleValue(false);
       };
 
       const data = {
         name: nameValue,
         active: activeValue,
         sortByUsed: sortByUsedValue,
+        showTitle: showTitleValue,
       };
 
         fetch("http://localhost:8080/dashboard/profiles", {
@@ -106,6 +109,10 @@ export default function Profiles() {
 
       const handleSortByUsedChange = (value) => {
         setSortByUsedValue(value);
+      };
+
+      const handleShowTitle = (value) => {
+        setShowTitleValue(value);
       };
 
   return (
@@ -194,7 +201,7 @@ export default function Profiles() {
                 <ColorPickerStop />
               </Grid>
               <Grid item xs={12}>
-                <SwitchShowTitle />
+                <SwitchShowTitle onSwitchChange={handleShowTitle} showTitleValue={showTitleValue} />
               </Grid>
               <Grid item xs={12}>
                 <SwitchAllBig />
