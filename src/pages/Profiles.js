@@ -35,6 +35,7 @@ export default function Profiles() {
     const [sortByUsedValue, setSortByUsedValue] = useState(false);
     const [showTitleValue, setShowTitleValue] = useState(false);
     const [allBigValue, setAllBigValue] = useState(false);
+    const [showEmptySlideValue, setShowEmptySlideValue] = useState(true);
     const [showAlert, setShowAlert] = useState(false);
     const [alertMessage, setAlertMessage] = useState("");
     const [showSuccessAlert, setShowSuccessAlert] = useState(false);
@@ -50,6 +51,7 @@ export default function Profiles() {
         setSortByUsedValue(false);
         setShowTitleValue(false);
         setAllBigValue(false);
+        setShowEmptySlideValue(true);
       };
 
       const data = {
@@ -58,6 +60,7 @@ export default function Profiles() {
         sortByUsed: sortByUsedValue,
         showTitle: showTitleValue,
         allBig: allBigValue,
+        showEmptySlide: showEmptySlideValue,
       };
 
         fetch("http://localhost:8080/dashboard/profiles", {
@@ -120,6 +123,10 @@ export default function Profiles() {
 
       const handleAllBig = (value) => {
         setAllBigValue(value);
+      }
+
+      const handleShowEmptySlide = (value) => {
+        setShowEmptySlideValue(value);
       }
 
   return (
@@ -214,7 +221,7 @@ export default function Profiles() {
                 <SwitchAllBig onSwitchChange={handleAllBig} allBigValue={allBigValue}/>
               </Grid>
               <Grid item xs={12}>
-                <SwitchShowEmptySlide />
+                <SwitchShowEmptySlide onSwitchChange={handleShowEmptySlide} showEmptySlideValue={showEmptySlideValue}/>
               </Grid>
               <Grid item xs={12}>
                 <SwitchInvertColors />
