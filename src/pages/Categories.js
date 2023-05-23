@@ -19,6 +19,7 @@ export default function Categories() {
     const [nameSongCategoryValue, setNameSongCategoryValue] = useState("");
     const [namePlaylistCategoryValue, setNamePlaylistCategoryValue] = useState("");
     const [idPlaylistCategoryValue, setIdPlaylistCategoryValue] = useState("");
+    const [idSongCategoryValue, setIdSongCategoryValue] = useState("");
     const [showAlert, setShowAlert] = useState(false);
     const [alertMessage, setAlertMessage] = useState("");
     const [showSuccessAlert, setShowSuccessAlert] = useState(false);
@@ -27,6 +28,7 @@ export default function Categories() {
     const [refreshKeyPlaylistCategories, setRefreshKeyPlaylistCategories] = useState(0);
     const [errorCount, setErrorCount] = useState(0);
     const [isUpdateMode, setIsUpdateMode] = useState(false);
+    const [isUpdateModeSongCategory, setIsUpdateModeSongCategory] = useState(false);
 
      const handleSaveSongCategoryClick = () => {
 
@@ -66,6 +68,47 @@ export default function Categories() {
             setShowAlert(true);
           });
       };
+
+      const handleUpdateSongCategoryClick = () => {
+
+                const resetFormSongCategories = () => {
+                  setNameSongCategoryValue("");
+                  setIdSongCategoryValue("");
+                };
+
+                const dataSongCategories = {
+                  name: nameSongCategoryValue,
+                };
+
+                fetch(`http://localhost:8080/dashboard/songCategories/${idSongCategoryValue}`, {
+                  method: "PUT",
+                  headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${localStorage.getItem('token')}`
+                  },
+                  body: JSON.stringify(dataSongCategories),
+                })
+                  .then((response) => {
+                    if (!response.ok) {
+                      return response.text().then((errorText) => {
+                        throw new Error(errorText);
+                      });
+                    }
+                    setSuccessAlertMessage(`Pomyślnie zaktualizowano kategorię pieśni ${nameSongCategoryValue}`);
+                    handleCloseAlert();
+                    setShowSuccessAlert(true);
+                    resetFormSongCategories();
+                    setRefreshKeySongCategories(prevKey => prevKey + 1);
+                    setIsUpdateMode(false);
+                    return response.json();
+                  })
+                  .catch((error) => {
+                    handleCloseSuccessAlert();
+                    setErrorCount(prevCount => prevCount + 1);
+                    setAlertMessage(`[${errorCount}] ${error.message}`);
+                    setShowAlert(true);
+                  });
+              };
 
       const handleSavePlaylistCategoryClick = () => {
 
@@ -208,13 +251,20 @@ export default function Categories() {
             </Typography>
             <Grid>
               <Grid item xs={12}>
-                <SongCategoryList refreshKey={refreshKeySongCategories} />
+                <SongCategoryList
+                    refreshKey={refreshKeySongCategories}
+                    setNameSongCategoryValue={setNameSongCategoryValue}
+                    setIdSongCategoryValue={setIdSongCategoryValue}
+                    setIsUpdateModeSongCategory={setIsUpdateModeSongCategory}
+                />
               </Grid>
               <Grid item xs={12}>
                 <TextFieldNameSongCategories onChange={handleSongCategoryNameChange} value={nameSongCategoryValue} />
               </Grid>
               <Grid item xs={12}>
-                <FloatingActionButtonsSave onClick={handleSaveSongCategoryClick} />
+                <FloatingActionButtonsSave
+                    onClick={isUpdateModeSongCategory ? handleUpdateSongCategoryClick : handleSaveSongCategoryClick}
+                />
               </Grid>
             </Grid>
           </Grid>
