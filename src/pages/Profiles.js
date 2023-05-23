@@ -37,6 +37,7 @@ export default function Profiles() {
     const [allBigValue, setAllBigValue] = useState(false);
     const [showEmptySlideValue, setShowEmptySlideValue] = useState(true);
     const [invertColorsValue, setInvertColorsValue] = useState(false);
+    const [expandedListValue, setExpandedListValue] = useState(false);
     const [showAlert, setShowAlert] = useState(false);
     const [alertMessage, setAlertMessage] = useState("");
     const [showSuccessAlert, setShowSuccessAlert] = useState(false);
@@ -54,6 +55,7 @@ export default function Profiles() {
         setAllBigValue(false);
         setShowEmptySlideValue(true);
         setInvertColorsValue(false);
+        setExpandedListValue(false);
       };
 
       const data = {
@@ -64,6 +66,7 @@ export default function Profiles() {
         allBig: allBigValue,
         showEmptySlide: showEmptySlideValue,
         invertColors: invertColorsValue,
+        expandedList: expandedListValue,
       };
 
         fetch("http://localhost:8080/dashboard/profiles", {
@@ -134,6 +137,10 @@ export default function Profiles() {
 
       const handleInvertColors = (value) => {
         setInvertColorsValue(value);
+      }
+
+      const handleExpandedList = (value) => {
+        setExpandedListValue(value);
       }
 
   return (
@@ -234,7 +241,7 @@ export default function Profiles() {
                 <SwitchInvertColors onSwitchChange={handleInvertColors} invertColorsValue={invertColorsValue}/>
               </Grid>
               <Grid item xs={12}>
-                <SwitchExpandedList />
+                <SwitchExpandedList onSwitchChange={handleExpandedList} expandedListValue={expandedListValue}/>
               </Grid>
             </Grid>
             </Box>
