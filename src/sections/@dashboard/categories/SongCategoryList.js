@@ -77,7 +77,6 @@ export default function SongCategoryList({ refreshKey, setNameSongCategoryValue,
     const handleToggle = (id) => () => {
         const item = data.find((item) => item.id === id);
         if (item) {
-        console.log(item.id);
           setNameSongCategoryValue(item.name);
           setIdSongCategoryValue(item.id);
           setIsUpdateModeSongCategory(true);

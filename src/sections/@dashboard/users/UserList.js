@@ -9,7 +9,7 @@ import SearchField from "./SearchField";
 import SelectType from "./SelectType";
 import AlertMessage from '../common/AlertMessage';
 
-export default function UserList({ refreshKey }) {
+export default function UserList({ refreshKey, setNameValue, setIdValue, setIsUpdateMode, setEmailValue, setRoleValue, setGroupValue, setActiveValue }) {
     const [searchText, setSearchText] = useState("");
     const [data, setData] = useState([]);
     const [itemToDelete, setItemToDelete] = useState(null);
@@ -75,9 +75,18 @@ export default function UserList({ refreshKey }) {
       setAlertMessage("");
     };
 
-  const handleToggle = (value) => () => {
-    // logika do zrobienia
-  }
+    const handleToggle = (id) => () => {
+        const item = data.find((item) => item.id === id);
+        if (item) {
+          setIdValue(item.id);
+          setNameValue(item.name);
+          setEmailValue(item.email);
+          setRoleValue(item.userType);
+          setGroupValue(item.group);
+          setActiveValue(item.active);
+          setIsUpdateMode(true);
+        }
+    };
 
   const handleSearch = (newSearchText) => {
     setSearchText(newSearchText);

@@ -77,7 +77,6 @@ export default function PlaylistCategoryList({ refreshKey, setNamePlaylistCatego
       const handleToggle = (id) => () => {
         const item = data.find((item) => item.id === id);
         if (item) {
-        console.log(item.id);
           setNamePlaylistCategoryValue(item.name);
           setIdPlaylistCategoryValue(item.id);
           setIsUpdateMode(true);
