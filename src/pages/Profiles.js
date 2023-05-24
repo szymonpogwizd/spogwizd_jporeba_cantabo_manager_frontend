@@ -39,6 +39,7 @@ export default function Profiles() {
     const [invertColorsValue, setInvertColorsValue] = useState(false);
     const [expandedListValue, setExpandedListValue] = useState(false);
     const [maxFontValue, setMaxFontValue] = useState(20);
+    const [marginValue, setMarginValue] = useState(1);
     const [showAlert, setShowAlert] = useState(false);
     const [alertMessage, setAlertMessage] = useState("");
     const [showSuccessAlert, setShowSuccessAlert] = useState(false);
@@ -57,8 +58,8 @@ export default function Profiles() {
         setShowEmptySlideValue(true);
         setInvertColorsValue(false);
         setExpandedListValue(false);
-        // NIE DZIAŁA WIZUALNY RESTART
         setMaxFontValue(20);
+        setMarginValue(1);
       };
 
       const data = {
@@ -71,6 +72,7 @@ export default function Profiles() {
         invertColors: invertColorsValue,
         expandedList: expandedListValue,
         maxFont: maxFontValue,
+        margin: marginValue,
       };
 
         fetch("http://localhost:8080/dashboard/profiles", {
@@ -151,6 +153,10 @@ export default function Profiles() {
         setMaxFontValue(value);
       }
 
+      const handleMargin = (value) => {
+        setMarginValue(value);
+      }
+
   return (
     <>
       <Helmet>
@@ -222,7 +228,7 @@ export default function Profiles() {
                 <SliderMaxFont setMaxFontValue={setMaxFontValue} maxFontValue={maxFontValue} />
               </Grid>
               <Grid item xs={12}>
-                <SliderMargin />
+                <SliderMargin setMarginValue={setMarginValue} marginValue={marginValue}/>
               </Grid>
               <Grid item xs={12}>
                 <SliderMaxMin />
