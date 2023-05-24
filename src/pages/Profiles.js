@@ -40,6 +40,7 @@ export default function Profiles() {
     const [expandedListValue, setExpandedListValue] = useState(false);
     const [maxFontValue, setMaxFontValue] = useState(20);
     const [marginValue, setMarginValue] = useState(1);
+    const [maxMinValue, setMaxMinValue] = useState(7);
     const [showAlert, setShowAlert] = useState(false);
     const [alertMessage, setAlertMessage] = useState("");
     const [showSuccessAlert, setShowSuccessAlert] = useState(false);
@@ -60,6 +61,7 @@ export default function Profiles() {
         setExpandedListValue(false);
         setMaxFontValue(20);
         setMarginValue(1);
+        setMaxMinValue(7);
       };
 
       const data = {
@@ -73,6 +75,7 @@ export default function Profiles() {
         expandedList: expandedListValue,
         maxFont: maxFontValue,
         margin: marginValue,
+        maxMin: maxMinValue,
       };
 
         fetch("http://localhost:8080/dashboard/profiles", {
@@ -149,14 +152,6 @@ export default function Profiles() {
         setExpandedListValue(value);
       }
 
-      const handleMaxFont = (value) => {
-        setMaxFontValue(value);
-      }
-
-      const handleMargin = (value) => {
-        setMarginValue(value);
-      }
-
   return (
     <>
       <Helmet>
@@ -231,7 +226,7 @@ export default function Profiles() {
                 <SliderMargin setMarginValue={setMarginValue} marginValue={marginValue}/>
               </Grid>
               <Grid item xs={12}>
-                <SliderMaxMin />
+                <SliderMaxMin setMaxMinValue={setMaxMinValue} maxMinValue={maxMinValue}/>
               </Grid>
               <Grid item xs={12}>
                 <ColorPickerBackground />
