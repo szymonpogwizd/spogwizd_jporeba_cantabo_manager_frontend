@@ -12,7 +12,7 @@ import {
    FloatingActionButtonsAdd,
    PlaylistList,
 
-} from '../sections/@dashboard/Playlists';
+} from '../sections/@dashboard/playlists';
 
 
 export default function Playlist() {
@@ -47,12 +47,7 @@ return (
                             </Grid>
                         </Grid>
                     </Grid>
-
-
                 </Grid>
-
-
-
       </Container>
     </>
   );
