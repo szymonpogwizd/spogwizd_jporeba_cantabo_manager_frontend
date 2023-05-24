@@ -1,11 +1,16 @@
-import * as React from "react";
+import React from "react";
 import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import FormControl from "@mui/material/FormControl";
 import FormLabel from "@mui/material/FormLabel";
 
-export default function RowRadioButtonsGroup() {
+export default function RadioButtonsGroupAlign({ setAlignValue, alignValue }) {
+  const handleAlignChange = (event) => {
+    const value = event.target.value;
+    setAlignValue(value);
+  };
+
   return (
     <FormControl sx={{ marginBottom: 2 }}>
       <FormLabel id="demo-row-radio-buttons-group-label">
@@ -14,8 +19,9 @@ export default function RowRadioButtonsGroup() {
       <RadioGroup
         row
         aria-labelledby="demo-row-radio-buttons-group-label"
-        defaultValue="CENTER"
+        value={alignValue}
         name="row-radio-buttons-group"
+        onChange={handleAlignChange}
       >
         <FormControlLabel
           value="LEFT"

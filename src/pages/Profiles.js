@@ -44,6 +44,7 @@ export default function Profiles() {
     const [backgroundColorValue, setBackgroundColorValue] = useState("#000000");
     const [textColorValue, setTextColorValue] = useState("#FFFFFF");
     const [stopColorValue, setStopColorValue] = useState("#000000");
+    const [alignValue, setAlignValue] = useState("CENTER");
     const [showAlert, setShowAlert] = useState(false);
     const [alertMessage, setAlertMessage] = useState("");
     const [showSuccessAlert, setShowSuccessAlert] = useState(false);
@@ -68,6 +69,7 @@ export default function Profiles() {
         setBackgroundColorValue("#000000");
         setTextColorValue("#FFFFFF");
         setStopColorValue("#000000");
+        setAlignValue("CENTER");
       };
 
       const data = {
@@ -85,6 +87,7 @@ export default function Profiles() {
         bgColor: backgroundColorValue,
         txColor: textColorValue,
         stopColor: stopColorValue,
+        align: alignValue,
       };
 
         fetch("http://localhost:8080/dashboard/profiles", {
@@ -226,7 +229,7 @@ export default function Profiles() {
                 <SwitchSortByUsed onSwitchChange={handleSortByUsedChange} sortByUsedValue={sortByUsedValue} />
               </Grid>
               <Grid item xs={12}>
-                <RadioGroupAlign />
+                <RadioGroupAlign setAlignValue={setAlignValue} alignValue={alignValue}/>
               </Grid>
               <Grid item xs={12}>
                 <SliderMaxFont setMaxFontValue={setMaxFontValue} maxFontValue={maxFontValue} />

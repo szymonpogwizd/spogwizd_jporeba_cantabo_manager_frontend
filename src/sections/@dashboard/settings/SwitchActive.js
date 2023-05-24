@@ -12,7 +12,7 @@ export default function SwitchLabels() {
         <Typography>Ciemny motyw</Typography>
         <FormControlLabel
         sx={{ marginRight: 0 }}
-          control={<Switch defaultChecked />}
+          control={<Switch />}
           labelPlacement="end"
         />
       </Box>
