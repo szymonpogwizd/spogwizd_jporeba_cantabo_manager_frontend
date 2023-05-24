@@ -6,7 +6,7 @@ import ListItemText from "@mui/material/ListItemText";
 import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@mui/icons-material/Delete";
 import SearchField from "./SearchField";
-import SelectType from "./SelectType";
+import SelectCategory from "./SelectCategory";
 
 export default function CheckboxList() {
   const [searchText, setSearchText] = useState("");
@@ -56,7 +56,7 @@ export default function CheckboxList() {
 return (
     <div>
       <SearchField handleSearch={handleSearch} />
-      <SelectType />
+      <SelectCategory />
       <List
         sx={{
           width: "100%",
