@@ -8,7 +8,9 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import SearchField from "./SearchField";
 import AlertMessage from '../common/AlertMessage';
 
-export default function ProfileList({ refreshKey }) {
+export default function ProfileList({ refreshKey, setIdValue, setIsUpdateMode, setNameValue, setActiveValue, setSortByUsedValue,
+    setShowTitleValue, setAllBigValue, setShowEmptySlideValue, setInvertColorsValue, setExpandedListValue, setMaxFontValue, setMarginValue,
+    setMaxMinValue, setBackgroundColorValue, setTextColorValue, setStopColorValue, setAlignValue }) {
     const [searchText, setSearchText] = useState("");
     const [data, setData] = useState([]);
     const [itemToDelete, setItemToDelete] = useState(null);
@@ -73,9 +75,29 @@ export default function ProfileList({ refreshKey }) {
       setAlertMessage("");
     };
 
-  const handleToggle = (value) => () => {
-    // logika do zrobienia
-  };
+    const handleToggle = (id) => () => {
+        const item = data.find((item) => item.id === id);
+        if (item) {
+            setIdValue(item.id);
+            setNameValue(item.name);
+            setActiveValue(item.active);
+            setSortByUsedValue(item.sortByUsed);
+            setShowTitleValue(item.showTitle);
+            setAllBigValue(item.allBig);
+            setShowEmptySlideValue(item.showEmptySlide);
+            setInvertColorsValue(item.invertColors);
+            setExpandedListValue(item.expandedList);
+            setMaxFontValue(item.maxFont);
+            setMarginValue(item.margin);
+            setMaxMinValue(item.maxMin);
+            setBackgroundColorValue(item.bgColor);
+            setTextColorValue(item.txColor);
+            setStopColorValue(item.stopColor);
+            setAlignValue(item.align);
+            setIsUpdateMode(true);
+            console.log(item);
+        }
+    };
 
   const handleSearch = (newSearchText) => {
     setSearchText(newSearchText);
