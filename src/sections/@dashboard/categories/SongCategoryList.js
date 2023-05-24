@@ -8,7 +8,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import SearchField from "./SearchField";
 import AlertMessage from '../common/AlertMessage';
 
-export default function SongCategoryList({ refreshKey }) {
+export default function SongCategoryList({ refreshKey, setNameSongCategoryValue, setIdSongCategoryValue, setIsUpdateModeSongCategory }) {
   const [searchText, setSearchText] = useState("");
   const [data, setData] = useState([]);
   const [itemToDelete, setItemToDelete] = useState(null);
@@ -74,8 +74,13 @@ export default function SongCategoryList({ refreshKey }) {
         setAlertMessage("");
       };
 
-  const handleToggle = (value) => () => {
-      // logika
+    const handleToggle = (id) => () => {
+        const item = data.find((item) => item.id === id);
+        if (item) {
+          setNameSongCategoryValue(item.name);
+          setIdSongCategoryValue(item.id);
+          setIsUpdateModeSongCategory(true);
+        }
     };
 
     const handleSearch = (newSearchText) => {
