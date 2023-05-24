@@ -12,6 +12,7 @@ import SelectCategory from '../songs/SelectCategory';
 import TextFieldName from './TextFieldName';
 import SelectPlaylistCategory from './SelectPlaylistCategory';
 import FloatingActionButtonsSave from '../common/FloatingActionButtonsSave';
+import AlertMessage from '../common/AlertMessage';
 
 function not(a, b) {
   return a.filter((value) => b.indexOf(value) === -1);
@@ -29,6 +30,14 @@ export default function TransferList() {
 
   const leftChecked = intersection(checked, left);
   const rightChecked = intersection(checked, right);
+
+  const [nameValue, setNameValue] = useState("");
+  const [showAlert, setShowAlert] = useState(false);
+  const [alertMessage, setAlertMessage] = useState("");
+  const [showSuccessAlert, setShowSuccessAlert] = useState(false);
+  const [successAlertMessage, setSuccessAlertMessage] = useState("");
+  const [refreshKey, setRefreshKey] = useState(0);
+  const [errorCount, setErrorCount] = useState(0);
 
 const handleToggle = (value) => () => {
   const currentIndex = checked.indexOf(value);
@@ -75,6 +84,62 @@ const handleToggle = (value) => () => {
     fetchData();
   }, []);
 
+   const handleSaveClick = () => {
+
+        const resetForm = () => {
+          setNameValue("");
+        };
+
+        const data = {
+          name: nameValue,
+        };
+
+          fetch("http://localhost:8080/dashboard/playlistCreate", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "Authorization": `Bearer ${localStorage.getItem('token')}`
+            },
+            body: JSON.stringify(data),
+          })
+            .then((response) => {
+              if (!response.ok) {
+                return response.text().then((errorText) => {
+                  throw new Error(errorText);
+                });
+              }
+                handleCloseAlert();
+                setSuccessAlertMessage(`Pomyślnie utworzono playliste ${nameValue}`);
+                setShowSuccessAlert(true);
+                resetForm();
+                setRefreshKey(prevKey => prevKey + 1);
+                return response.json();
+            })
+            .catch((error) => {
+              handleCloseSuccessAlert();
+              setErrorCount(prevCount => prevCount + 1);
+              setAlertMessage(`[${errorCount}] ${error.message}`);
+              setShowAlert(true);
+            });
+        };
+
+    const handleNameChange = (event) => {
+      const value = event.target.value;
+      setNameValue(value);
+    }
+
+    const handleCloseAlert = () => {
+      setShowAlert(false);
+    };
+
+    const handleCloseSuccessAlert = () => {
+      setShowSuccessAlert(false);
+    };
+
+    const resetAlert = () => {
+      setAlertMessage("");
+    };
+
   const handleSearch = (newSearchText) => {
     setSearchText(newSearchText);
   };
@@ -118,6 +183,25 @@ const handleToggle = (value) => () => {
 
   return (
     <Grid container spacing={2} justifyContent="center" alignItems="center">
+      {showAlert && (
+      <AlertMessage
+        severity="error"
+        title="Błąd"
+        message={alertMessage}
+        onClose={handleCloseAlert}
+        resetAlert={resetAlert}
+      />
+      )}
+
+      {showSuccessAlert && (
+      <AlertMessage
+        severity="success"
+        title="Sukces"
+        message={successAlertMessage}
+        onClose={handleCloseSuccessAlert}
+        resetAlert={resetAlert}
+      />
+      )}
       <Grid item xs={12} md={5.5}>
         <SearchField handleSearch={handleSearch} />
         <SelectCategory />
@@ -150,13 +234,13 @@ const handleToggle = (value) => () => {
         </Grid>
       </Grid>
       <Grid item xs={12} md={5.5}>
-        <TextFieldName />
+        <TextFieldName onChange={handleNameChange} value={nameValue} />
         <SelectPlaylistCategory />
         {customList(right)}
       </Grid>
       <Grid container justifyContent="flex-end">
         <Grid item>
-          <FloatingActionButtonsSave />
+           <FloatingActionButtonsSave onClick={handleSaveClick}/>
         </Grid>
       </Grid>
     </Grid>
