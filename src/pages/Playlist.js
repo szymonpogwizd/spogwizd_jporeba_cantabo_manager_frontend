@@ -14,20 +14,106 @@ import {
    PlaylistList,
    CheckboxCategories,
 } from '../sections/@dashboard/playlists';
-
+import AlertMessage from '../sections/@dashboard/common/AlertMessage';
 
 export default function Playlist() {
+  const [nameValue, setNameValue] = useState("");
   const [selectedCategories, setSelectedCategories] = useState([]);
+  const [showAlert, setShowAlert] = useState(false);
+  const [alertMessage, setAlertMessage] = useState("");
+  const [showSuccessAlert, setShowSuccessAlert] = useState(false);
+  const [successAlertMessage, setSuccessAlertMessage] = useState("");
+  const [refreshKey, setRefreshKey] = useState(0);
+  const [errorCount, setErrorCount] = useState(0);
+  const [idValue, setIdValue] = useState("");
+  const [isUpdateMode, setIsUpdateMode] = useState(false);
 
   const handleCategoryChange = (newCategories) => {
     setSelectedCategories(newCategories);
   };
+
+         const handleUpdateClick = () => {
+                const resetForm = () => {
+                  setIdValue("");
+                  setNameValue("");
+                };
+
+                const data = {
+                  name: nameValue,
+                };
+
+                fetch(`http://localhost:8080/dashboard/playlist/${idValue}`, {
+                  method: "PUT",
+                  headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${localStorage.getItem('token')}`
+                  },
+                  body: JSON.stringify(data),
+                })
+                  .then((response) => {
+                    if (!response.ok) {
+                      return response.text().then((errorText) => {
+                        throw new Error(errorText);
+                      });
+                    }
+                    setSuccessAlertMessage(`Pomyślnie zaktualizowano playliste ${nameValue}`);
+                    handleCloseAlert();
+                    setShowSuccessAlert(true);
+                    resetForm();
+                    setRefreshKey(prevKey => prevKey + 1);
+                    setIsUpdateMode(false);
+                    return response.json();
+                  })
+                  .catch((error) => {
+                    handleCloseSuccessAlert();
+                    setErrorCount(prevCount => prevCount + 1);
+                    setAlertMessage(`[${errorCount}] ${error.message}`);
+                    setShowAlert(true);
+                  });
+              };
+
+    const handleNameChange = (event) => {
+      const value = event.target.value;
+      setNameValue(value);
+    }
+
+    const handleCloseAlert = () => {
+      setShowAlert(false);
+    };
+
+    const handleCloseSuccessAlert = () => {
+      setShowSuccessAlert(false);
+    };
+
+    const resetAlert = () => {
+      setAlertMessage("");
+    };
 
 return (
     <>
       <Helmet>
         <title> Playlisty | Cantabo Manager </title>
       </Helmet>
+
+      {showAlert && (
+      <AlertMessage
+        severity="error"
+        title="Błąd"
+        message={alertMessage}
+        onClose={handleCloseAlert}
+        resetAlert={resetAlert}
+      />
+      )}
+
+      {showSuccessAlert && (
+      <AlertMessage
+        severity="success"
+        title="Sukces"
+        message={successAlertMessage}
+        onClose={handleCloseSuccessAlert}
+        resetAlert={resetAlert}
+      />
+      )}
 
       <Container maxWidth="xl">
            <Typography variant="h4" sx={{ mb: 5 }}>
@@ -37,7 +123,12 @@ return (
                 <Grid item xs ={12} sm={6}>
                      {/* Lewa strona */}
                     <Grid>
-                        <PlaylistList/>
+                        <PlaylistList
+                            refreshKey={refreshKey}
+                            setNameValue={setNameValue}
+                            setIsUpdateMode={setIsUpdateMode}
+                            setIdValue={setIdValue}
+                        />
                     </Grid>
                     <Grid>
                         <FloatingActionButtonsAdd />
@@ -47,12 +138,12 @@ return (
                      {/* Prawa strona */}
                     <Grid>
                         <Grid item xs={12}>
-                            <TextFieldName />
+                            <TextFieldName onChange={handleNameChange} value={nameValue} />
                             <CheckboxCategories onChange={handleCategoryChange} value={selectedCategories} />
                             <PlaylistEditList />
                         </Grid>
                         <Grid>
-                            <FloatingActionButtonsSave />
+                            <FloatingActionButtonsSave onClick={handleUpdateClick}/>
                         </Grid>
                     </Grid>
                 </Grid>
