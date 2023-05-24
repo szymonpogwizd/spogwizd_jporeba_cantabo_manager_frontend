@@ -4,10 +4,14 @@ import { Box } from "@mui/material";
 import FormControl from "@mui/material/FormControl";
 import FormLabel from "@mui/material/FormLabel";
 
-export default function ColorPicker() {
+export default function ColorPickerBackground({ setBackgroundColorValue, backgroundColorValue}) {
   const [showPicker, setShowPicker] = useState(false);
-  const [color, setColor] = useState("#000000");
+  const [color, setColor] = useState(backgroundColorValue);
   const pickerRef = useRef(null);
+
+    useEffect(() => {
+      setColor(backgroundColorValue);
+    }, [backgroundColorValue]);
 
   const handleClick = () => {
     setShowPicker(!showPicker);
@@ -15,6 +19,7 @@ export default function ColorPicker() {
 
   const handleColorChange = (selectedColor) => {
     setColor(selectedColor.hex);
+    setBackgroundColorValue(selectedColor.hex);
   };
 
   const handleClickOutside = (event) => {
@@ -55,7 +60,7 @@ export default function ColorPicker() {
                 zIndex: "999",
               }}
             >
-          <ChromePicker color={color} onChange={handleColorChange} />
+          <ChromePicker color={color} onChange={handleColorChange} value={backgroundColorValue}/>
         </Box>
       )}
     </FormControl>
