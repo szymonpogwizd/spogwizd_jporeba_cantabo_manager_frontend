@@ -43,6 +43,7 @@ export default function Profiles() {
     const [maxMinValue, setMaxMinValue] = useState(7);
     const [backgroundColorValue, setBackgroundColorValue] = useState("#000000");
     const [textColorValue, setTextColorValue] = useState("#FFFFFF");
+    const [stopColorValue, setStopColorValue] = useState("#000000");
     const [showAlert, setShowAlert] = useState(false);
     const [alertMessage, setAlertMessage] = useState("");
     const [showSuccessAlert, setShowSuccessAlert] = useState(false);
@@ -66,6 +67,7 @@ export default function Profiles() {
         setMaxMinValue(7);
         setBackgroundColorValue("#000000");
         setTextColorValue("#FFFFFF");
+        setStopColorValue("#000000");
       };
 
       const data = {
@@ -82,6 +84,7 @@ export default function Profiles() {
         maxMin: maxMinValue,
         bgColor: backgroundColorValue,
         txColor: textColorValue,
+        stopColor: stopColorValue,
       };
 
         fetch("http://localhost:8080/dashboard/profiles", {
@@ -241,7 +244,7 @@ export default function Profiles() {
                 <ColorPickerText setTextColorValue={setTextColorValue} textColorValue={textColorValue}/>
               </Grid>
               <Grid item xs={12}>
-                <ColorPickerStop />
+                <ColorPickerStop setStopColorValue={setStopColorValue} stopColorValue={stopColorValue}/>
               </Grid>
               <Grid item xs={12}>
                 <SwitchShowTitle onSwitchChange={handleShowTitle} showTitleValue={showTitleValue} />
