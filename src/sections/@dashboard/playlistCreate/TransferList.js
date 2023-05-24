@@ -10,7 +10,7 @@ import Paper from "@mui/material/Paper";
 import SearchField from '../songs/SearchField';
 import SelectCategory from '../songs/SelectCategory';
 import TextFieldName from './TextFieldName';
-import SelectPlaylistCategory from './SelectPlaylistCategory';
+import CheckboxCategories from './CheckboxCategories';
 import FloatingActionButtonsSave from '../common/FloatingActionButtonsSave';
 import AlertMessage from '../common/AlertMessage';
 
@@ -38,6 +38,7 @@ export default function TransferList() {
   const [successAlertMessage, setSuccessAlertMessage] = useState("");
   const [refreshKey, setRefreshKey] = useState(0);
   const [errorCount, setErrorCount] = useState(0);
+  const [selectedCategories, setSelectedCategories] = useState([]);
 
 const handleToggle = (value) => () => {
   const currentIndex = checked.indexOf(value);
@@ -144,6 +145,10 @@ const handleToggle = (value) => () => {
     setSearchText(newSearchText);
   };
 
+  const handleCategoryChange = (newCategories) => {
+    setSelectedCategories(newCategories);
+  };
+
   const filteredList = left.filter((value) =>
     searchText !== ""
       ? value.toLowerCase().includes(searchText.toLowerCase())
@@ -235,7 +240,7 @@ const handleToggle = (value) => () => {
       </Grid>
       <Grid item xs={12} md={5.5}>
         <TextFieldName onChange={handleNameChange} value={nameValue} />
-        <SelectPlaylistCategory />
+        <CheckboxCategories onChange={handleCategoryChange} value={selectedCategories} />
         {customList(right)}
       </Grid>
       <Grid container justifyContent="flex-end">

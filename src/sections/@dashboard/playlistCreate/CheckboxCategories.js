@@ -20,7 +20,7 @@ export default function CheckboxCategories({ onChange, value }) {
   }, []);
 
   const fetchOptions = () => {
-    fetch("http://localhost:8080/dashboard/songCategories", { headers })
+    fetch("http://localhost:8080/dashboard/playlistCategories", { headers })
       .then((response) => response.json())
       .then((data) => {
         setOptions(data);
@@ -29,7 +29,7 @@ export default function CheckboxCategories({ onChange, value }) {
 
   return (
     <Autocomplete
-      sx={{ marginBottom: 2, marginTop: 2 }}
+      sx={{ marginBottom: 2 }}
       multiple
       id="checkboxes-tags-demo"
       options={options}
