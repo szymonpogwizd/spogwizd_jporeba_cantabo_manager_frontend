@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Grid from "@mui/material/Grid";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
@@ -11,6 +11,7 @@ import SearchField from '../songs/SearchField';
 import SelectCategory from '../songs/SelectCategory';
 import TextFieldName from './TextFieldName';
 import SelectPlaylistCategory from './SelectPlaylistCategory';
+import FloatingActionButtonsSave from '../common/FloatingActionButtonsSave';
 
 function not(a, b) {
   return a.filter((value) => b.indexOf(value) === -1);
@@ -22,25 +23,25 @@ function intersection(a, b) {
 
 export default function TransferList() {
   const [checked, setChecked] = useState([]);
-  const [left, setLeft] = useState([0, 1, 2, 3]);
-  const [right, setRight] = useState([4, 5, 6, 7]);
+  const [left, setLeft] = useState([]);
+  const [right, setRight] = useState([]);
   const [searchText, setSearchText] = useState("");
 
   const leftChecked = intersection(checked, left);
   const rightChecked = intersection(checked, right);
 
-  const handleToggle = (value) => () => {
-    const currentIndex = checked.indexOf(value);
-    const newChecked = [...checked];
+const handleToggle = (value) => () => {
+  const currentIndex = checked.indexOf(value);
+  const newChecked = [...checked];
 
-    if (currentIndex === -1) {
-      newChecked.push(value);
-    } else {
-      newChecked.splice(currentIndex, 1);
-    }
+  if (currentIndex === -1) {
+    newChecked.push(value);
+  } else {
+    newChecked.splice(currentIndex, 1);
+  }
 
-    setChecked(newChecked);
-  };
+  setChecked(newChecked);
+};
 
   const handleCheckedRight = () => {
     setRight(right.concat(leftChecked));
@@ -54,21 +55,41 @@ export default function TransferList() {
     setChecked(not(checked, rightChecked));
   };
 
+  const fetchData = () => {
+    const headers = {
+      Authorization: `Bearer ${localStorage.getItem('token')}`
+    };
+
+    fetch("http://localhost:8080/dashboard/songs", { headers })
+      .then((response) => response.json())
+      .then((data) => {
+        const names = data.map((item) => item.name);
+        setLeft(names);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
   const handleSearch = (newSearchText) => {
     setSearchText(newSearchText);
   };
 
   const filteredList = left.filter((value) =>
     searchText !== ""
-      ? `List item ${value + 1}`.toLowerCase().includes(searchText.toLowerCase())
+      ? value.toLowerCase().includes(searchText.toLowerCase())
       : true
   );
 
   const customList = (items) => (
     <Paper sx={{ width: "100%", height: 640, overflow: "auto" }}>
       <List dense component="div" role="list">
-        {items.map((value) => {
-          const labelId = `transfer-list-item-${value}-label`;
+        {items.map((value, index) => {
+          const labelId = `transfer-list-item-${index}-label`;
 
           return (
             <ListItem
@@ -87,7 +108,7 @@ export default function TransferList() {
                   }}
                 />
               </ListItemIcon>
-              <ListItemText id={labelId} primary={`List item ${value + 1}`} />
+              <ListItemText id={labelId} primary={value} />
             </ListItem>
           );
         })}
@@ -102,36 +123,41 @@ export default function TransferList() {
         <SelectCategory />
         {customList(filteredList)}
       </Grid>
-     <Grid item xs={12} md={1} sx={{ textAlign: "center" }}>
-       <Grid container direction="column" alignItems="center">
-         <Button
-           sx={{ my: 0.5 }}
-           variant="contained"
-           color="primary"
-           size="small"
-           onClick={handleCheckedRight}
-           disabled={leftChecked.length === 0}
-           aria-label="move selected right"
-         >
-           &gt;
-         </Button>
-         <Button
-           sx={{ my: 0.5 }}
-           variant="contained"
-           color="primary"
-           size="small"
-           onClick={handleCheckedLeft}
-           disabled={rightChecked.length === 0}
-           aria-label="move selected left"
-         >
-           &lt;
-         </Button>
-       </Grid>
-     </Grid>
+      <Grid item xs={12} md={1} sx={{ textAlign: "center" }}>
+        <Grid container direction="column" alignItems="center">
+          <Button
+            sx={{ my: 0.5 }}
+            variant="contained"
+            color="primary"
+            size="small"
+            onClick={handleCheckedRight}
+            disabled={leftChecked.length === 0}
+            aria-label="move selected right"
+          >
+            &gt;
+          </Button>
+          <Button
+            sx={{ my: 0.5 }}
+            variant="contained"
+            color="primary"
+            size="small"
+            onClick={handleCheckedLeft}
+            disabled={rightChecked.length === 0}
+            aria-label="move selected left"
+          >
+            &lt;
+          </Button>
+        </Grid>
+      </Grid>
       <Grid item xs={12} md={5.5}>
         <TextFieldName />
         <SelectPlaylistCategory />
         {customList(right)}
+      </Grid>
+      <Grid container justifyContent="flex-end">
+        <Grid item>
+          <FloatingActionButtonsSave />
+        </Grid>
       </Grid>
     </Grid>
   );
