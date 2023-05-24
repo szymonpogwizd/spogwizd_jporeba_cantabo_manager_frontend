@@ -7,17 +7,25 @@ import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@mui/icons-material/Delete";
 import SearchField from "./SearchField";
 import SelectType from "./SelectType";
+import AlertMessage from '../common/AlertMessage';
 
-export default function CheckboxList() {
-  const [searchText, setSearchText] = useState("");
-  const [data, setData] = useState([]);
-  const [itemToDelete, setItemToDelete] = useState(null);
+export default function UserList({ refreshKey, setNameValue, setIdValue, setIsUpdateMode, setEmailValue, setRoleValue, setGroupValue, setActiveValue }) {
+    const [searchText, setSearchText] = useState("");
+    const [data, setData] = useState([]);
+    const [itemToDelete, setItemToDelete] = useState(null);
+    const [showAlert, setShowAlert] = useState(false);
+    const [alertMessage, setAlertMessage] = useState("");
+    const [showSuccessAlert, setShowSuccessAlert] = useState(false);
+    const [successAlertMessage, setSuccessAlertMessage] = useState("");
+
+    const headers = {
+      Authorization: `Bearer ${localStorage.getItem('token')}`
+    };
 
   useEffect(() => {
-    fetch("http://localhost:8080/dashboard/users")
+    fetch("http://localhost:8080/dashboard/users", { headers })
       .then((response) => response.json())
       .then((data) => {
-        console.log(data);
         setData(data);
 
         if (itemToDelete !== null) {
@@ -32,22 +40,53 @@ export default function CheckboxList() {
           setItemToDelete(null);
         }
       });
-  }, [itemToDelete]);
+  }, [itemToDelete, refreshKey]);
 
-  const handleDelete = (value) => () => {
-    console.log(value);
-    fetch(`http://localhost:8080/dashboard/users/${value}`, { method: "DELETE" })
-      .then(() => {
-        setItemToDelete(value);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-  };
+    const handleDelete = (id) => () => {
+      const item = data.find((item) => item.id === id);
+      if (!item) {
+        return;
+      }
 
-  const handleToggle = (value) => () => {
-    // logika do zrobienia
-  }
+      fetch(`http://localhost:8080/dashboard/users/${id}`, {
+         method: "DELETE",
+         headers
+       })
+        .then(() => {
+          setItemToDelete(id);
+          setSuccessAlertMessage(`Pomyślnie usunięto kategorię pieśni ${item.name}`);
+          setShowSuccessAlert(true);
+        })
+        .catch((error) => {
+          setAlertMessage(`${error.message}`);
+          setShowAlert(true);
+        });
+    };
+
+    const handleCloseAlert = () => {
+      setShowAlert(false);
+    };
+
+    const handleCloseSuccessAlert = () => {
+      setShowSuccessAlert(false);
+    };
+
+    const resetAlert = () => {
+      setAlertMessage("");
+    };
+
+    const handleToggle = (id) => () => {
+        const item = data.find((item) => item.id === id);
+        if (item) {
+          setIdValue(item.id);
+          setNameValue(item.name);
+          setEmailValue(item.email);
+          setRoleValue(item.userType);
+          setGroupValue(item.group);
+          setActiveValue(item.active);
+          setIsUpdateMode(true);
+        }
+    };
 
   const handleSearch = (newSearchText) => {
     setSearchText(newSearchText);
@@ -56,6 +95,26 @@ export default function CheckboxList() {
 return (
     <div>
       <SearchField handleSearch={handleSearch} />
+
+      {showAlert && (
+        <AlertMessage
+          severity="error"
+          title="Błąd"
+          message={alertMessage}
+          onClose={handleCloseAlert}
+        />
+      )}
+
+        {showSuccessAlert && (
+          <AlertMessage
+            severity="success"
+            title="Sukces"
+            message={successAlertMessage}
+            onClose={handleCloseSuccessAlert}
+            resetAlert={resetAlert}
+          />
+        )}
+
       <SelectType />
       <List
         sx={{

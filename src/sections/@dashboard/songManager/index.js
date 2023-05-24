@@ -5,3 +5,4 @@ export { default as TextFieldMusicAuthor } from './TextFieldMusicAuthor';
 export { default as TextFieldWordsAuthor } from './TextFieldWordsAuthor';
 export { default as CheckboxCategories } from './CheckboxCategories';
 export { default as Editor } from './Editor';
+export { default as AlertMessage } from '../common/AlertMessage';

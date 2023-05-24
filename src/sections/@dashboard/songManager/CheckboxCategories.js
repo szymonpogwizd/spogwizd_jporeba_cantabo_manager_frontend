@@ -8,15 +8,33 @@ import CheckBoxIcon from "@mui/icons-material/CheckBox";
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkedIcon = <CheckBoxIcon fontSize="small" />;
 
-export default function CheckboxesTags() {
+export default function CheckboxCategories({ onChange, value }) {
+  const [options, setOptions] = React.useState([]);
+
+  const headers = {
+    Authorization: `Bearer ${localStorage.getItem('token')}`
+  };
+
+  React.useEffect(() => {
+    fetchOptions();
+  }, []);
+
+  const fetchOptions = () => {
+    fetch("http://localhost:8080/dashboard/songCategories", { headers })
+      .then((response) => response.json())
+      .then((data) => {
+        setOptions(data);
+      })
+  };
+
   return (
     <Autocomplete
       sx={{ marginBottom: 2, marginTop: 2 }}
       multiple
       id="checkboxes-tags-demo"
-      options={top100Films}
+      options={options}
       disableCloseOnSelect
-      getOptionLabel={(option) => option.title}
+      getOptionLabel={(option) => option.name}
       renderOption={(props, option, { selected }) => (
         <li {...props}>
           <Checkbox
@@ -25,7 +43,7 @@ export default function CheckboxesTags() {
             style={{ marginRight: 8 }}
             checked={selected}
           />
-          {option.title}
+          {option.name}
         </li>
       )}
       renderInput={(params) => (
@@ -34,17 +52,8 @@ export default function CheckboxesTags() {
           label="Wybierz kategorie"
         />
       )}
+      onChange={(event, newValue) => onChange(newValue)}
+      value={value}
     />
   );
 }
-
-// Top 100 films as rated by IMDb users. http://www.imdb.com/chart/top
-const top100Films = [
-  { title: "One", year: 1994 },
-  { title: "Two", year: 1972 },
-  { title: "Three", year: 1974 },
-  { title: "Four", year: 2008 },
-  { title: "Five", year: 1957 },
-  { title: "Six", year: 1993 },
-  { title: "Seven", year: 1994 }
-];

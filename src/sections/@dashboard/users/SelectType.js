@@ -8,11 +8,14 @@ export default function SelectLabels() {
   const [songCategory, setSongCategory] = React.useState('');
   const [data, setData] = useState([]);
 
+  const headers = {
+    Authorization: `Bearer ${localStorage.getItem('token')}`
+  };
+
     useEffect(() => {
-      fetch("http://localhost:8080/dashboard/users/userTypes")
+      fetch("http://localhost:8080/dashboard/users/userTypes", { headers })
         .then((response) => response.json())
         .then((data) => {
-          console.log(data);
           setData(data);
         });
     }, []);

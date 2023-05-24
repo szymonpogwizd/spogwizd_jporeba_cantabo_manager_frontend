@@ -4,6 +4,6 @@ import TextField from '@mui/material/TextField';
 
 export default function BasicTextFields() {
   return (
-      <TextField id="outlined-basic" label="Nazwa kategorii" variant="outlined" fullWidth />
+      <TextField id="outlined-basic" label="Nazwa Grupy" variant="outlined" fullWidth sx={{ width: "100%", marginBottom: 2 }}/>
   );
 }
