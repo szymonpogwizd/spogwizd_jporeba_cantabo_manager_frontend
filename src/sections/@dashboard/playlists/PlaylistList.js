@@ -7,6 +7,7 @@ import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@mui/icons-material/Delete";
 import SearchField from "./SearchField";
 import AlertMessage from '../common/AlertMessage';
+import SelectCategory from './SelectCategory';
 
 export default function PlaylistList({ refreshKey, setIdValue, setIsUpdateMode, setNameValue }) {
     const [searchText, setSearchText] = useState("");
@@ -89,6 +90,7 @@ export default function PlaylistList({ refreshKey, setIdValue, setIsUpdateMode, 
 return (
     <div>
       <SearchField handleSearch={handleSearch} />
+        <SelectCategory />
 
         {showAlert && (
           <AlertMessage
