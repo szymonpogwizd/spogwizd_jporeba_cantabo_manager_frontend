@@ -6,13 +6,14 @@ import ListItemText from "@mui/material/ListItemText";
 import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@mui/icons-material/Delete";
 
-import SelectType from "./SelectType";
+import CheckboxCategories from "./CheckboxCategories";
 import TextFieldName from "./TextFieldName"
 
 export default function CheckboxList() {
   const [searchText, setSearchText] = useState("");
   const [data, setData] = useState([]);
   const [itemToDelete, setItemToDelete] = useState(null);
+  const [selectedCategories, setSelectedCategories] = useState([]);
 
   useEffect(() => {
     fetch("http://localhost:8080/dashboard/playlists")
@@ -54,10 +55,14 @@ export default function CheckboxList() {
     setSearchText(newSearchText);
   };
 
+  const handleCategoryChange = (newCategories) => {
+    setSelectedCategories(newCategories);
+  };
+
 return (
     <div>
       <TextFieldName handleSearch={handleSearch} />
-      <SelectType />
+        <CheckboxCategories onChange={handleCategoryChange} value={selectedCategories} />
       <List
         sx={{
           width: "100%",
