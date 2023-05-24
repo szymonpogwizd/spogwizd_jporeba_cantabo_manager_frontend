@@ -42,6 +42,7 @@ export default function Profiles() {
     const [marginValue, setMarginValue] = useState(1);
     const [maxMinValue, setMaxMinValue] = useState(7);
     const [backgroundColorValue, setBackgroundColorValue] = useState("#000000");
+    const [textColorValue, setTextColorValue] = useState("#FFFFFF");
     const [showAlert, setShowAlert] = useState(false);
     const [alertMessage, setAlertMessage] = useState("");
     const [showSuccessAlert, setShowSuccessAlert] = useState(false);
@@ -64,6 +65,7 @@ export default function Profiles() {
         setMarginValue(1);
         setMaxMinValue(7);
         setBackgroundColorValue("#000000");
+        setTextColorValue("#FFFFFF");
       };
 
       const data = {
@@ -79,6 +81,7 @@ export default function Profiles() {
         margin: marginValue,
         maxMin: maxMinValue,
         bgColor: backgroundColorValue,
+        txColor: textColorValue,
       };
 
         fetch("http://localhost:8080/dashboard/profiles", {
@@ -235,7 +238,7 @@ export default function Profiles() {
                 <ColorPickerBackground setBackgroundColorValue={setBackgroundColorValue} backgroundColorValue={backgroundColorValue}/>
               </Grid>
               <Grid item xs={12}>
-                <ColorPickerText />
+                <ColorPickerText setTextColorValue={setTextColorValue} textColorValue={textColorValue}/>
               </Grid>
               <Grid item xs={12}>
                 <ColorPickerStop />
