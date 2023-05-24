@@ -51,6 +51,8 @@ export default function Profiles() {
     const [successAlertMessage, setSuccessAlertMessage] = useState("");
     const [refreshKey, setRefreshKey] = useState(0);
     const [errorCount, setErrorCount] = useState(0);
+    const [idValue, setIdValue] = useState("");
+    const [isUpdateMode, setIsUpdateMode] = useState(false);
 
     const handleSaveClick = () => {
 
@@ -118,6 +120,74 @@ export default function Profiles() {
             setShowAlert(true);
           });
       };
+
+        const handleUpdateClick = () => {
+              const resetForm = () => {
+                setIdValue("");
+                setNameValue("");
+                setActiveValue(false);
+                setSortByUsedValue(false);
+                setShowTitleValue(false);
+                setAllBigValue(false);
+                setShowEmptySlideValue(true);
+                setInvertColorsValue(false);
+                setExpandedListValue(false);
+                setMaxFontValue(20);
+                setMarginValue(1);
+                setMaxMinValue(7);
+                setBackgroundColorValue("#000000");
+                setTextColorValue("#FFFFFF");
+                setStopColorValue("#000000");
+                setAlignValue("CENTER");
+              };
+
+              const data = {
+                name: nameValue,
+                active: activeValue,
+                sortByUsed: sortByUsedValue,
+                showTitle: showTitleValue,
+                allBig: allBigValue,
+                showEmptySlide: showEmptySlideValue,
+                invertColors: invertColorsValue,
+                expandedList: expandedListValue,
+                maxFont: maxFontValue,
+                margin: marginValue,
+                maxMin: maxMinValue,
+                bgColor: backgroundColorValue,
+                txColor: textColorValue,
+                stopColor: stopColorValue,
+                align: alignValue,
+              };
+
+              fetch(`http://localhost:8080/dashboard/profiles/${idValue}`, {
+                method: "PUT",
+                headers: {
+                  "Content-Type": "application/json",
+                  "Authorization": `Bearer ${localStorage.getItem('token')}`
+                },
+                body: JSON.stringify(data),
+              })
+                .then((response) => {
+                  if (!response.ok) {
+                    return response.text().then((errorText) => {
+                      throw new Error(errorText);
+                    });
+                  }
+                  setSuccessAlertMessage(`Pomyślnie zaktualizowano profil ${nameValue}`);
+                  handleCloseAlert();
+                  setShowSuccessAlert(true);
+                  resetForm();
+                  setRefreshKey(prevKey => prevKey + 1);
+                  setIsUpdateMode(false);
+                  return response.json();
+                })
+                .catch((error) => {
+                  handleCloseSuccessAlert();
+                  setErrorCount(prevCount => prevCount + 1);
+                  setAlertMessage(`[${errorCount}] ${error.message}`);
+                  setShowAlert(true);
+                });
+            };
 
       const handleNameChange = (event) => {
         const value = event.target.value;
@@ -201,7 +271,26 @@ export default function Profiles() {
             {/* Lewa strona */}
             <Grid>
               <Grid item xs={12}>
-                <ProfileList refreshKey={refreshKey} />
+                <ProfileList
+                    refreshKey={refreshKey}
+                    setIdValue={setIdValue}
+                    setIsUpdateMode={setIsUpdateMode}
+                    setNameValue={setNameValue}
+                    setActiveValue={setActiveValue}
+                    setSortByUsedValue={setSortByUsedValue}
+                    setShowTitleValue={setShowTitleValue}
+                    setAllBigValue={setAllBigValue}
+                    setShowEmptySlideValue={setShowEmptySlideValue}
+                    setInvertColorsValue={setInvertColorsValue}
+                    setExpandedListValue={setExpandedListValue}
+                    setMaxFontValue={setMaxFontValue}
+                    setMarginValue={setMarginValue}
+                    setMaxMinValue={setMaxMinValue}
+                    setBackgroundColorValue={setBackgroundColorValue}
+                    setTextColorValue={setTextColorValue}
+                    setStopColorValue={setStopColorValue}
+                    setAlignValue={setAlignValue}
+                />
               </Grid>
               <Grid item xs={12}>
                 <FloatingActionButtonsAdd />
@@ -267,10 +356,11 @@ export default function Profiles() {
             </Grid>
             </Box>
             <Grid item xs={12}>
-             <FloatingActionButtonsSave onClick={handleSaveClick}/>
+                <FloatingActionButtonsSave
+                    onClick={isUpdateMode ? handleUpdateClick : handleSaveClick}
+                />
            </Grid>
           </Grid>
-
         </Grid>
 
       </Container>

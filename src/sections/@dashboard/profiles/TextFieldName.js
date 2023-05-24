@@ -6,10 +6,10 @@ export default function TextFieldName({ onChange, value }) {
   return (
       <TextField
         id="outlined-basic"
-        label="Nazwa użytkownika"
+        label="Nazwa profilu"
         variant="outlined"
         fullWidth
-        sx={{ width: "100%", marginBottom: 2 }}
+        sx={{ width: "100%", marginBottom: 2, marginTop: 0.6 }}
         onChange={onChange}
         value={value}
       />
