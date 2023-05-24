@@ -5,39 +5,44 @@ import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 
 export default function SelectLabels() {
-  const [songCategory, setSongCategory] = React.useState('');
-  const [data, setData] = useState([]);
+    const [playlistCategory, setPlaylistCategory] = React.useState('');
+    const [data, setData] = useState([]);
 
-  useEffect(() => {
-    fetch("http://localhost:8080/dashboard/playlists/categories")
-      .then((response) => response.json())
-      .then((data) => {
-        console.log(data);
-        setData(data);
-      });
-  }, []);
+    const headers = {
+      Authorization: `Bearer ${localStorage.getItem('token')}`
+    };
+
+    useEffect(() => {
+      fetch("http://localhost:8080/dashboard/playlistCategories", { headers })
+        .then((response) => response.json())
+        .then((data) => {
+          setData(data);
+        });
+    }, []);
 
   const handleChange = (event: SelectChangeEvent) => {
-    setSongCategory(event.target.value);
+    setPlaylistCategory(event.target.value);
   };
 
   return (
     <div>
       <FormControl sx={{ width: "100%", marginBottom: 2 }}>
-        <InputLabel id="demo-simple-select-helper-label">Wybierz kategorię</InputLabel>
+        <InputLabel id="demo-simple-select-helper-label">Wybierz kategorie</InputLabel>
         <Select
           labelId="demo-simple-select-helper-label"
           id="demo-simple-select-helper"
-          value={songCategory}
-          label="SongCategory"
+          value={playlistCategory}
+          label="PlaylistCategory"
           onChange={handleChange}
         >
           <MenuItem value="">
-              <em>None</em>
+            <em>None</em>
+          </MenuItem>
+          {data.map((category) => (
+            <MenuItem key={category.id} value={category.id}>
+              {category.name}
             </MenuItem>
-            {data.map((item) => (
-              <MenuItem value={item} key={item}>{item}</MenuItem>
-            ))}
+          ))}
         </Select>
       </FormControl>
     </div>
