@@ -70,11 +70,10 @@ const handleToggle = (value) => () => {
       Authorization: `Bearer ${localStorage.getItem('token')}`
     };
 
-    fetch("http://localhost:8080/dashboard/songs", { headers })
+    return fetch("http://localhost:8080/dashboard/songs", { headers })
       .then((response) => response.json())
       .then((data) => {
-        const names = data.map((item) => item.name);
-        setLeft(names);
+        setLeft(data);
       })
       .catch((error) => {
         console.log(error);
@@ -90,11 +89,13 @@ const handleToggle = (value) => () => {
         const resetForm = () => {
           setNameValue("");
           setSelectedCategories([]);
+          setRight([]);
         };
 
         const data = {
           name: nameValue,
           playlistCategories: selectedCategories,
+          songs: right,
         };
 
           fetch("http://localhost:8080/dashboard/playlistCreate", {
@@ -111,12 +112,14 @@ const handleToggle = (value) => () => {
                   throw new Error(errorText);
                 });
               }
-                handleCloseAlert();
-                setSuccessAlertMessage(`Pomyślnie utworzono playliste ${nameValue}`);
-                setShowSuccessAlert(true);
-                resetForm();
+              handleCloseAlert();
+              setSuccessAlertMessage(`Pomyślnie utworzono playliste ${nameValue}`);
+              setShowSuccessAlert(true);
+              resetForm();
+              fetchData().then(() => {
                 setRefreshKey(prevKey => prevKey + 1);
-                return response.json();
+              });
+              return response.json();
             })
             .catch((error) => {
               handleCloseSuccessAlert();
@@ -165,7 +168,7 @@ const handleToggle = (value) => () => {
 
           return (
             <ListItem
-              key={value}
+              key={value.id}
               role="listitem"
               button
               onClick={handleToggle(value)}
@@ -180,7 +183,7 @@ const handleToggle = (value) => () => {
                   }}
                 />
               </ListItemIcon>
-              <ListItemText id={labelId} primary={value} />
+              <ListItemText id={labelId} primary={value.name} />
             </ListItem>
           );
         })}
