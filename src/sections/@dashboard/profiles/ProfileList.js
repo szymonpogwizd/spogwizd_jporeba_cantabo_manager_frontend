@@ -95,7 +95,6 @@ export default function ProfileList({ refreshKey, setIdValue, setIsUpdateMode, s
             setStopColorValue(item.stopColor);
             setAlignValue(item.align);
             setIsUpdateMode(true);
-            console.log(item);
         }
     };
 

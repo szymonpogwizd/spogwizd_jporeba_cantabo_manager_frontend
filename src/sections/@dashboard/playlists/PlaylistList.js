@@ -6,10 +6,9 @@ import ListItemText from "@mui/material/ListItemText";
 import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@mui/icons-material/Delete";
 import SearchField from "./SearchField";
-import SelectCategory from "./SelectCategory";
 import AlertMessage from '../common/AlertMessage';
 
-export default function CheckboxList() {
+export default function PlaylistList({ refreshKey, setIdValue, setIsUpdateMode, setNameValue }) {
     const [searchText, setSearchText] = useState("");
     const [data, setData] = useState([]);
     const [itemToDelete, setItemToDelete] = useState(null);
@@ -17,64 +16,50 @@ export default function CheckboxList() {
     const [alertMessage, setAlertMessage] = useState("");
     const [showSuccessAlert, setShowSuccessAlert] = useState(false);
     const [successAlertMessage, setSuccessAlertMessage] = useState("");
-    const [errorCount, setErrorCount] = useState(0);
 
     const headers = {
-      Authorization: `Bearer ${localStorage.getItem('token')}`
+        Authorization: `Bearer ${localStorage.getItem('token')}`
     };
 
-    useEffect(() => {
-        fetch("http://localhost:8080/dashboard/playlistCategories", { headers })
+      useEffect(() => {
+        fetch("http://localhost:8080/dashboard/playlist", { headers })
           .then((response) => response.json())
           .then((data) => {
-          setData(data);
+            setData(data);
 
-        if (itemToDelete !== null) {
-          setData((prevState) => {
-            const index = prevState.findIndex((item) => item.id === itemToDelete);
-            if (index !== -1) {
-              prevState.splice(index, 1);
-              return [...prevState];
-            }
-            return prevState;
-          });
-          setItemToDelete(null);
-        }
-      });
-  }, [itemToDelete]);
+          if (itemToDelete !== null) {
+            setData((prevState) => {
+              const index = prevState.findIndex((item) => item.id === itemToDelete);
+              if (index !== -1) {
+                prevState.splice(index, 1);
+                return [...prevState];
+              }
+              return prevState;
+            });
+            setItemToDelete(null);
+          }
+        });
+    }, [itemToDelete, refreshKey]);
 
     const handleDelete = (id) => () => {
       const item = data.find((item) => item.id === id);
       if (!item) {
         return;
       }
-
-        fetch(`http://localhost:8080/dashboard/playlistCategories/${id}`, {
+      fetch(`http://localhost:8080/dashboard/playlist/${id}`, {
           method: "DELETE",
           headers
         })
-          .then((response) => {
-            if (response.ok) {
-              setItemToDelete(id);
-              setSuccessAlertMessage(`Pomyślnie usunięto playlistę ${item.name}`);
-              setShowSuccessAlert(true);
-            } else if (response.status === 401) {
-              handleCloseSuccessAlert();
-              setErrorCount(prevCount => prevCount + 1);
-              setAlertMessage(`[${errorCount}] Błąd autoryzacji`);
-              setShowAlert(true);
-            } else {
-              handleCloseSuccessAlert();
-              setErrorCount(prevCount => prevCount + 1);
-              setAlertMessage(`[${errorCount}] Wystąpił błąd`);
-              setShowAlert(true);
-            }
-          })
-          .catch((error) => {
-            setAlertMessage(error.message);
-            setShowAlert(true);
-          });
-        };
+        .then(() => {
+          setItemToDelete(id);
+          setSuccessAlertMessage(`Pomyślnie usunięto playliste ${item.name}`);
+          setShowSuccessAlert(true);
+        })
+        .catch((error) => {
+          setAlertMessage(`${error.message}`);
+          setShowAlert(true);
+        });
+    };
 
     const handleCloseAlert = () => {
       setShowAlert(false);
@@ -88,9 +73,14 @@ export default function CheckboxList() {
       setAlertMessage("");
     };
 
-  const handleToggle = (value) => () => {
-    // logika do zrobienia
-  }
+    const handleToggle = (id) => () => {
+        const item = data.find((item) => item.id === id);
+        if (item) {
+            setIdValue(item.id);
+            setNameValue(item.name);
+            setIsUpdateMode(true);
+        }
+    };
 
   const handleSearch = (newSearchText) => {
     setSearchText(newSearchText);
@@ -98,28 +88,27 @@ export default function CheckboxList() {
 
 return (
     <div>
+      <SearchField handleSearch={handleSearch} />
 
         {showAlert && (
-        <AlertMessage
-          severity="error"
-          title="Błąd"
-          message={alertMessage}
-          onClose={handleCloseAlert}
-        />
-        )}
-
-        {showSuccessAlert && (
           <AlertMessage
-            severity="success"
-            title="Sukces"
-            message={successAlertMessage}
-            onClose={handleCloseSuccessAlert}
-            resetAlert={resetAlert}
+            severity="error"
+            title="Błąd"
+            message={alertMessage}
+            onClose={handleCloseAlert}
           />
         )}
 
-      <SearchField handleSearch={handleSearch} />
-      <SelectCategory />
+          {showSuccessAlert && (
+            <AlertMessage
+              severity="success"
+              title="Sukces"
+              message={successAlertMessage}
+              onClose={handleCloseSuccessAlert}
+              resetAlert={resetAlert}
+            />
+          )}
+
       <List
         sx={{
           width: "100%",
