@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 // @mui
 import { useTheme } from '@mui/material/styles';
@@ -38,6 +38,7 @@ export default function Profiles() {
     const [showEmptySlideValue, setShowEmptySlideValue] = useState(true);
     const [invertColorsValue, setInvertColorsValue] = useState(false);
     const [expandedListValue, setExpandedListValue] = useState(false);
+    const [maxFontValue, setMaxFontValue] = useState(20);
     const [showAlert, setShowAlert] = useState(false);
     const [alertMessage, setAlertMessage] = useState("");
     const [showSuccessAlert, setShowSuccessAlert] = useState(false);
@@ -56,6 +57,8 @@ export default function Profiles() {
         setShowEmptySlideValue(true);
         setInvertColorsValue(false);
         setExpandedListValue(false);
+        // NIE DZIAŁA WIZUALNY RESTART
+        setMaxFontValue(20);
       };
 
       const data = {
@@ -67,6 +70,7 @@ export default function Profiles() {
         showEmptySlide: showEmptySlideValue,
         invertColors: invertColorsValue,
         expandedList: expandedListValue,
+        maxFont: maxFontValue,
       };
 
         fetch("http://localhost:8080/dashboard/profiles", {
@@ -143,6 +147,10 @@ export default function Profiles() {
         setExpandedListValue(value);
       }
 
+      const handleMaxFont = (value) => {
+        setMaxFontValue(value);
+      }
+
   return (
     <>
       <Helmet>
@@ -211,7 +219,7 @@ export default function Profiles() {
                 <RadioGroupAlign />
               </Grid>
               <Grid item xs={12}>
-                <SliderMaxFont />
+                <SliderMaxFont setMaxFontValue={setMaxFontValue} maxFontValue={maxFontValue} />
               </Grid>
               <Grid item xs={12}>
                 <SliderMargin />
