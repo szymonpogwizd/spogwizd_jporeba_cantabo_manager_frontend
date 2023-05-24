@@ -31,7 +31,6 @@ export default function PlaylistCreate() {
         </Typography>
 
         <TransferList />
-        <FloatingActionButtonsSave />
 
       </Container>
     </>
