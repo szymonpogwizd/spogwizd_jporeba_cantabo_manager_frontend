@@ -41,6 +41,7 @@ export default function Profiles() {
     const [maxFontValue, setMaxFontValue] = useState(20);
     const [marginValue, setMarginValue] = useState(1);
     const [maxMinValue, setMaxMinValue] = useState(7);
+    const [backgroundColorValue, setBackgroundColorValue] = useState("#000000");
     const [showAlert, setShowAlert] = useState(false);
     const [alertMessage, setAlertMessage] = useState("");
     const [showSuccessAlert, setShowSuccessAlert] = useState(false);
@@ -62,6 +63,7 @@ export default function Profiles() {
         setMaxFontValue(20);
         setMarginValue(1);
         setMaxMinValue(7);
+        setBackgroundColorValue("#000000");
       };
 
       const data = {
@@ -76,6 +78,7 @@ export default function Profiles() {
         maxFont: maxFontValue,
         margin: marginValue,
         maxMin: maxMinValue,
+        bgColor: backgroundColorValue,
       };
 
         fetch("http://localhost:8080/dashboard/profiles", {
@@ -229,7 +232,7 @@ export default function Profiles() {
                 <SliderMaxMin setMaxMinValue={setMaxMinValue} maxMinValue={maxMinValue}/>
               </Grid>
               <Grid item xs={12}>
-                <ColorPickerBackground />
+                <ColorPickerBackground setBackgroundColorValue={setBackgroundColorValue} backgroundColorValue={backgroundColorValue}/>
               </Grid>
               <Grid item xs={12}>
                 <ColorPickerText />
