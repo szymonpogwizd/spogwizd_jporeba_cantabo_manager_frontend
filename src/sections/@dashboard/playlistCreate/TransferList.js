@@ -89,10 +89,12 @@ const handleToggle = (value) => () => {
 
         const resetForm = () => {
           setNameValue("");
+          setSelectedCategories([]);
         };
 
         const data = {
           name: nameValue,
+          playlistCategories: selectedCategories,
         };
 
           fetch("http://localhost:8080/dashboard/playlistCreate", {
