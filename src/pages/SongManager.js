@@ -201,7 +201,10 @@ const handleAddClick = () => {
                 <TextFieldName onChange={handleNameChange} value={nameValue}/>
               </Grid>
               <Grid item xs={12}>
-                <CheckboxCategories onChange={handleCategoriesChange}/>
+                <CheckboxCategories
+                    onChange={handleCategoriesChange}
+                    selectedCategories={selectedCategories}
+                />
               </Grid>
               <Grid item xs={12} container spacing={8}>
                 <Grid item xs={6}>
