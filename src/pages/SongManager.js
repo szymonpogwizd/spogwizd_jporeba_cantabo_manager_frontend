@@ -31,6 +31,27 @@ export default function SongManager() {
 
   const [previewHtml, setPreviewHtml] = useState('');
 
+    useEffect(() => {
+        if (nameValue === "") {
+          const initialIdValue = localStorage.getItem("selectedSongId");
+          const initialNameValue = localStorage.getItem("selectedSongName");
+          const initialMusicAuthorValue = localStorage.getItem("selectedSongMusicAuthor");
+          const initialWordsAuthorValue = localStorage.getItem("selectedSongWordsAuthor");
+          setNameValue(initialNameValue || "");
+          setMusicAuthorValue(initialMusicAuthorValue || "");
+          setWordsAuthorValue(initialWordsAuthorValue || "");
+        }
+    }, [nameValue]);
+
+    useEffect(() => {
+      return () => {
+        localStorage.removeItem("selectedSongId");
+        localStorage.removeItem("selectedSongName");
+        localStorage.removeItem("selectedSongMusicAuthor");
+        localStorage.removeItem("selectedSongWordsAuthor");
+      };
+    }, []);
+
   const handlePreviewChange = (html) => {
     setPreviewHtml(html);
   };
@@ -183,10 +204,10 @@ const handleAddClick = () => {
               </Grid>
               <Grid item xs={12} container spacing={8}>
                 <Grid item xs={6}>
-                  <TextFieldWordsAuthor onChange={handleMusicAuthorChange} value={musicAuthorValue}/>
+                  <TextFieldMusicAuthor onChange={handleMusicAuthorChange} value={musicAuthorValue}/>
                 </Grid>
                 <Grid item xs={6}>
-                  <TextFieldMusicAuthor onChange={handleWordsAuthorChange} value={wordsAuthorValue}/>
+                  <TextFieldWordsAuthor onChange={handleWordsAuthorChange} value={wordsAuthorValue}/>
                 </Grid>
               </Grid>
               <Grid item xs={12}>
