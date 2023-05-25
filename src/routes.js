@@ -17,6 +17,7 @@ import Groups from './pages/Groups';
 import Settings from './pages/Settings';
 import PlaylistCreate from './pages/PlaylistCreate';
 import Playlist from './pages/Playlist';
+import Contact from './pages/Contact'
 
 import ProtectedRoute from './route/ProtectedRoute';
 import SuperAdminRoute from './route/SuperAdminRoute';
@@ -39,7 +40,8 @@ export default function Router() {
         { path: 'playlistCreate', element: <ProtectedRoute><PlaylistCreate /></ProtectedRoute> },
         {path: 'playlist', element: <ProtectedRoute><Playlist/></ProtectedRoute> },
         { path: 'groups', element: <SuperAdminRoute><Groups /></SuperAdminRoute> },
-        { path: 'settings', element: <ProtectedRoute><Settings /></ProtectedRoute> }
+        { path: 'settings', element: <ProtectedRoute><Settings /></ProtectedRoute> },
+        { path: 'contact', element: <ProtectedRoute><Contact /></ProtectedRoute>}
       ],
     },
     {
