@@ -41,6 +41,8 @@ export default function SongManager() {
       setMusicAuthorValue("");
       setWordsAuthorValue("");
       setSelectedCategories([]);
+      setPreviewHtml('');
+      setItems([]);
     };
 
     const slides = items.map((item) => ({
@@ -75,6 +77,7 @@ export default function SongManager() {
         setSuccessAlertMessage(`Pomyślnie utworzono pieśń ${nameValue}`);
         setShowSuccessAlert(true);
         resetForm();
+        resetEditor();
         return response.json();
       })
       .catch((error) => {
@@ -124,14 +127,14 @@ const handleAddClick = () => {
   setItems(prevItems => [...prevItems, newItem]);
   setPreviewHtml('');
 
-  if (editorRef.current) {
-    editorRef.current.handleChange('');
-  }
+  resetEditor();
 };
 
-  useEffect(() => {
-    console.log(items);
-  }, [items]);
+  const resetEditor = () => {
+    if (editorRef.current) {
+      editorRef.current.handleChange('');
+    }
+  }
 
   const handleDeleteItem = (item) => {
     const newItems = items.filter((i) => i.id !== item.id);
