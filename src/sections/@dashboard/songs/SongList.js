@@ -96,7 +96,6 @@ export default function CheckboxList() {
     localStorage.setItem("selectedSongMusicAuthor", musicAuthor);
     localStorage.setItem("selectedSongWordsAuthor", wordsAuthor);
     localStorage.setItem("selectedSongCategories", JSON.stringify(songCategories));
-    console.log(JSON.stringify(songCategories));
     navigate('/dashboard/songManager');
   }
 

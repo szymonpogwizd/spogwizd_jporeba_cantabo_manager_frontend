@@ -60,7 +60,7 @@ export default function CheckboxCategories({ onChange }) {
       onChange={(event, newValue) => {
         const newSelectedIds = newValue.map((item) => item.id);
         setSelectedOptions(newSelectedIds);
-        onChange(newSelectedIds);
+        onChange(newValue);
       }}
       value={options.filter((option) => selectedOptions.includes(option.id))}
     />
