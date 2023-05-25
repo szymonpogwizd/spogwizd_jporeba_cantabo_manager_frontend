@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from 'react-router-dom';
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
@@ -10,6 +11,7 @@ import SelectCategory from "./SelectCategory";
 import AlertMessage from '../common/AlertMessage';
 
 export default function CheckboxList() {
+    const navigate = useNavigate();
     const [searchText, setSearchText] = useState("");
     const [data, setData] = useState([]);
     const [itemToDelete, setItemToDelete] = useState(null);
@@ -88,8 +90,13 @@ export default function CheckboxList() {
       setAlertMessage("");
     };
 
-  const handleToggle = (value) => () => {
-    // logika do zrobienia
+  const handleToggle = (id, name, musicAuthor, wordsAuthor, songCategories) => () => {
+    localStorage.setItem("selectedSongId", id);
+    localStorage.setItem("selectedSongName", name);
+    localStorage.setItem("selectedSongMusicAuthor", musicAuthor);
+    localStorage.setItem("selectedSongWordsAuthor", wordsAuthor);
+    localStorage.setItem("selectedSongCategories", JSON.stringify(songCategories));
+    navigate('/dashboard/songManager');
   }
 
   const handleSearch = (newSearchText) => {
@@ -154,7 +161,7 @@ return (
             >
               <ListItemButton
                 role={undefined}
-                onClick={handleToggle(item.id)}
+                onClick={handleToggle(item.id, item.name, item.musicAuthor, item.wordsAuthor, item.songCategories)}
               >
                 <ListItemText id={labelId} primary={item.name} />
               </ListItemButton>

@@ -1,4 +1,5 @@
 import { Helmet } from 'react-helmet-async';
+import { useNavigate } from 'react-router-dom';
 // @mui
 import { useTheme } from '@mui/material/styles';
 import { Container, Typography } from '@mui/material';
@@ -12,6 +13,11 @@ import {
 
 export default function Songs() {
   const theme = useTheme();
+  const navigate = useNavigate();
+
+  const handleGoToSongManager = () => {
+    navigate('/dashboard/songManager');
+  };
 
   return (
     <>
@@ -25,8 +31,7 @@ export default function Songs() {
         </Typography>
 
         <SongList />
-        <FloatingActionButtonsAdd />
-
+        <FloatingActionButtonsAdd onClick={handleGoToSongManager}/>
       </Container>
     </>
   );
