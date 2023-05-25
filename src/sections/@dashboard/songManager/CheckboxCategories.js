@@ -8,16 +8,21 @@ import CheckBoxIcon from "@mui/icons-material/CheckBox";
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkedIcon = <CheckBoxIcon fontSize="small" />;
 
-export default function CheckboxCategories({ onChange, value }) {
+export default function CheckboxCategories({ onChange }) {
   const [options, setOptions] = React.useState([]);
+  const [selectedOptions, setSelectedOptions] = React.useState([]);
 
   const headers = {
     Authorization: `Bearer ${localStorage.getItem('token')}`
   };
 
-  React.useEffect(() => {
-    fetchOptions();
-  }, []);
+    React.useEffect(() => {
+      const storedCategories = JSON.parse(localStorage.getItem("selectedSongCategories"));
+      if (storedCategories) {
+        setSelectedOptions(storedCategories);
+      }
+      fetchOptions();
+    }, []);
 
   const fetchOptions = () => {
     fetch("http://localhost:8080/dashboard/songCategories", { headers })
@@ -41,7 +46,7 @@ export default function CheckboxCategories({ onChange, value }) {
             icon={icon}
             checkedIcon={checkedIcon}
             style={{ marginRight: 8 }}
-            checked={selected}
+            checked={selected ? selectedOptions.includes(option.id) : false}
           />
           {option.name}
         </li>
@@ -52,8 +57,12 @@ export default function CheckboxCategories({ onChange, value }) {
           label="Wybierz kategorie"
         />
       )}
-      onChange={(event, newValue) => onChange(newValue)}
-      value={value}
+      onChange={(event, newValue) => {
+        const newSelectedIds = newValue.map((item) => item.id);
+        setSelectedOptions(newSelectedIds);
+        onChange(newSelectedIds);
+      }}
+      value={options.filter((option) => selectedOptions.includes(option.id))}
     />
   );
 }

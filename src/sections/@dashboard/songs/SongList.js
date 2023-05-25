@@ -90,11 +90,13 @@ export default function CheckboxList() {
       setAlertMessage("");
     };
 
-  const handleToggle = (id, name, musicAuthor, wordsAuthor) => () => {
+  const handleToggle = (id, name, musicAuthor, wordsAuthor, songCategories) => () => {
     localStorage.setItem("selectedSongId", id);
     localStorage.setItem("selectedSongName", name);
     localStorage.setItem("selectedSongMusicAuthor", musicAuthor);
     localStorage.setItem("selectedSongWordsAuthor", wordsAuthor);
+    localStorage.setItem("selectedSongCategories", JSON.stringify(songCategories));
+    console.log(JSON.stringify(songCategories));
     navigate('/dashboard/songManager');
   }
 
@@ -160,7 +162,7 @@ return (
             >
               <ListItemButton
                 role={undefined}
-                onClick={handleToggle(item.id, item.name, item.musicAuthor, item.wordsAuthor)}
+                onClick={handleToggle(item.id, item.name, item.musicAuthor, item.wordsAuthor, item.songCategories)}
               >
                 <ListItemText id={labelId} primary={item.name} />
               </ListItemButton>
