@@ -17,9 +17,10 @@ class Editor extends Component {
     this.handleChange = this.handleChange.bind(this);
   }
 
-  handleChange(html) {
-    this.setState({ editorHtml: html });
-    console.log(html);
+  handleChange(content, delta, source, editor) {
+    this.setState({ editorHtml: content });
+    const html = typeof editor.getHTML === 'function' ? editor.getHTML() : editor.root.innerHTML;
+    this.props.onChange(html);
   }
 
   render() {
