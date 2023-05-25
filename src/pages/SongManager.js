@@ -28,8 +28,33 @@ export default function SongManager() {
   const [errorCount, setErrorCount] = useState(0);
   const [items, setItems] = useState([]);
   const editorRef = useRef(null);
+  const [idValue, setIdValue] = useState("");
+  const [isUpdateMode, setIsUpdateMode] = useState(false);
 
   const [previewHtml, setPreviewHtml] = useState('');
+
+    useEffect(() => {
+        if (nameValue === "") {
+          const initialIdValue = localStorage.getItem("selectedSongId");
+          const initialNameValue = localStorage.getItem("selectedSongName");
+          const initialMusicAuthorValue = localStorage.getItem("selectedSongMusicAuthor");
+          const initialWordsAuthorValue = localStorage.getItem("selectedSongWordsAuthor");
+          setNameValue(initialNameValue || "");
+          setMusicAuthorValue(initialMusicAuthorValue || "");
+          setWordsAuthorValue(initialWordsAuthorValue || "");
+          setIdValue(initialIdValue || "");
+        }
+    }, [nameValue]);
+
+    useEffect(() => {
+      return () => {
+        localStorage.removeItem("selectedSongId");
+        localStorage.removeItem("selectedSongName");
+        localStorage.removeItem("selectedSongMusicAuthor");
+        localStorage.removeItem("selectedSongWordsAuthor");
+        localStorage.removeItem("selectedSongCategories");
+      };
+    }, []);
 
   const handlePreviewChange = (html) => {
     setPreviewHtml(html);
@@ -87,6 +112,60 @@ export default function SongManager() {
         setShowAlert(true);
       });
   };
+
+
+        const handleUpdateClick = () => {
+            const resetForm = () => {
+              setNameValue("");
+              setMusicAuthorValue("");
+              setWordsAuthorValue("");
+              setSelectedCategories([]);
+              setPreviewHtml('');
+              setItems([]);
+              setIdValue("");
+            };
+
+            const slides = items.map((item) => ({
+              body: item.previewHtml,
+            }));
+
+            const data = {
+                name: nameValue,
+                musicAuthor: musicAuthorValue,
+                wordsAuthor: wordsAuthorValue,
+                songCategories: selectedCategories,
+            };
+
+            console.log(nameValue);
+
+              fetch(`http://localhost:8080/dashboard/songManager/${idValue}`, {
+                method: "PUT",
+                headers: {
+                  "Content-Type": "application/json",
+                  "Authorization": `Bearer ${localStorage.getItem('token')}`
+                },
+                body: JSON.stringify(data),
+              })
+                .then((response) => {
+                  if (!response.ok) {
+                    return response.text().then((errorText) => {
+                      throw new Error(errorText);
+                    });
+                  }
+                  setSuccessAlertMessage(`Pomyślnie zaktualizowano pieśń ${nameValue}`);
+                  handleCloseAlert();
+                  setShowSuccessAlert(true);
+                  resetForm();
+                  setIsUpdateMode(false);
+                  return response.json();
+                })
+                .catch((error) => {
+                  handleCloseSuccessAlert();
+                  setErrorCount(prevCount => prevCount + 1);
+                  setAlertMessage(`[${errorCount}] ${error.message}`);
+                  setShowAlert(true);
+                });
+            };
 
   const handleNameChange = (event) => {
     const value = event.target.value;
@@ -179,14 +258,17 @@ const handleAddClick = () => {
                 <TextFieldName onChange={handleNameChange} value={nameValue}/>
               </Grid>
               <Grid item xs={12}>
-                <CheckboxCategories onChange={handleCategoriesChange} value={selectedCategories}/>
+                <CheckboxCategories
+                    onChange={handleCategoriesChange}
+                    selectedCategories={selectedCategories}
+                />
               </Grid>
               <Grid item xs={12} container spacing={8}>
                 <Grid item xs={6}>
-                  <TextFieldWordsAuthor onChange={handleMusicAuthorChange} value={musicAuthorValue}/>
+                  <TextFieldMusicAuthor onChange={handleMusicAuthorChange} value={musicAuthorValue}/>
                 </Grid>
                 <Grid item xs={6}>
-                  <TextFieldMusicAuthor onChange={handleWordsAuthorChange} value={wordsAuthorValue}/>
+                  <TextFieldWordsAuthor onChange={handleWordsAuthorChange} value={wordsAuthorValue}/>
                 </Grid>
               </Grid>
               <Grid item xs={12}>
@@ -204,7 +286,9 @@ const handleAddClick = () => {
                 <SlideList initialItems={items} onDeleteItem={handleDeleteItem} />
               </Grid>
               <Grid item xs={12}>
-                <FloatingActionButtonsSave onClick={handleSaveClick}/>
+                 <FloatingActionButtonsSave
+                     onClick={isUpdateMode ? handleUpdateClick : handleSaveClick}
+                 />
               </Grid>
             </Grid>
           </Grid>

@@ -8,18 +8,25 @@ import CheckBoxIcon from "@mui/icons-material/CheckBox";
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkedIcon = <CheckBoxIcon fontSize="small" />;
 
-export default function CheckboxCategories({ onChange, value }) {
+export default function CheckboxCategories({ onChange, selectedCategories }) {
   const [options, setOptions] = React.useState([]);
-
-  const headers = {
-    Authorization: `Bearer ${localStorage.getItem('token')}`
-  };
 
   React.useEffect(() => {
     fetchOptions();
   }, []);
 
+  React.useEffect(() => {
+    const storedCategories = JSON.parse(localStorage.getItem("selectedSongCategories"));
+    if (storedCategories) {
+      onChange(storedCategories.map((item) => options.find((option) => option.id === item)));
+    }
+  }, [options]); // aktualizuj zaznaczenie kiedy opcje się zmieniają
+
   const fetchOptions = () => {
+    const headers = {
+      Authorization: `Bearer ${localStorage.getItem('token')}`
+    };
+
     fetch("http://localhost:8080/dashboard/songCategories", { headers })
       .then((response) => response.json())
       .then((data) => {
@@ -34,7 +41,7 @@ export default function CheckboxCategories({ onChange, value }) {
       id="checkboxes-tags-demo"
       options={options}
       disableCloseOnSelect
-      getOptionLabel={(option) => option.name}
+      getOptionLabel={(option) => option ? option.name : ''}
       renderOption={(props, option, { selected }) => (
         <li {...props}>
           <Checkbox
@@ -52,8 +59,10 @@ export default function CheckboxCategories({ onChange, value }) {
           label="Wybierz kategorie"
         />
       )}
-      onChange={(event, newValue) => onChange(newValue)}
-      value={value}
+      onChange={(event, newValue) => {
+        onChange(newValue);
+      }}
+      value={selectedCategories}
     />
   );
 }
