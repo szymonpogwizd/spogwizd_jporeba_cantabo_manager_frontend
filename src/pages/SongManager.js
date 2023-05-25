@@ -43,11 +43,18 @@ export default function SongManager() {
       setSelectedCategories([]);
     };
 
+    const slides = items.map((item) => ({
+      body: item.previewHtml,
+    }));
+
     const data = {
-      name: nameValue,
-      musicAuthor: musicAuthorValue,
-      wordsAuthor: wordsAuthorValue,
-      songCategories: selectedCategories,
+      song: {
+          name: nameValue,
+          musicAuthor: musicAuthorValue,
+          wordsAuthor: wordsAuthorValue,
+          songCategories: selectedCategories,
+        },
+          slides
     };
 
     fetch("http://localhost:8080/dashboard/songManager", {
