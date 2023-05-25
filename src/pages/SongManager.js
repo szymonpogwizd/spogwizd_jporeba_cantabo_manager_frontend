@@ -28,6 +28,8 @@ export default function SongManager() {
   const [errorCount, setErrorCount] = useState(0);
   const [items, setItems] = useState([]);
   const editorRef = useRef(null);
+  const [idValue, setIdValue] = useState("");
+  const [isUpdateMode, setIsUpdateMode] = useState(false);
 
   const [previewHtml, setPreviewHtml] = useState('');
 
@@ -40,6 +42,7 @@ export default function SongManager() {
           setNameValue(initialNameValue || "");
           setMusicAuthorValue(initialMusicAuthorValue || "");
           setWordsAuthorValue(initialWordsAuthorValue || "");
+          setIdValue(initialIdValue || "");
         }
     }, [nameValue]);
 
@@ -109,6 +112,60 @@ export default function SongManager() {
         setShowAlert(true);
       });
   };
+
+
+        const handleUpdateClick = () => {
+            const resetForm = () => {
+              setNameValue("");
+              setMusicAuthorValue("");
+              setWordsAuthorValue("");
+              setSelectedCategories([]);
+              setPreviewHtml('');
+              setItems([]);
+              setIdValue("");
+            };
+
+            const slides = items.map((item) => ({
+              body: item.previewHtml,
+            }));
+
+            const data = {
+                name: nameValue,
+                musicAuthor: musicAuthorValue,
+                wordsAuthor: wordsAuthorValue,
+                songCategories: selectedCategories,
+            };
+
+            console.log(nameValue);
+
+              fetch(`http://localhost:8080/dashboard/songManager/${idValue}`, {
+                method: "PUT",
+                headers: {
+                  "Content-Type": "application/json",
+                  "Authorization": `Bearer ${localStorage.getItem('token')}`
+                },
+                body: JSON.stringify(data),
+              })
+                .then((response) => {
+                  if (!response.ok) {
+                    return response.text().then((errorText) => {
+                      throw new Error(errorText);
+                    });
+                  }
+                  setSuccessAlertMessage(`Pomyślnie zaktualizowano pieśń ${nameValue}`);
+                  handleCloseAlert();
+                  setShowSuccessAlert(true);
+                  resetForm();
+                  setIsUpdateMode(false);
+                  return response.json();
+                })
+                .catch((error) => {
+                  handleCloseSuccessAlert();
+                  setErrorCount(prevCount => prevCount + 1);
+                  setAlertMessage(`[${errorCount}] ${error.message}`);
+                  setShowAlert(true);
+                });
+            };
 
   const handleNameChange = (event) => {
     const value = event.target.value;
@@ -229,7 +286,9 @@ const handleAddClick = () => {
                 <SlideList initialItems={items} onDeleteItem={handleDeleteItem} />
               </Grid>
               <Grid item xs={12}>
-                <FloatingActionButtonsSave onClick={handleSaveClick}/>
+                 <FloatingActionButtonsSave
+                     onClick={isUpdateMode ? handleUpdateClick : handleSaveClick}
+                 />
               </Grid>
             </Grid>
           </Grid>
