@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { useTheme } from '@mui/material/styles';
 import { Grid, Container, Typography } from '@mui/material';
@@ -27,6 +27,7 @@ export default function SongManager() {
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [errorCount, setErrorCount] = useState(0);
   const [items, setItems] = useState([]);
+  const editorRef = useRef(null);
 
   const [previewHtml, setPreviewHtml] = useState('');
 
@@ -108,17 +109,27 @@ export default function SongManager() {
     setAlertMessage("");
   };
 
-  const handleAddClick = () => {
-    const newItem = {
-      id: items.length,
-      previewHtml,
-    };
-    setItems(prevItems => [...prevItems, newItem]);
+const handleAddClick = () => {
+  const newItem = {
+    id: items.length,
+    previewHtml,
   };
+  setItems(prevItems => [...prevItems, newItem]);
+  setPreviewHtml('');
+
+  if (editorRef.current) {
+    editorRef.current.handleChange('');
+  }
+};
 
   useEffect(() => {
     console.log(items);
   }, [items]);
+
+  const handleDeleteItem = (item) => {
+    const newItems = items.filter((i) => i.id !== item.id);
+    setItems(newItems);
+  };
 
   return (
     <>
@@ -169,7 +180,7 @@ export default function SongManager() {
                 </Grid>
               </Grid>
               <Grid item xs={12}>
-                <Editor onChange={handlePreviewChange} />
+                <Editor onChange={handlePreviewChange} ref={editorRef} />
               </Grid>
               <Grid item xs={12}>
                 <FloatingActionButtonsAccept onClick={handleAddClick} />
@@ -180,7 +191,7 @@ export default function SongManager() {
           <Grid item xs={12} sm={5}>
             <Grid>
               <Grid item xs={12}>
-                <SlideList initialItems={items} />
+                <SlideList initialItems={items} onDeleteItem={handleDeleteItem} />
               </Grid>
               <Grid item xs={12}>
                 <FloatingActionButtonsSave onClick={handleSaveClick}/>

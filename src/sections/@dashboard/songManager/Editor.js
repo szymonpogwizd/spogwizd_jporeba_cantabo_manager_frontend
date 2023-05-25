@@ -7,9 +7,6 @@ import './styles.css';
 
 Quill.register('modules/imageResize', ImageResize);
 
-/*
- * Simple editor component that takes placeholder text as a prop
- */
 class Editor extends Component {
   constructor(props) {
     super(props);
