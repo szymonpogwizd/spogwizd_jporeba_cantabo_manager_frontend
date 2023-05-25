@@ -1,4 +1,4 @@
-import { Component } from 'react';
+import React, { useState, useCallback, forwardRef, useImperativeHandle } from 'react';
 import ReactQuill, { Quill } from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import ImageResize from 'quill-image-resize-module-react';
@@ -7,40 +7,36 @@ import './styles.css';
 
 Quill.register('modules/imageResize', ImageResize);
 
-/*
- * Simple editor component that takes placeholder text as a prop
- */
-class Editor extends Component {
-  constructor(props) {
-    super(props);
-    this.state = { editorHtml: '' };
-    this.handleChange = this.handleChange.bind(this);
-  }
+const Editor = forwardRef(({ onChange, placeholder }, ref) => {
+  const [editorHtml, setEditorHtml] = useState('');
 
-  handleChange(html) {
-    this.setState({ editorHtml: html });
-    console.log(html);
-  }
+  const handleChange = useCallback(
+    (content, delta, source, editor) => {
+      setEditorHtml(content);
+      const html = typeof editor.getHTML === 'function' ? editor.getHTML() : editor.root.innerHTML;
+      onChange(html);
+    },
+    [onChange]
+  );
 
-  render() {
-    return (
-      <ReactQuill
-        theme={this.state.theme}
-        onChange={this.handleChange}
-        value={this.state.editorHtml}
-        modules={Editor.modules}
-        formats={Editor.formats}
-        bounds={'#root'}
-        placeholder={this.props.placeholder}
-      />
-    );
-  }
-}
+  useImperativeHandle(ref, () => ({
+    handleChange: (content) => {
+      setEditorHtml(content);
+    },
+  }));
 
-/*
- * Quill modules to attach to editor
- * See https://quilljs.com/docs/modules/ for complete options
- */
+  return (
+    <ReactQuill
+      onChange={handleChange}
+      value={editorHtml}
+      modules={Editor.modules}
+      formats={Editor.formats}
+      bounds={'#root'}
+      placeholder={placeholder}
+    />
+  );
+});
+
 Editor.modules = {
   toolbar: [
     [{ header: '1' }, { header: '2' }, { font: [] }],
@@ -56,7 +52,6 @@ Editor.modules = {
     ['clean']
   ],
   clipboard: {
-    // toggle to add extra line breaks when pasting HTML:
     matchVisual: false
   },
   imageResize: {
@@ -65,10 +60,6 @@ Editor.modules = {
   }
 };
 
-/*
- * Quill editor formats
- * See https://quilljs.com/docs/formats/
- */
 Editor.formats = [
   'header',
   'font',
