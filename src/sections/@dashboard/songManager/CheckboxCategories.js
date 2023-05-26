@@ -20,7 +20,7 @@ export default function CheckboxCategories({ onChange, selectedCategories }) {
     if (storedCategories) {
       onChange(storedCategories.map((item) => options.find((option) => option.id === item)));
     }
-  }, [options]); // aktualizuj zaznaczenie kiedy opcje się zmieniają
+  }, [options]);
 
   const fetchOptions = () => {
     const headers = {

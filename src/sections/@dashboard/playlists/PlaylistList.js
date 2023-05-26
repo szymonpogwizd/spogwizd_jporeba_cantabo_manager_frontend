@@ -7,10 +7,9 @@ import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@mui/icons-material/Delete";
 import SearchField from "./SearchField";
 import AlertMessage from '../common/AlertMessage';
+import SelectCategory from './SelectCategory';
 
-export default function ProfileList({ refreshKey, setIdValue, setIsUpdateMode, setNameValue, setActiveValue, setSortByUsedValue,
-    setShowTitleValue, setAllBigValue, setShowEmptySlideValue, setInvertColorsValue, setExpandedListValue, setMaxFontValue, setMarginValue,
-    setMaxMinValue, setBackgroundColorValue, setTextColorValue, setStopColorValue, setAlignValue }) {
+export default function PlaylistList({ refreshKey, setIdValue, setIsUpdateMode, setNameValue, setSelectedCategories }) {
     const [searchText, setSearchText] = useState("");
     const [data, setData] = useState([]);
     const [itemToDelete, setItemToDelete] = useState(null);
@@ -24,7 +23,7 @@ export default function ProfileList({ refreshKey, setIdValue, setIsUpdateMode, s
     };
 
       useEffect(() => {
-        fetch("http://localhost:8080/dashboard/profiles", { headers })
+        fetch("http://localhost:8080/dashboard/playlist", { headers })
           .then((response) => response.json())
           .then((data) => {
             setData(data);
@@ -48,13 +47,13 @@ export default function ProfileList({ refreshKey, setIdValue, setIsUpdateMode, s
       if (!item) {
         return;
       }
-      fetch(`http://localhost:8080/dashboard/profiles/${id}`, {
+      fetch(`http://localhost:8080/dashboard/playlist/${id}`, {
           method: "DELETE",
           headers
         })
         .then(() => {
           setItemToDelete(id);
-          setSuccessAlertMessage(`Pomyślnie usunięto profil ${item.name}`);
+          setSuccessAlertMessage(`Pomyślnie usunięto playliste ${item.name}`);
           setShowSuccessAlert(true);
         })
         .catch((error) => {
@@ -80,21 +79,8 @@ export default function ProfileList({ refreshKey, setIdValue, setIsUpdateMode, s
         if (item) {
             setIdValue(item.id);
             setNameValue(item.name);
-            setActiveValue(item.active);
-            setSortByUsedValue(item.sortByUsed);
-            setShowTitleValue(item.showTitle);
-            setAllBigValue(item.allBig);
-            setShowEmptySlideValue(item.showEmptySlide);
-            setInvertColorsValue(item.invertColors);
-            setExpandedListValue(item.expandedList);
-            setMaxFontValue(item.maxFont);
-            setMarginValue(item.margin);
-            setMaxMinValue(item.maxMin);
-            setBackgroundColorValue(item.bgColor);
-            setTextColorValue(item.txColor);
-            setStopColorValue(item.stopColor);
-            setAlignValue(item.align);
             setIsUpdateMode(true);
+            setSelectedCategories(item.playlistCategories);
         }
     };
 
@@ -105,6 +91,7 @@ export default function ProfileList({ refreshKey, setIdValue, setIsUpdateMode, s
 return (
     <div>
       <SearchField handleSearch={handleSearch} />
+        <SelectCategory />
 
         {showAlert && (
           <AlertMessage
@@ -129,7 +116,7 @@ return (
         sx={{
           width: "100%",
           bgcolor: "background.paper",
-          height: "55.6vh",
+          height: "50vh",
           overflow: "auto",
         }}
       >
