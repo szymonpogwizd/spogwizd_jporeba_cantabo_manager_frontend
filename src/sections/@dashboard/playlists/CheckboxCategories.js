@@ -28,10 +28,10 @@ export default function CheckboxCategories({ onChange, setSelectedCategories, id
           setSelectedCategories(data);
         });
     } else {
-           setSelectedOptions([]);
-           setSelectedCategories([]);
-         }
-       }, [idValue, setSelectedCategories, refreshKey]);
+      setSelectedOptions([]);
+      setSelectedCategories([]);
+    }
+  }, [idValue, setSelectedCategories, refreshKey]);
 
   useEffect(() => {
     fetchOptions();
@@ -57,20 +57,21 @@ export default function CheckboxCategories({ onChange, setSelectedCategories, id
       options={options}
       disableCloseOnSelect
       getOptionLabel={(option) => option.name}
-      renderOption={(props, option, { selected }) => (
-        <li {...props}>
-          <Checkbox
-            icon={icon}
-            checkedIcon={checkedIcon}
-            style={{ marginRight: 8 }}
-            checked={selected}
-          />
-          {option.name}
-        </li>
-      )}
-      renderInput={(params) => (
-        <TextField {...params} label="Wybierz kategorie" />
-      )}
+      renderOption={(props, option) => {
+        const isChecked = selectedOptions.some((item) => item.id === option.id);
+        return (
+          <li {...props}>
+            <Checkbox
+              icon={icon}
+              checkedIcon={checkedIcon}
+              style={{ marginRight: 8 }}
+              checked={isChecked}
+            />
+            {option.name}
+          </li>
+        );
+      }}
+      renderInput={(params) => <TextField {...params} label="Wybierz kategorie" />}
       onChange={(event, newValue) => {
         setSelectedOptions(newValue);
         onChange(newValue);
