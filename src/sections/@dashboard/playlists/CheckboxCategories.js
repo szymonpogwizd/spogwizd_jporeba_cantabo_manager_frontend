@@ -9,45 +9,46 @@ const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkedIcon = <CheckBoxIcon fontSize="small" />;
 
 export default function CheckboxCategories({ onChange, setSelectedCategories, idValue, refreshKey }) {
-  const [options, setOptions] = useState([]);
   const [selectedOptions, setSelectedOptions] = useState([]);
+const [options, setOptions] = useState([]);
+const [optionMap, setOptionMap] = useState({});
 
-  useEffect(() => {
-    if (idValue !== "") {
-      const headers = {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      };
+useEffect(() => {
+  const headers = {
+    Authorization: `Bearer ${localStorage.getItem("token")}`,
+  };
 
-      fetch(
-        `http://localhost:8080/dashboard/playlist/getPlaylistCategoriesForPlaylist/${idValue}`,
-        { headers }
-      )
-        .then((response) => response.json())
-        .then((data) => {
-          setSelectedOptions(data);
-          setSelectedCategories(data);
-        });
-    } else {
-      setSelectedOptions([]);
-      setSelectedCategories([]);
-    }
-  }, [idValue, setSelectedCategories, refreshKey]);
+  fetch("http://localhost:8080/dashboard/playlistCategories", { headers })
+    .then((response) => response.json())
+    .then((data) => {
+      const map = data.reduce((acc, cur) => ({ ...acc, [cur.id]: cur }), {});
+      setOptions(data);
+      setOptionMap(map);
+    });
+}, []);
 
-  useEffect(() => {
-    fetchOptions();
-  }, []);
-
-  const fetchOptions = () => {
+useEffect(() => {
+  if (idValue !== "") {
     const headers = {
       Authorization: `Bearer ${localStorage.getItem("token")}`,
     };
 
-    fetch("http://localhost:8080/dashboard/playlistCategories", { headers })
+    fetch(
+      `http://localhost:8080/dashboard/playlist/getPlaylistCategoriesForPlaylist/${idValue}`,
+      { headers }
+    )
       .then((response) => response.json())
       .then((data) => {
-        setOptions(data);
+        const selected = data.map((item) => optionMap[item.id]);
+        setSelectedOptions(selected);
+        setSelectedCategories(selected);
       });
-  };
+  } else {
+    setSelectedOptions([]);
+    setSelectedCategories([]);
+  }
+}, [idValue, setSelectedCategories, refreshKey, optionMap]);
+
 
   return (
     <Autocomplete
