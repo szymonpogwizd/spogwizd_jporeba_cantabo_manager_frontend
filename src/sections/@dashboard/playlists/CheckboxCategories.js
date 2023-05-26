@@ -8,19 +8,18 @@ import CheckBoxIcon from "@mui/icons-material/CheckBox";
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkedIcon = <CheckBoxIcon fontSize="small" />;
 
-export default function CheckboxCategories({ onChange, setSelectedCategories, idValue }) {
+export default function CheckboxCategories({ onChange, setSelectedCategories, idValue, refreshKey }) {
   const [options, setOptions] = useState([]);
   const [selectedOptions, setSelectedOptions] = useState([]);
-  const id = idValue;
 
   useEffect(() => {
-    if (id !== "") {
+    if (idValue !== "") {
       const headers = {
         Authorization: `Bearer ${localStorage.getItem("token")}`,
       };
 
       fetch(
-        `http://localhost:8080/dashboard/playlist/getPlaylistCategoriesForPlaylist/${id}`,
+        `http://localhost:8080/dashboard/playlist/getPlaylistCategoriesForPlaylist/${idValue}`,
         { headers }
       )
         .then((response) => response.json())
@@ -28,8 +27,11 @@ export default function CheckboxCategories({ onChange, setSelectedCategories, id
           setSelectedOptions(data);
           setSelectedCategories(data);
         });
-    }
-  }, [id, setSelectedCategories]);
+    } else {
+           setSelectedOptions([]);
+           setSelectedCategories([]);
+         }
+       }, [idValue, setSelectedCategories, refreshKey]);
 
   useEffect(() => {
     fetchOptions();

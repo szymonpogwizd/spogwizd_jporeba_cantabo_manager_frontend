@@ -6,24 +6,25 @@ import ListItemText from "@mui/material/ListItemText";
 import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@mui/icons-material/Delete";
 
-export default function EmptyList({ idValue, setSongsValue }) {
+export default function EmptyList({ idValue, setSongsValue, refreshKey }) {
   const [searchText, setSearchText] = useState("");
   const [data, setData] = useState([]);
-  const id = idValue;
 
   useEffect(() => {
-    if (id !== "") {
+    if (idValue !== "") {
       const headers = {
         Authorization: `Bearer ${localStorage.getItem('token')}`
       };
 
-      fetch(`http://localhost:8080/dashboard/playlist/songsForPlaylist/${id}`, { headers })
+      fetch(`http://localhost:8080/dashboard/playlist/songsForPlaylist/${idValue}`, { headers })
         .then((response) => response.json())
         .then((data) => {
           setData(data);
         });
+    } else {
+      setData([]);
     }
-  }, [id]);
+  }, [idValue, refreshKey]);
 
   const handleDelete = (index) => {
     setData((prevData) => {

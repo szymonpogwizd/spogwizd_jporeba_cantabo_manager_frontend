@@ -146,11 +146,16 @@ export default function Playlist() {
               <Grid item xs={12}>
                 <TextFieldName onChange={handleNameChange} value={nameValue} />
                 <CheckboxCategories
-                  onChange={handleCategoryChange}
-                  setSelectedCategories={setSelectedCategories}
-                  idValue={idValue}
+                    onChange={handleCategoryChange}
+                    setSelectedCategories={setSelectedCategories}
+                    idValue={idValue}
+                    refreshKey={refreshKey}
                 />
-                <PlaylistEditList idValue={idValue} setSongsValue={setSongsValue} />
+                <PlaylistEditList
+                    idValue={idValue}
+                    setSongsValue={setSongsValue}
+                    refreshKey={refreshKey}
+                />
               </Grid>
               <Grid>
                 <FloatingActionButtonsSave onClick={handleUpdateClick} />
