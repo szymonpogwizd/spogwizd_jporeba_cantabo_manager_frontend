@@ -17,7 +17,7 @@ export default function EmptyList({ idValue, setSongsValue }) {
         Authorization: `Bearer ${localStorage.getItem('token')}`
       };
 
-      fetch(`http://localhost:8080/dashboard/songs/songsForCategories/${id}`, { headers })
+      fetch(`http://localhost:8080/dashboard/playlist/songsForPlaylist/${id}`, { headers })
         .then((response) => response.json())
         .then((data) => {
           setData(data);

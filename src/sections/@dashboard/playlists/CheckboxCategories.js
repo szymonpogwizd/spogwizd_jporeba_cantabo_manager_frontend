@@ -38,7 +38,7 @@ export default function CheckboxCategories({ onChange, selectedCategories }) {
 
   return (
     <Autocomplete
-      sx={{ marginBottom: 2, marginTop: 2 }}
+      sx={{ marginBottom: 2 }}
       multiple
       id="checkboxes-tags-demo"
       options={options}
