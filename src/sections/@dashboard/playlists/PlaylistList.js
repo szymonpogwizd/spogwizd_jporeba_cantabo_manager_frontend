@@ -81,7 +81,6 @@ export default function PlaylistList({ refreshKey, setIdValue, setIsUpdateMode, 
             setNameValue(item.name);
             setIsUpdateMode(true);
             setSelectedCategories(item.playlistCategories);
-            console.log(item.playlistCategories);
         }
     };
 
