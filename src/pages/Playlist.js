@@ -41,7 +41,6 @@ export default function Playlist() {
       setSongsValue([]);
     };
 
-    console.log(selectedCategories);
     const data = {
       name: nameValue,
       playlistCategories: selectedCategories,
@@ -147,9 +146,9 @@ export default function Playlist() {
               <Grid item xs={12}>
                 <TextFieldName onChange={handleNameChange} value={nameValue} />
                 <CheckboxCategories
-                  key={refreshKey}
                   onChange={handleCategoryChange}
-                  selectedCategories={selectedCategories}
+                  setSelectedCategories={setSelectedCategories}
+                  idValue={idValue}
                 />
                 <PlaylistEditList idValue={idValue} setSongsValue={setSongsValue} />
               </Grid>

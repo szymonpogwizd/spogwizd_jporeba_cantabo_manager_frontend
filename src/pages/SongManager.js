@@ -136,8 +136,6 @@ export default function SongManager() {
                 songCategories: selectedCategories,
             };
 
-            console.log(nameValue);
-
               fetch(`http://localhost:8080/dashboard/songManager/${idValue}`, {
                 method: "PUT",
                 headers: {
