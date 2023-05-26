@@ -36,10 +36,13 @@ export default function Playlist() {
                 const resetForm = () => {
                   setIdValue("");
                   setNameValue("");
+                  setSelectedCategories([]);
                 };
 
+                console.log(selectedCategories);
                 const data = {
                   name: nameValue,
+                    playlistCategories: selectedCategories,
                 };
 
                 fetch(`http://localhost:8080/dashboard/playlist/${idValue}`, {
@@ -128,6 +131,7 @@ return (
                             setNameValue={setNameValue}
                             setIsUpdateMode={setIsUpdateMode}
                             setIdValue={setIdValue}
+                            setSelectedCategories={setSelectedCategories}
                         />
                     </Grid>
                     <Grid>
@@ -139,7 +143,11 @@ return (
                     <Grid>
                         <Grid item xs={12}>
                             <TextFieldName onChange={handleNameChange} value={nameValue} />
-                            <CheckboxCategories onChange={handleCategoryChange} value={selectedCategories} />
+                            <CheckboxCategories
+                              key={refreshKey}
+                              onChange={handleCategoryChange}
+                              selectedCategories={selectedCategories}
+                            />
                             <PlaylistEditList />
                         </Grid>
                         <Grid>

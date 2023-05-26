@@ -9,7 +9,7 @@ import SearchField from "./SearchField";
 import AlertMessage from '../common/AlertMessage';
 import SelectCategory from './SelectCategory';
 
-export default function PlaylistList({ refreshKey, setIdValue, setIsUpdateMode, setNameValue }) {
+export default function PlaylistList({ refreshKey, setIdValue, setIsUpdateMode, setNameValue, setSelectedCategories }) {
     const [searchText, setSearchText] = useState("");
     const [data, setData] = useState([]);
     const [itemToDelete, setItemToDelete] = useState(null);
@@ -80,6 +80,8 @@ export default function PlaylistList({ refreshKey, setIdValue, setIsUpdateMode, 
             setIdValue(item.id);
             setNameValue(item.name);
             setIsUpdateMode(true);
+            setSelectedCategories(item.playlistCategories);
+            console.log(item.playlistCategories);
         }
     };
 
