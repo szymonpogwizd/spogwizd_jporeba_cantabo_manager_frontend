@@ -158,11 +158,10 @@ const handleToggle = (value) => () => {
     setSelectedCategories(newCategories);
   };
 
-  const filteredList = left.filter((item) =>
-    searchText !== ""
-      ? item.name.toLowerCase().includes(searchText.toLowerCase())
-      : true
-  );
+    const filteredList = left.filter((item) =>
+      (searchText !== "" ? item.name.toLowerCase().includes(searchText.toLowerCase()) : true) &&
+      (sortSong !== "" ? item.songCategories.includes(sortSong) : true)
+    );
 
 const customList = (items) => (
     <Paper sx={{ width: "100%", height: 640, overflow: "auto" }}>
