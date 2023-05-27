@@ -40,6 +40,7 @@ export default function TransferList() {
   const [refreshKey, setRefreshKey] = useState(0);
   const [errorCount, setErrorCount] = useState(0);
   const [selectedCategories, setSelectedCategories] = useState([]);
+  const [sortSong, setSortSong] = useState("");
 
 const handleToggle = (value) => () => {
   const currentIndex = checked.indexOf(value);
@@ -157,17 +158,17 @@ const handleToggle = (value) => () => {
     setSelectedCategories(newCategories);
   };
 
-  const filteredList = left.filter((value) =>
+  const filteredList = left.filter((item) =>
     searchText !== ""
-      ? value.toLowerCase().includes(searchText.toLowerCase())
+      ? item.name.toLowerCase().includes(searchText.toLowerCase())
       : true
   );
 
-  const customList = (items) => (
+const customList = (items) => (
     <Paper sx={{ width: "100%", height: 640, overflow: "auto" }}>
       <List dense component="div" role="list">
-        {items.map((value, index) => {
-          const labelId = `transfer-list-item-${index}-label`;
+        {items.map((value) => {
+          const labelId = `transfer-list-item-${value.id}-label`;
 
           return (
             <ListItem
@@ -217,7 +218,7 @@ const handleToggle = (value) => () => {
       )}
       <Grid item xs={12} md={5.5}>
         <SearchField handleSearch={handleSearch} />
-        <SelectCategory />
+        <SelectCategory setSortSong={setSortSong}/>
         {customList(filteredList)}
       </Grid>
       <Grid item xs={12} md={1} sx={{ textAlign: "center" }}>
