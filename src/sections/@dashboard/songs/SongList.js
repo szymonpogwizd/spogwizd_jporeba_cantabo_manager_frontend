@@ -20,6 +20,7 @@ export default function CheckboxList() {
     const [showSuccessAlert, setShowSuccessAlert] = useState(false);
     const [successAlertMessage, setSuccessAlertMessage] = useState("");
     const [errorCount, setErrorCount] = useState(0);
+    const [sortSong, setSortSong] = useState("");
 
     const headers = {
       Authorization: `Bearer ${localStorage.getItem('token')}`
@@ -125,7 +126,7 @@ return (
           />
         )}
 
-      <SelectCategory />
+      <SelectCategory setSortSong={setSortSong}/>
       <List
         sx={{
           width: "100%",
@@ -134,15 +135,17 @@ return (
           overflow: "auto",
         }}
       >
-        {data.map((item) => {
-          const labelId = `checkbox-list-label-${item.id}`;
+        {data
+            .filter(item => !sortSong || item.songCategories.includes(sortSong))
+            .map((item) => {
+                const labelId = `checkbox-list-label-${item.id}`;
 
-          if (
-            searchText &&
-            !item.name.toLowerCase().includes(searchText.toLowerCase())
-          ) {
-            return null;
-          }
+                if (
+                    searchText &&
+                    !item.name.toLowerCase().includes(searchText.toLowerCase())
+                ) {
+                    return null;
+                }
 
           return (
             <ListItem
