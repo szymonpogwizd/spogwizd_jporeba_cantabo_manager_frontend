@@ -136,16 +136,19 @@ export default function SongManager() {
               setIsUpdateMode(false);
             };
 
-            const slides = items.map((item) => ({
-              body: item.previewHtml,
-            }));
+              const slides = items.map((item) => ({
+                body: item.previewHtml,
+              }));
 
-            const data = {
-                name: nameValue,
-                musicAuthor: musicAuthorValue,
-                wordsAuthor: wordsAuthorValue,
-                songCategories: selectedCategories,
-            };
+              const data = {
+                song: {
+                  name: nameValue,
+                  musicAuthor: musicAuthorValue,
+                  wordsAuthor: wordsAuthorValue,
+                  songCategories: selectedCategories,
+                },
+                slides,
+              };
 
               fetch(`http://localhost:8080/dashboard/songManager/${idValue}`, {
                 method: "PUT",
