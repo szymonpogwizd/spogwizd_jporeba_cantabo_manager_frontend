@@ -5,7 +5,6 @@ import { Grid, Container, Typography } from '@mui/material';
 // sections
 import {
     GroupList,
-    FloatingActionButtonsAdd,
     TextFieldName,
     FloatingActionButtonsSave,
     SwitchActive,
@@ -33,9 +32,6 @@ return (
                     <Grid>
                          <GroupList/>
                      </Grid>
-                    <Grid>
-                    <FloatingActionButtonsAdd />
-                    </Grid>
                  </Grid>
 
                   <Grid item xs={12} sm={6}>
@@ -53,6 +49,9 @@ return (
                         </Grid>
                         <Grid item xs={12}>
                         <UserList />
+                        </Grid>
+                        <Grid item xs={12}>
+                            <FloatingActionButtonsSave />
                         </Grid>
                     </Grid>
                   </Grid>

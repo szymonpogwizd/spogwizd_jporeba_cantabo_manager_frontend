@@ -6,7 +6,6 @@ import { Grid, Container, Typography } from '@mui/material';
 // sections
 import {
   UserList,
-  FloatingActionButtonsAdd,
   FloatingActionButtonsSave,
   TextFieldName,
   SelectRole,
@@ -225,9 +224,6 @@ export default function Users() {
                     setGroupValue={setGroupValue}
                     setActiveValue={setActiveValue}
                 />
-              </Grid>
-              <Grid item xs={12}>
-                <FloatingActionButtonsAdd />
               </Grid>
             </Grid>
           </Grid>
