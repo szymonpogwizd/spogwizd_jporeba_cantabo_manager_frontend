@@ -43,6 +43,11 @@ export default function Playlist() {
   };
 
   const handleUpdateClick = () => {
+    if (!isUpdateMode) {
+      setAlertMessage("Nie wybrałeś elementu do edycji");
+      setShowAlert(true);
+      return;
+    }
 
     const data = {
       name: nameValue,
