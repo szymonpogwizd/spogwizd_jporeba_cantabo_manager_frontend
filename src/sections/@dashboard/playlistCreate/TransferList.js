@@ -85,13 +85,14 @@ const handleToggle = (value) => () => {
     fetchData();
   }, []);
 
+    const resetForm = () => {
+      setNameValue("");
+      setSelectedCategories([]);
+      setRight([]);
+    };
+
    const handleSaveClick = () => {
 
-        const resetForm = () => {
-          setNameValue("");
-          setSelectedCategories([]);
-          setRight([]);
-        };
 
         const data = {
           name: nameValue,
@@ -251,7 +252,14 @@ const handleToggle = (value) => () => {
       </Grid>
       <Grid container justifyContent="flex-end">
         <Grid item>
-           <FloatingActionButtonsSave onClick={handleSaveClick}/>
+            <Grid container spacing={2} justifyContent="flex-end">
+              <Grid item>
+                <FloatingActionButtonsClean onClick={resetForm} />
+              </Grid>
+              <Grid item>
+                <FloatingActionButtonsSave onClick={handleSaveClick}/>
+              </Grid>
+            </Grid>
         </Grid>
       </Grid>
     </Grid>
