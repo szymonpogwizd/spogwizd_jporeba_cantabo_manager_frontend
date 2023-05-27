@@ -6,6 +6,7 @@ import { Grid, Container, Typography } from '@mui/material';
 // sections
 import {
   FloatingActionButtonsSave,
+  FloatingActionButtonsClean,
   PlaylistCategoryList,
   SongCategoryList,
   TextFieldNamePlaylistCategories,
@@ -30,12 +31,13 @@ export default function Categories() {
     const [isUpdateMode, setIsUpdateMode] = useState(false);
     const [isUpdateModeSongCategory, setIsUpdateModeSongCategory] = useState(false);
 
-     const handleSaveSongCategoryClick = () => {
-
     const resetFormSongCategories = () => {
       setNameSongCategoryValue("");
+      setIdSongCategoryValue("");
+      setIsUpdateModeSongCategory(false);
     };
 
+     const handleSaveSongCategoryClick = () => {
       const dataSongCategories = {
         name: nameSongCategoryValue,
       };
@@ -70,52 +72,47 @@ export default function Categories() {
       };
 
       const handleUpdateSongCategoryClick = () => {
+            const dataSongCategories = {
+              name: nameSongCategoryValue,
+            };
 
-                const resetFormSongCategories = () => {
-                  setNameSongCategoryValue("");
-                  setIdSongCategoryValue("");
-                };
-
-                const dataSongCategories = {
-                  name: nameSongCategoryValue,
-                };
-
-                fetch(`http://localhost:8080/dashboard/songCategories/${idSongCategoryValue}`, {
-                  method: "PUT",
-                  headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": `Bearer ${localStorage.getItem('token')}`
-                  },
-                  body: JSON.stringify(dataSongCategories),
-                })
-                  .then((response) => {
-                    if (!response.ok) {
-                      return response.text().then((errorText) => {
-                        throw new Error(errorText);
-                      });
-                    }
-                    setSuccessAlertMessage(`Pomyślnie zaktualizowano kategorię pieśni ${nameSongCategoryValue}`);
-                    handleCloseAlert();
-                    setShowSuccessAlert(true);
-                    resetFormSongCategories();
-                    setRefreshKeySongCategories(prevKey => prevKey + 1);
-                    setIsUpdateMode(false);
-                    return response.json();
-                  })
-                  .catch((error) => {
-                    handleCloseSuccessAlert();
-                    setErrorCount(prevCount => prevCount + 1);
-                    setAlertMessage(`[${errorCount}] ${error.message}`);
-                    setShowAlert(true);
+            fetch(`http://localhost:8080/dashboard/songCategories/${idSongCategoryValue}`, {
+              method: "PUT",
+              headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${localStorage.getItem('token')}`
+              },
+              body: JSON.stringify(dataSongCategories),
+            })
+              .then((response) => {
+                if (!response.ok) {
+                  return response.text().then((errorText) => {
+                    throw new Error(errorText);
                   });
-              };
+                }
+                setSuccessAlertMessage(`Pomyślnie zaktualizowano kategorię pieśni ${nameSongCategoryValue}`);
+                handleCloseAlert();
+                setShowSuccessAlert(true);
+                resetFormSongCategories();
+                setRefreshKeySongCategories(prevKey => prevKey + 1);
+                setIsUpdateMode(false);
+                return response.json();
+              })
+              .catch((error) => {
+                handleCloseSuccessAlert();
+                setErrorCount(prevCount => prevCount + 1);
+                setAlertMessage(`[${errorCount}] ${error.message}`);
+                setShowAlert(true);
+              });
+          };
+
+          const resetFormPlaylistCategories = () => {
+            setNamePlaylistCategoryValue("");
+            setIdPlaylistCategoryValue("");
+            setIsUpdateMode(false);
+          };
 
       const handleSavePlaylistCategoryClick = () => {
-
-      const resetFormPlaylistCategories = () => {
-        setNamePlaylistCategoryValue("");
-      };
-
         const dataPlaylistCategories = {
           name: namePlaylistCategoryValue,
         };
@@ -150,12 +147,6 @@ export default function Categories() {
         };
 
         const handleUpdatePlaylistCategoryClick = () => {
-
-          const resetFormPlaylistCategories = () => {
-            setNamePlaylistCategoryValue("");
-            setIdPlaylistCategoryValue("");
-          };
-
           const dataPlaylistCategories = {
             name: namePlaylistCategoryValue,
           };
@@ -262,9 +253,16 @@ export default function Categories() {
                 <TextFieldNameSongCategories onChange={handleSongCategoryNameChange} value={nameSongCategoryValue} />
               </Grid>
               <Grid item xs={12}>
-                <FloatingActionButtonsSave
-                    onClick={isUpdateModeSongCategory ? handleUpdateSongCategoryClick : handleSaveSongCategoryClick}
-                />
+              <Grid container spacing={2} justifyContent="flex-end">
+                    <Grid item>
+                      <FloatingActionButtonsClean onClick={resetFormSongCategories} />
+                    </Grid>
+                    <Grid item>
+                      <FloatingActionButtonsSave
+                        onClick={isUpdateModeSongCategory ? handleUpdateSongCategoryClick : handleSaveSongCategoryClick}
+                      />
+                    </Grid>
+                  </Grid>
               </Grid>
             </Grid>
           </Grid>
@@ -286,9 +284,16 @@ export default function Categories() {
                 <TextFieldNamePlaylistCategories onChange={handlePlaylistCategoryNameChange} value={namePlaylistCategoryValue} />
               </Grid>
               <Grid item xs={12}>
-                <FloatingActionButtonsSave
-                  onClick={isUpdateMode ? handleUpdatePlaylistCategoryClick : handleSavePlaylistCategoryClick}
-                />
+              <Grid container spacing={2} justifyContent="flex-end">
+                    <Grid item>
+                      <FloatingActionButtonsClean onClick={resetFormPlaylistCategories} />
+                    </Grid>
+                    <Grid item>
+                      <FloatingActionButtonsSave
+                        onClick={isUpdateMode ? handleUpdatePlaylistCategoryClick : handleSavePlaylistCategoryClick}
+                      />
+                    </Grid>
+                  </Grid>
               </Grid>
             </Grid>
           </Grid>
