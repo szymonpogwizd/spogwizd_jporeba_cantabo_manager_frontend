@@ -6,12 +6,52 @@ import ListItemText from "@mui/material/ListItemText";
 import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@mui/icons-material/Delete";
 
-export default function CheckboxList({ initialItems, onDeleteItem }) {
+export default function CheckboxList({ initialItems, onDeleteItem, idValue, onItemsChange, refreshKey }) {
   const [items, setItems] = useState(initialItems || []);
 
-  useEffect(() => {
-    setItems(initialItems || []);
-  }, [initialItems]);
+useEffect(() => {
+  if (idValue !== "") {
+    const headers = {
+      Authorization: `Bearer ${localStorage.getItem("token")}`,
+    };
+    fetch(`http://localhost:8080/dashboard/songManager/slidesForSong/${idValue}`,
+      { headers }
+    )
+    .then((response) => response.json())
+    .then((data) => {
+      const newItems = [...items];
+      data.forEach(d => {
+        if (!newItems.some(item => item.id === d.id)) {
+          newItems.push(d);
+        }
+      });
+      setItems(newItems);
+      if (typeof onItemsChange === 'function') {
+        onItemsChange(newItems);
+      }
+    });
+  }
+}, [idValue, onItemsChange, refreshKey]);
+
+useEffect(() => {
+  if (initialItems && initialItems.length > 0) {
+    setItems(prevItems => {
+      const newItems = [...prevItems];
+      initialItems.forEach(d => {
+        if (!newItems.some(item => item.id === d.id)) {
+          newItems.push(d);
+        }
+      });
+      return newItems;
+    });
+  }
+}, [initialItems, refreshKey]);
+
+useEffect(() => {
+  if(refreshKey > 0) {
+    setItems([]);
+  }
+}, [refreshKey]);
 
   const handleDelete = (value) => () => {
     const newItems = items.filter(item => item.id !== value.id);
@@ -43,7 +83,7 @@ export default function CheckboxList({ initialItems, onDeleteItem }) {
               sx={{ p: 0 }}
             >
               <ListItemButton role={undefined}>
-                <ListItemText id={labelId} primary={value.previewHtml} />
+                <ListItemText id={labelId} primary={value.body ? value.body : value.previewHtml} />
               </ListItemButton>
             </ListItem>
           );

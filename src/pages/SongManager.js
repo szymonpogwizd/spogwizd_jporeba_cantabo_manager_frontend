@@ -36,7 +36,9 @@ export default function SongManager() {
 
     useEffect(() => {
         if (nameValue === "") {
+        if (localStorage.getItem("selectedSongId")) {
           setIsUpdateMode(true);
+        }
           const initialIdValue = localStorage.getItem("selectedSongId");
           const initialNameValue = localStorage.getItem("selectedSongName");
           const initialMusicAuthorValue = localStorage.getItem("selectedSongMusicAuthor");
@@ -103,8 +105,9 @@ export default function SongManager() {
         handleCloseAlert();
         setSuccessAlertMessage(`Pomyślnie utworzono pieśń ${nameValue}`);
         setShowSuccessAlert(true);
-        resetForm();
         resetEditor();
+        resetForm();
+        setRefreshKey(prevKey => prevKey + 1);
         return response.json();
       })
       .catch((error) => {
@@ -125,26 +128,28 @@ export default function SongManager() {
               setWordsAuthorValue("");
               setSelectedCategories([]);
               setPreviewHtml('');
-              setItems([]);
               setIdValue("");
               localStorage.removeItem("selectedSongId");
               localStorage.removeItem("selectedSongName");
               localStorage.removeItem("selectedSongMusicAuthor");
               localStorage.removeItem("selectedSongWordsAuthor");
               setIsUpdateMode(false);
+              setItems([]);
             };
 
-            const slides = items.map((item) => ({
-              body: item.previewHtml,
-            }));
+            const slides = items.map((item) => {
+              return { body: item.body ? item.body : item.previewHtml };
+            });
 
-            const data = {
-                name: nameValue,
-                musicAuthor: musicAuthorValue,
-                wordsAuthor: wordsAuthorValue,
-                songCategories: selectedCategories,
-            };
-
+              const data = {
+                song: {
+                  name: nameValue,
+                  musicAuthor: musicAuthorValue,
+                  wordsAuthor: wordsAuthorValue,
+                  songCategories: selectedCategories,
+                },
+                slides,
+              };
               fetch(`http://localhost:8080/dashboard/songManager/${idValue}`, {
                 method: "PUT",
                 headers: {
@@ -162,9 +167,9 @@ export default function SongManager() {
                   setSuccessAlertMessage(`Pomyślnie zaktualizowano pieśń ${nameValue}`);
                   handleCloseAlert();
                   setShowSuccessAlert(true);
+                  setIsUpdateMode(false);
                   resetForm();
                   setRefreshKey(prevKey => prevKey + 1);
-                  setIsUpdateMode(false);
                   return response.json();
                 })
                 .catch((error) => {
@@ -289,7 +294,13 @@ const handleAddClick = () => {
           <Grid item xs={12} sm={5}>
             <Grid>
               <Grid item xs={12}>
-                <SlideList initialItems={items} onDeleteItem={handleDeleteItem} />
+                <SlideList
+                    initialItems={items}
+                    onDeleteItem={handleDeleteItem}
+                    idValue={idValue}
+                    onItemsChange={setItems}
+                    refreshKey={refreshKey}
+                />
               </Grid>
               <Grid item xs={12}>
                  <FloatingActionButtonsSave
