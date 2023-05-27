@@ -10,6 +10,7 @@ import {
    TextFieldName,
    PlaylistEditList,
    FloatingActionButtonsSave,
+   FloatingActionButtonsClean,
    PlaylistList,
    CheckboxCategories,
 } from '../sections/@dashboard/playlists';
@@ -28,17 +29,19 @@ export default function Playlist() {
   const [idValue, setIdValue] = useState("");
   const [isUpdateMode, setIsUpdateMode] = useState(false);
 
-  const handleCategoryChange = (newCategories) => {
-    setSelectedCategories(newCategories);
-  };
-
-  const handleUpdateClick = () => {
     const resetForm = () => {
       setIdValue("");
       setNameValue("");
       setSelectedCategories([]);
       setSongsValue([]);
+      setIsUpdateMode(false);
     };
+
+  const handleCategoryChange = (newCategories) => {
+    setSelectedCategories(newCategories);
+  };
+
+  const handleUpdateClick = () => {
 
     const data = {
       name: nameValue,
@@ -154,7 +157,14 @@ export default function Playlist() {
                 />
               </Grid>
               <Grid>
-                <FloatingActionButtonsSave onClick={handleUpdateClick} />
+                <Grid container spacing={2} justifyContent="flex-end">
+                  <Grid item>
+                    <FloatingActionButtonsClean onClick={resetForm} />
+                  </Grid>
+                  <Grid item>
+                    <FloatingActionButtonsSave onClick={handleUpdateClick} />
+                  </Grid>
+                </Grid>
               </Grid>
             </Grid>
           </Grid>
