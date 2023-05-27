@@ -71,6 +71,7 @@ export default function Profiles() {
         setTextColorValue("#FFFFFF");
         setStopColorValue("#000000");
         setAlignValue("CENTER");
+        setRefreshKey(prevKey => prevKey + 1);
         setIsUpdateMode(false);
       };
 
@@ -111,7 +112,6 @@ export default function Profiles() {
               setSuccessAlertMessage(`Pomyślnie utworzono profil ${nameValue}`);
               setShowSuccessAlert(true);
               resetForm();
-              setRefreshKey(prevKey => prevKey + 1);
               return response.json();
           })
           .catch((error) => {
@@ -159,8 +159,6 @@ export default function Profiles() {
                   handleCloseAlert();
                   setShowSuccessAlert(true);
                   resetForm();
-                  setRefreshKey(prevKey => prevKey + 1);
-                  setIsUpdateMode(false);
                   return response.json();
                 })
                 .catch((error) => {

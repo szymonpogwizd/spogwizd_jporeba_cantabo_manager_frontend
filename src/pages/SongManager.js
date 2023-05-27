@@ -115,7 +115,6 @@ export default function SongManager() {
         setShowSuccessAlert(true);
         resetEditor();
         resetForm();
-        setRefreshKey(prevKey => prevKey + 1);
         return response.json();
       })
       .catch((error) => {
@@ -161,9 +160,7 @@ export default function SongManager() {
               setSuccessAlertMessage(`Pomyślnie zaktualizowano pieśń ${nameValue}`);
               handleCloseAlert();
               setShowSuccessAlert(true);
-              setIsUpdateMode(false);
               resetForm();
-              setRefreshKey(prevKey => prevKey + 1);
               return response.json();
             })
             .catch((error) => {

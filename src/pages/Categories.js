@@ -34,6 +34,7 @@ export default function Categories() {
     const resetFormSongCategories = () => {
       setNameSongCategoryValue("");
       setIdSongCategoryValue("");
+      setRefreshKeySongCategories(prevKey => prevKey + 1);
       setIsUpdateModeSongCategory(false);
     };
 
@@ -60,7 +61,6 @@ export default function Categories() {
               handleCloseAlert();
               setShowSuccessAlert(true);
               resetFormSongCategories();
-              setRefreshKeySongCategories(prevKey => prevKey + 1);
               return response.json();
           })
           .catch((error) => {
@@ -94,8 +94,6 @@ export default function Categories() {
                 handleCloseAlert();
                 setShowSuccessAlert(true);
                 resetFormSongCategories();
-                setRefreshKeySongCategories(prevKey => prevKey + 1);
-                setIsUpdateMode(false);
                 return response.json();
               })
               .catch((error) => {
@@ -109,6 +107,7 @@ export default function Categories() {
           const resetFormPlaylistCategories = () => {
             setNamePlaylistCategoryValue("");
             setIdPlaylistCategoryValue("");
+            setRefreshKeyPlaylistCategories(prevKey => prevKey + 1);
             setIsUpdateMode(false);
           };
 
@@ -135,7 +134,6 @@ export default function Categories() {
                 handleCloseAlert();
                 setShowSuccessAlert(true);
                 resetFormPlaylistCategories();
-                setRefreshKeyPlaylistCategories(prevKey => prevKey + 1);
                 return response.json();
             })
             .catch((error) => {
@@ -169,8 +167,6 @@ export default function Categories() {
               handleCloseAlert();
               setShowSuccessAlert(true);
               resetFormPlaylistCategories();
-              setRefreshKeyPlaylistCategories(prevKey => prevKey + 1);
-              setIsUpdateMode(false);
               return response.json();
             })
             .catch((error) => {

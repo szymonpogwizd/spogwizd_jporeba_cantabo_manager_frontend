@@ -46,6 +46,7 @@ export default function Users() {
     setGroupValue(null);
     setResetPasswords(true);
     setIdValue("");
+    setRefreshKey(prevKey => prevKey + 1);
     setIsUpdateMode(false);
   };
 
@@ -78,7 +79,6 @@ export default function Users() {
             setSuccessAlertMessage(`Pomyślnie utworzono użytkownika ${nameValue}`);
             setShowSuccessAlert(true);
             resetForm();
-            setRefreshKey(prevKey => prevKey + 1);
             return response.json();
         })
         .catch((error) => {
@@ -118,8 +118,6 @@ export default function Users() {
                 handleCloseAlert();
                 setShowSuccessAlert(true);
                 resetForm();
-                setRefreshKey(prevKey => prevKey + 1);
-                setIsUpdateMode(false);
                 return response.json();
               })
               .catch((error) => {

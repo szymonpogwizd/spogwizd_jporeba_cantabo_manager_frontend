@@ -34,6 +34,7 @@ export default function Playlist() {
       setNameValue("");
       setSelectedCategories([]);
       setSongsValue([]);
+      setRefreshKey(prevKey => prevKey + 1);
       setIsUpdateMode(false);
     };
 
@@ -67,8 +68,6 @@ export default function Playlist() {
         handleCloseAlert();
         setShowSuccessAlert(true);
         resetForm();
-        setRefreshKey(prevKey => prevKey + 1);
-        setIsUpdateMode(false);
         return response.json();
       })
       .catch((error) => {

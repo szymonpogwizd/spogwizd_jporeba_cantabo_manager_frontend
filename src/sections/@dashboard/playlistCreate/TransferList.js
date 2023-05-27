@@ -89,6 +89,7 @@ const handleToggle = (value) => () => {
       setNameValue("");
       setSelectedCategories([]);
       setRight([]);
+      setRefreshKey(prevKey => prevKey + 1);
     };
 
    const handleSaveClick = () => {
