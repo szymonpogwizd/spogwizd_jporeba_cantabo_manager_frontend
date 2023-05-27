@@ -17,6 +17,7 @@ export default function PlaylistList({ refreshKey, setIdValue, setIsUpdateMode, 
     const [alertMessage, setAlertMessage] = useState("");
     const [showSuccessAlert, setShowSuccessAlert] = useState(false);
     const [successAlertMessage, setSuccessAlertMessage] = useState("");
+    const [sortPlaylist, setSortPlaylist] = useState("");
 
     const headers = {
         Authorization: `Bearer ${localStorage.getItem('token')}`
@@ -91,7 +92,7 @@ export default function PlaylistList({ refreshKey, setIdValue, setIsUpdateMode, 
 return (
     <div>
       <SearchField handleSearch={handleSearch} />
-        <SelectCategory />
+        <SelectCategory setSortPlaylist={setSortPlaylist}/>
 
         {showAlert && (
           <AlertMessage
@@ -120,15 +121,17 @@ return (
           overflow: "auto",
         }}
       >
-        {data.map((item) => {
-          const labelId = `checkbox-list-label-${item.id}`;
+        {data
+            .filter(item => !sortPlaylist || item.playlistCategories.includes(sortPlaylist))
+            .map((item) => {
+                const labelId = `checkbox-list-label-${item.id}`;
 
-          if (
-            searchText &&
-            !item.name.toLowerCase().includes(searchText.toLowerCase())
-          ) {
-            return null;
-          }
+                if (
+                    searchText &&
+                    !item.name.toLowerCase().includes(searchText.toLowerCase())
+                ) {
+                    return null;
+                }
 
           return (
             <ListItem
