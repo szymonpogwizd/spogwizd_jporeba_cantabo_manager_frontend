@@ -30,11 +30,15 @@ export default function SongManager() {
   const editorRef = useRef(null);
   const [idValue, setIdValue] = useState("");
   const [isUpdateMode, setIsUpdateMode] = useState(false);
+  const [refreshKey, setRefreshKey] = useState(0);
 
   const [previewHtml, setPreviewHtml] = useState('');
 
     useEffect(() => {
         if (nameValue === "") {
+        if (localStorage.getItem("selectedSongId")) {
+          setIsUpdateMode(true);
+        }
           const initialIdValue = localStorage.getItem("selectedSongId");
           const initialNameValue = localStorage.getItem("selectedSongName");
           const initialMusicAuthorValue = localStorage.getItem("selectedSongMusicAuthor");
@@ -52,7 +56,7 @@ export default function SongManager() {
         localStorage.removeItem("selectedSongName");
         localStorage.removeItem("selectedSongMusicAuthor");
         localStorage.removeItem("selectedSongWordsAuthor");
-        localStorage.removeItem("selectedSongCategories");
+        setIsUpdateMode(false);
       };
     }, []);
 
@@ -101,8 +105,9 @@ export default function SongManager() {
         handleCloseAlert();
         setSuccessAlertMessage(`Pomyślnie utworzono pieśń ${nameValue}`);
         setShowSuccessAlert(true);
-        resetForm();
         resetEditor();
+        resetForm();
+        setRefreshKey(prevKey => prevKey + 1);
         return response.json();
       })
       .catch((error) => {
@@ -113,7 +118,9 @@ export default function SongManager() {
       });
   };
 
-
+  const handleCategoriesChange = (newValue) => {
+    setSelectedCategories(newValue);
+  }
         const handleUpdateClick = () => {
             const resetForm = () => {
               setNameValue("");
@@ -121,23 +128,28 @@ export default function SongManager() {
               setWordsAuthorValue("");
               setSelectedCategories([]);
               setPreviewHtml('');
-              setItems([]);
               setIdValue("");
+              localStorage.removeItem("selectedSongId");
+              localStorage.removeItem("selectedSongName");
+              localStorage.removeItem("selectedSongMusicAuthor");
+              localStorage.removeItem("selectedSongWordsAuthor");
+              setIsUpdateMode(false);
+              setItems([]);
             };
 
-            const slides = items.map((item) => ({
-              body: item.previewHtml,
-            }));
+            const slides = items.map((item) => {
+              return { body: item.body ? item.body : item.previewHtml };
+            });
 
-            const data = {
-                name: nameValue,
-                musicAuthor: musicAuthorValue,
-                wordsAuthor: wordsAuthorValue,
-                songCategories: selectedCategories,
-            };
-
-            console.log(nameValue);
-
+              const data = {
+                song: {
+                  name: nameValue,
+                  musicAuthor: musicAuthorValue,
+                  wordsAuthor: wordsAuthorValue,
+                  songCategories: selectedCategories,
+                },
+                slides,
+              };
               fetch(`http://localhost:8080/dashboard/songManager/${idValue}`, {
                 method: "PUT",
                 headers: {
@@ -155,8 +167,9 @@ export default function SongManager() {
                   setSuccessAlertMessage(`Pomyślnie zaktualizowano pieśń ${nameValue}`);
                   handleCloseAlert();
                   setShowSuccessAlert(true);
-                  resetForm();
                   setIsUpdateMode(false);
+                  resetForm();
+                  setRefreshKey(prevKey => prevKey + 1);
                   return response.json();
                 })
                 .catch((error) => {
@@ -180,10 +193,6 @@ export default function SongManager() {
   const handleWordsAuthorChange = (event) => {
     const value = event.target.value;
     setWordsAuthorValue(value);
-  }
-
-  const handleCategoriesChange = (newValue) => {
-    setSelectedCategories(newValue);
   }
 
   const handleCloseAlert = () => {
@@ -260,7 +269,9 @@ const handleAddClick = () => {
               <Grid item xs={12}>
                 <CheckboxCategories
                     onChange={handleCategoriesChange}
-                    selectedCategories={selectedCategories}
+                    setSelectedCategories={setSelectedCategories}
+                    idValue={idValue}
+                    refreshKey={refreshKey}
                 />
               </Grid>
               <Grid item xs={12} container spacing={8}>
@@ -283,7 +294,13 @@ const handleAddClick = () => {
           <Grid item xs={12} sm={5}>
             <Grid>
               <Grid item xs={12}>
-                <SlideList initialItems={items} onDeleteItem={handleDeleteItem} />
+                <SlideList
+                    initialItems={items}
+                    onDeleteItem={handleDeleteItem}
+                    idValue={idValue}
+                    onItemsChange={setItems}
+                    refreshKey={refreshKey}
+                />
               </Grid>
               <Grid item xs={12}>
                  <FloatingActionButtonsSave
