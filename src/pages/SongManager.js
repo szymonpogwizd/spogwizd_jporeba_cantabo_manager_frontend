@@ -36,6 +36,7 @@ export default function SongManager() {
 
     useEffect(() => {
         if (nameValue === "") {
+          setIsUpdateMode(true);
           const initialIdValue = localStorage.getItem("selectedSongId");
           const initialNameValue = localStorage.getItem("selectedSongName");
           const initialMusicAuthorValue = localStorage.getItem("selectedSongMusicAuthor");
@@ -53,6 +54,7 @@ export default function SongManager() {
         localStorage.removeItem("selectedSongName");
         localStorage.removeItem("selectedSongMusicAuthor");
         localStorage.removeItem("selectedSongWordsAuthor");
+        setIsUpdateMode(false);
       };
     }, []);
 
@@ -125,7 +127,11 @@ export default function SongManager() {
               setPreviewHtml('');
               setItems([]);
               setIdValue("");
-            };
+              localStorage.removeItem("selectedSongId");
+                localStorage.removeItem("selectedSongName");
+            localStorage.removeItem("selectedSongMusicAuthor");
+            localStorage.removeItem("selectedSongWordsAuthor");
+            setIsUpdateMode(false);            };
 
             const slides = items.map((item) => ({
               body: item.previewHtml,
