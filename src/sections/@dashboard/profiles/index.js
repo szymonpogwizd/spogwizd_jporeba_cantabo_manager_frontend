@@ -17,3 +17,4 @@ export { default as ColorPickerBackground } from './ColorPickerBackground';
 export { default as ColorPickerText } from './ColorPickerText';
 export { default as ColorPickerStop } from './ColorPickerStop';
 export { default as AlertMessage } from '../common/AlertMessage';
+export { default as FloatingActionButtonsClean } from '../common/FloatingActionButtonsClean';

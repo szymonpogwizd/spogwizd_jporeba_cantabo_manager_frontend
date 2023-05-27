@@ -1,5 +1,6 @@
 export { default as FloatingActionButtonsSave } from '../common/FloatingActionButtonsSave';
 export { default as FloatingActionButtonsAccept } from './FloatingActionButtonsAccept';
+export { default as FloatingActionButtonsClean } from '../common/FloatingActionButtonsClean';
 export { default as TextFieldName } from './TextFieldName';
 export { default as TextFieldMusicAuthor } from './TextFieldMusicAuthor';
 export { default as TextFieldWordsAuthor } from './TextFieldWordsAuthor';

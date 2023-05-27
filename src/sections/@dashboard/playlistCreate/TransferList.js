@@ -13,6 +13,7 @@ import TextFieldName from './TextFieldName';
 import CheckboxCategories from './CheckboxCategories';
 import FloatingActionButtonsSave from '../common/FloatingActionButtonsSave';
 import AlertMessage from '../common/AlertMessage';
+import FloatingActionButtonsClean from '../common/FloatingActionButtonsClean';
 
 function not(a, b) {
   return a.filter((value) => b.indexOf(value) === -1);
