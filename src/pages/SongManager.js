@@ -36,7 +36,9 @@ export default function SongManager() {
 
     useEffect(() => {
         if (nameValue === "") {
+        if (localStorage.getItem("selectedSongId")) {
           setIsUpdateMode(true);
+        }
           const initialIdValue = localStorage.getItem("selectedSongId");
           const initialNameValue = localStorage.getItem("selectedSongName");
           const initialMusicAuthorValue = localStorage.getItem("selectedSongMusicAuthor");
@@ -289,7 +291,11 @@ const handleAddClick = () => {
           <Grid item xs={12} sm={5}>
             <Grid>
               <Grid item xs={12}>
-                <SlideList initialItems={items} onDeleteItem={handleDeleteItem} />
+                <SlideList
+                    initialItems={items}
+                    onDeleteItem={handleDeleteItem}
+                    idValue={idValue}
+                />
               </Grid>
               <Grid item xs={12}>
                  <FloatingActionButtonsSave

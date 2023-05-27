@@ -6,8 +6,24 @@ import ListItemText from "@mui/material/ListItemText";
 import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@mui/icons-material/Delete";
 
-export default function CheckboxList({ initialItems, onDeleteItem }) {
+export default function CheckboxList({ initialItems, onDeleteItem, idValue }) {
   const [items, setItems] = useState(initialItems || []);
+
+  useEffect(() => {
+    const headers = {
+      Authorization: `Bearer ${localStorage.getItem("token")}`,
+    };
+
+    if (idValue !== "") {
+        fetch(`http://localhost:8080/dashboard/songManager/slidesForSong/${idValue}`,
+            { headers }
+          )
+          .then((response) => response.json())
+          .then((data) => {
+            setItems(data);
+          });
+      }
+  }, [idValue]);
 
   useEffect(() => {
     setItems(initialItems || []);
