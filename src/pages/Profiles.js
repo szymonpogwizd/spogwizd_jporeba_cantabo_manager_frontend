@@ -6,7 +6,6 @@ import { Grid, Container, Typography, Box } from '@mui/material';
 // sections
 import {
   ProfileList,
-  FloatingActionButtonsAdd,
   FloatingActionButtonsSave,
   TextFieldName,
   SwitchActive,
@@ -291,9 +290,6 @@ export default function Profiles() {
                     setStopColorValue={setStopColorValue}
                     setAlignValue={setAlignValue}
                 />
-              </Grid>
-              <Grid item xs={12}>
-                <FloatingActionButtonsAdd />
               </Grid>
             </Grid>
           </Grid>

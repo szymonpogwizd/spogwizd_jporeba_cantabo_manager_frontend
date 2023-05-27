@@ -10,7 +10,6 @@ import {
    TextFieldName,
    PlaylistEditList,
    FloatingActionButtonsSave,
-   FloatingActionButtonsAdd,
    PlaylistList,
    CheckboxCategories,
 } from '../sections/@dashboard/playlists';
@@ -135,9 +134,6 @@ export default function Playlist() {
                 setIdValue={setIdValue}
                 setSelectedCategories={setSelectedCategories}
               />
-            </Grid>
-            <Grid>
-              <FloatingActionButtonsAdd />
             </Grid>
           </Grid>
           <Grid item xs={12} sm={6}>
