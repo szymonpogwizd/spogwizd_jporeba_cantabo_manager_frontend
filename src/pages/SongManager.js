@@ -136,9 +136,9 @@ export default function SongManager() {
               setIsUpdateMode(false);
             };
 
-              const slides = items.map((item) => ({
-                body: item.previewHtml,
-              }));
+            const slides = items.map((item) => {
+              return { body: item.body ? item.body : item.previewHtml };
+            });
 
               const data = {
                 song: {
@@ -149,7 +149,6 @@ export default function SongManager() {
                 },
                 slides,
               };
-
               fetch(`http://localhost:8080/dashboard/songManager/${idValue}`, {
                 method: "PUT",
                 headers: {
@@ -298,6 +297,7 @@ const handleAddClick = () => {
                     initialItems={items}
                     onDeleteItem={handleDeleteItem}
                     idValue={idValue}
+                    onItemsChange={setItems}
                 />
               </Grid>
               <Grid item xs={12}>

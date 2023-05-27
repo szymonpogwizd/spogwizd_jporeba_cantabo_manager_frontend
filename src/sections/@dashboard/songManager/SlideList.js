@@ -6,7 +6,7 @@ import ListItemText from "@mui/material/ListItemText";
 import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@mui/icons-material/Delete";
 
-export default function CheckboxList({ initialItems, onDeleteItem, idValue }) {
+export default function CheckboxList({ initialItems, onDeleteItem, idValue, onItemsChange }) {
   const [items, setItems] = useState(initialItems || []);
 
 useEffect(() => {
@@ -19,18 +19,19 @@ useEffect(() => {
     )
     .then((response) => response.json())
     .then((data) => {
-      setItems(prevItems => {
-        const newItems = [...prevItems];
-        data.forEach(d => {
-          if (!newItems.some(item => item.id === d.id)) {
-            newItems.push(d);
-          }
-        });
-        return newItems;
+      const newItems = [...items];
+      data.forEach(d => {
+        if (!newItems.some(item => item.id === d.id)) {
+          newItems.push(d);
+        }
       });
+      setItems(newItems);
+      if (typeof onItemsChange === 'function') {
+        onItemsChange(newItems);
+      }
     });
   }
-}, [idValue]);
+}, [idValue, onItemsChange]);
 
 useEffect(() => {
   if (initialItems && initialItems.length > 0) {
