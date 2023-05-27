@@ -128,10 +128,11 @@ export default function SongManager() {
               setItems([]);
               setIdValue("");
               localStorage.removeItem("selectedSongId");
-                localStorage.removeItem("selectedSongName");
-            localStorage.removeItem("selectedSongMusicAuthor");
-            localStorage.removeItem("selectedSongWordsAuthor");
-            setIsUpdateMode(false);            };
+              localStorage.removeItem("selectedSongName");
+              localStorage.removeItem("selectedSongMusicAuthor");
+              localStorage.removeItem("selectedSongWordsAuthor");
+              setIsUpdateMode(false);
+            };
 
             const slides = items.map((item) => ({
               body: item.previewHtml,
