@@ -6,6 +6,7 @@ import { Grid, Container, Typography } from '@mui/material';
 import {
   FloatingActionButtonsSave,
   FloatingActionButtonsAccept,
+  FloatingActionButtonsClean,
   TextFieldName,
   TextFieldMusicAuthor,
   TextFieldWordsAuthor,
@@ -64,16 +65,23 @@ export default function SongManager() {
     setPreviewHtml(html);
   };
 
-  const handleSaveClick = () => {
-    const resetForm = () => {
-      setNameValue("");
-      setMusicAuthorValue("");
-      setWordsAuthorValue("");
-      setSelectedCategories([]);
-      setPreviewHtml('');
-      setItems([]);
-    };
+      const resetForm = () => {
+        setNameValue("");
+        setMusicAuthorValue("");
+        setWordsAuthorValue("");
+        setSelectedCategories([]);
+        setPreviewHtml('');
+        setIdValue("");
+        localStorage.removeItem("selectedSongId");
+        localStorage.removeItem("selectedSongName");
+        localStorage.removeItem("selectedSongMusicAuthor");
+        localStorage.removeItem("selectedSongWordsAuthor");
+        setRefreshKey(prevKey => prevKey + 1);
+        setIsUpdateMode(false);
+        setItems([]);
+      };
 
+  const handleSaveClick = () => {
     const slides = items.map((item) => ({
       body: item.previewHtml,
     }));
@@ -121,64 +129,50 @@ export default function SongManager() {
   const handleCategoriesChange = (newValue) => {
     setSelectedCategories(newValue);
   }
-        const handleUpdateClick = () => {
-            const resetForm = () => {
-              setNameValue("");
-              setMusicAuthorValue("");
-              setWordsAuthorValue("");
-              setSelectedCategories([]);
-              setPreviewHtml('');
-              setIdValue("");
-              localStorage.removeItem("selectedSongId");
-              localStorage.removeItem("selectedSongName");
-              localStorage.removeItem("selectedSongMusicAuthor");
-              localStorage.removeItem("selectedSongWordsAuthor");
-              setIsUpdateMode(false);
-              setItems([]);
-            };
 
-            const slides = items.map((item) => {
-              return { body: item.body ? item.body : item.previewHtml };
-            });
+    const handleUpdateClick = () => {
+        const slides = items.map((item) => {
+          return { body: item.body ? item.body : item.previewHtml };
+        });
 
-              const data = {
-                song: {
-                  name: nameValue,
-                  musicAuthor: musicAuthorValue,
-                  wordsAuthor: wordsAuthorValue,
-                  songCategories: selectedCategories,
-                },
-                slides,
-              };
-              fetch(`http://localhost:8080/dashboard/songManager/${idValue}`, {
-                method: "PUT",
-                headers: {
-                  "Content-Type": "application/json",
-                  "Authorization": `Bearer ${localStorage.getItem('token')}`
-                },
-                body: JSON.stringify(data),
-              })
-                .then((response) => {
-                  if (!response.ok) {
-                    return response.text().then((errorText) => {
-                      throw new Error(errorText);
-                    });
-                  }
-                  setSuccessAlertMessage(`Pomyślnie zaktualizowano pieśń ${nameValue}`);
-                  handleCloseAlert();
-                  setShowSuccessAlert(true);
-                  setIsUpdateMode(false);
-                  resetForm();
-                  setRefreshKey(prevKey => prevKey + 1);
-                  return response.json();
-                })
-                .catch((error) => {
-                  handleCloseSuccessAlert();
-                  setErrorCount(prevCount => prevCount + 1);
-                  setAlertMessage(`[${errorCount}] ${error.message}`);
-                  setShowAlert(true);
+          const data = {
+            song: {
+              name: nameValue,
+              musicAuthor: musicAuthorValue,
+              wordsAuthor: wordsAuthorValue,
+              songCategories: selectedCategories,
+            },
+            slides,
+          };
+          fetch(`http://localhost:8080/dashboard/songManager/${idValue}`, {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+              "Authorization": `Bearer ${localStorage.getItem('token')}`
+            },
+            body: JSON.stringify(data),
+          })
+            .then((response) => {
+              if (!response.ok) {
+                return response.text().then((errorText) => {
+                  throw new Error(errorText);
                 });
-            };
+              }
+              setSuccessAlertMessage(`Pomyślnie zaktualizowano pieśń ${nameValue}`);
+              handleCloseAlert();
+              setShowSuccessAlert(true);
+              setIsUpdateMode(false);
+              resetForm();
+              setRefreshKey(prevKey => prevKey + 1);
+              return response.json();
+            })
+            .catch((error) => {
+              handleCloseSuccessAlert();
+              setErrorCount(prevCount => prevCount + 1);
+              setAlertMessage(`[${errorCount}] ${error.message}`);
+              setShowAlert(true);
+            });
+        };
 
   const handleNameChange = (event) => {
     const value = event.target.value;
@@ -303,9 +297,16 @@ const handleAddClick = () => {
                 />
               </Grid>
               <Grid item xs={12}>
-                 <FloatingActionButtonsSave
-                     onClick={isUpdateMode ? handleUpdateClick : handleSaveClick}
-                 />
+                <Grid container spacing={2} justifyContent="flex-end">
+                    <Grid item>
+                      <FloatingActionButtonsClean onClick={resetForm} />
+                    </Grid>
+                    <Grid item>
+                      <FloatingActionButtonsSave
+                           onClick={isUpdateMode ? handleUpdateClick : handleSaveClick}
+                       />
+                    </Grid>
+                  </Grid>
               </Grid>
             </Grid>
           </Grid>
