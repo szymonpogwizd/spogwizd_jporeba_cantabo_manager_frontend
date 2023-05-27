@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useState, useEffect } from "react";
 import Checkbox from "@mui/material/Checkbox";
 import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
@@ -8,31 +8,41 @@ import CheckBoxIcon from "@mui/icons-material/CheckBox";
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkedIcon = <CheckBoxIcon fontSize="small" />;
 
-export default function CheckboxCategories({ onChange, selectedCategories }) {
-  const [options, setOptions] = React.useState([]);
+export default function CheckboxCategories({ onChange, setSelectedCategories, idValue, refreshKey }) {
+  const [selectedOptions, setSelectedOptions] = useState([]);
+  const [options, setOptions] = useState([]);
+  const [optionMap, setOptionMap] = useState({});
 
-  React.useEffect(() => {
-    fetchOptions();
-  }, []);
-
-  React.useEffect(() => {
-    const storedCategories = JSON.parse(localStorage.getItem("selectedSongCategories"));
-    if (storedCategories) {
-      onChange(storedCategories.map((item) => options.find((option) => option.id === item)));
-    }
-  }, [options]);
-
-  const fetchOptions = () => {
+  useEffect(() => {
     const headers = {
-      Authorization: `Bearer ${localStorage.getItem('token')}`
+      Authorization: `Bearer ${localStorage.getItem("token")}`,
     };
 
     fetch("http://localhost:8080/dashboard/songCategories", { headers })
       .then((response) => response.json())
       .then((data) => {
+        const map = data.reduce((acc, cur) => ({ ...acc, [cur.id]: cur }), {});
         setOptions(data);
-      })
-  };
+        setOptionMap(map);
+
+        if (idValue !== "") {
+          fetch(
+            `http://localhost:8080/dashboard/songManager/songCategoriesForSong/${idValue}`,
+            { headers }
+          )
+            .then((response) => response.json())
+            .then((data) => {
+              const selected = data.map((item) => map[item.id]);
+              setSelectedOptions(selected);
+              setSelectedCategories(selected);
+            });
+        } else {
+          setSelectedOptions([]);
+          setSelectedCategories([]);
+        }
+      });
+  }, [idValue, setSelectedCategories, refreshKey]);
+
 
   return (
     <Autocomplete
@@ -41,28 +51,28 @@ export default function CheckboxCategories({ onChange, selectedCategories }) {
       id="checkboxes-tags-demo"
       options={options}
       disableCloseOnSelect
-      getOptionLabel={(option) => option ? option.name : ''}
-      renderOption={(props, option, { selected }) => (
-        <li {...props}>
-          <Checkbox
-            icon={icon}
-            checkedIcon={checkedIcon}
-            style={{ marginRight: 8 }}
-            checked={selected}
-          />
-          {option.name}
-        </li>
-      )}
-      renderInput={(params) => (
-        <TextField
-          {...params}
-          label="Wybierz kategorie"
-        />
-      )}
-      onChange={(event, newValue) => {
-        onChange(newValue);
+      getOptionLabel={(option) => option.name}
+      renderOption={(props, option) => {
+        const isChecked = selectedOptions.some((item) => item.id === option.id);
+        return (
+          <li {...props}>
+            <Checkbox
+              icon={icon}
+              checkedIcon={checkedIcon}
+              style={{ marginRight: 8 }}
+              checked={isChecked}
+            />
+            {option.name}
+          </li>
+        );
       }}
-      value={selectedCategories}
+      renderInput={(params) => <TextField {...params} label="Wybierz kategorie" />}
+      onChange={(event, newValue) => {
+        setSelectedOptions(newValue);
+        onChange(newValue);
+        setSelectedCategories(newValue);
+      }}
+      value={selectedOptions}
     />
   );
 }

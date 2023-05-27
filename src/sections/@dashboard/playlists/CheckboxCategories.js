@@ -34,7 +34,7 @@ useEffect(() => {
     };
 
     fetch(
-      `http://localhost:8080/dashboard/playlist/getPlaylistCategoriesForPlaylist/${idValue}`,
+      `http://localhost:8080/dashboard/playlist/playlistCategoriesForPlaylist/${idValue}`,
       { headers }
     )
       .then((response) => response.json())
