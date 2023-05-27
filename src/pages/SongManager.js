@@ -30,6 +30,7 @@ export default function SongManager() {
   const editorRef = useRef(null);
   const [idValue, setIdValue] = useState("");
   const [isUpdateMode, setIsUpdateMode] = useState(false);
+  const [refreshKey, setRefreshKey] = useState(0);
 
   const [previewHtml, setPreviewHtml] = useState('');
 
@@ -52,7 +53,6 @@ export default function SongManager() {
         localStorage.removeItem("selectedSongName");
         localStorage.removeItem("selectedSongMusicAuthor");
         localStorage.removeItem("selectedSongWordsAuthor");
-        localStorage.removeItem("selectedSongCategories");
       };
     }, []);
 
@@ -113,7 +113,9 @@ export default function SongManager() {
       });
   };
 
-
+  const handleCategoriesChange = (newValue) => {
+    setSelectedCategories(newValue);
+  }
         const handleUpdateClick = () => {
             const resetForm = () => {
               setNameValue("");
@@ -154,6 +156,7 @@ export default function SongManager() {
                   handleCloseAlert();
                   setShowSuccessAlert(true);
                   resetForm();
+                  setRefreshKey(prevKey => prevKey + 1);
                   setIsUpdateMode(false);
                   return response.json();
                 })
@@ -178,10 +181,6 @@ export default function SongManager() {
   const handleWordsAuthorChange = (event) => {
     const value = event.target.value;
     setWordsAuthorValue(value);
-  }
-
-  const handleCategoriesChange = (newValue) => {
-    setSelectedCategories(newValue);
   }
 
   const handleCloseAlert = () => {
@@ -258,7 +257,9 @@ const handleAddClick = () => {
               <Grid item xs={12}>
                 <CheckboxCategories
                     onChange={handleCategoriesChange}
-                    selectedCategories={selectedCategories}
+                    setSelectedCategories={setSelectedCategories}
+                    idValue={idValue}
+                    refreshKey={refreshKey}
                 />
               </Grid>
               <Grid item xs={12} container spacing={8}>
