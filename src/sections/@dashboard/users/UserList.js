@@ -17,6 +17,7 @@ export default function UserList({ refreshKey, setNameValue, setIdValue, setIsUp
     const [alertMessage, setAlertMessage] = useState("");
     const [showSuccessAlert, setShowSuccessAlert] = useState(false);
     const [successAlertMessage, setSuccessAlertMessage] = useState("");
+    const [userType, setUserType] = useState("");
 
     const headers = {
       Authorization: `Bearer ${localStorage.getItem('token')}`
@@ -115,7 +116,7 @@ return (
           />
         )}
 
-      <SelectType />
+       <SelectType setUserType={setUserType} />
       <List
         sx={{
           width: "100%",
@@ -128,8 +129,8 @@ return (
           const labelId = `checkbox-list-label-${item.id}`;
 
           if (
-            searchText &&
-            !item.name.toLowerCase().includes(searchText.toLowerCase())
+            (searchText && !item.name.toLowerCase().includes(searchText.toLowerCase())) ||
+            (userType && item.userType !== userType)
           ) {
             return null;
           }

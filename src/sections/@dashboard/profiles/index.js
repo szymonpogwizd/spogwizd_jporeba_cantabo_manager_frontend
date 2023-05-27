@@ -1,6 +1,5 @@
 export { default as ProfileList } from './ProfileList';
 export { default as SearchField } from './SearchField';
-export { default as FloatingActionButtonsAdd } from '../common/FloatingActionButtonsAdd';
 export { default as FloatingActionButtonsSave } from '../common/FloatingActionButtonsSave';
 export { default as TextFieldName } from './TextFieldName';
 export { default as SwitchActive } from './SwitchActive';
@@ -18,3 +17,4 @@ export { default as ColorPickerBackground } from './ColorPickerBackground';
 export { default as ColorPickerText } from './ColorPickerText';
 export { default as ColorPickerStop } from './ColorPickerStop';
 export { default as AlertMessage } from '../common/AlertMessage';
+export { default as FloatingActionButtonsClean } from '../common/FloatingActionButtonsClean';

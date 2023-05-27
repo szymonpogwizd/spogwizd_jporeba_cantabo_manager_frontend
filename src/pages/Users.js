@@ -6,8 +6,8 @@ import { Grid, Container, Typography } from '@mui/material';
 // sections
 import {
   UserList,
-  FloatingActionButtonsAdd,
   FloatingActionButtonsSave,
+  FloatingActionButtonsClean,
   TextFieldName,
   SelectRole,
   SelectGroup,
@@ -38,8 +38,6 @@ export default function Users() {
   const [idValue, setIdValue] = useState("");
   const [isUpdateMode, setIsUpdateMode] = useState(false);
 
-   const handleSaveClick = () => {
-
   const resetForm = () => {
     setNameValue("");
     setEmailValue("");
@@ -47,7 +45,12 @@ export default function Users() {
     setRoleValue('USER');
     setGroupValue(null);
     setResetPasswords(true);
+    setIdValue("");
+    setRefreshKey(prevKey => prevKey + 1);
+    setIsUpdateMode(false);
   };
+
+   const handleSaveClick = () => {
 
     const data = {
       name: nameValue,
@@ -76,7 +79,6 @@ export default function Users() {
             setSuccessAlertMessage(`Pomyślnie utworzono użytkownika ${nameValue}`);
             setShowSuccessAlert(true);
             resetForm();
-            setRefreshKey(prevKey => prevKey + 1);
             return response.json();
         })
         .catch((error) => {
@@ -88,15 +90,6 @@ export default function Users() {
     };
 
       const handleUpdateClick = () => {
-            const resetFormUsers = () => {
-              setIdValue("");
-              setNameValue("");
-              setEmailValue("");
-              setRoleValue('USER');
-              setGroupValue(null);
-              setActiveValue(true);
-              setResetPasswords(true);
-            };
 
             const dataUsers = {
               name: nameValue,
@@ -124,9 +117,7 @@ export default function Users() {
                 setSuccessAlertMessage(`Pomyślnie zaktualizowano użytkownika ${nameValue}`);
                 handleCloseAlert();
                 setShowSuccessAlert(true);
-                resetFormUsers();
-                setRefreshKey(prevKey => prevKey + 1);
-                setIsUpdateMode(false);
+                resetForm();
                 return response.json();
               })
               .catch((error) => {
@@ -226,9 +217,6 @@ export default function Users() {
                     setActiveValue={setActiveValue}
                 />
               </Grid>
-              <Grid item xs={12}>
-                <FloatingActionButtonsAdd />
-              </Grid>
             </Grid>
           </Grid>
 
@@ -258,11 +246,16 @@ export default function Users() {
                     onReset={() => setResetPasswords(false)}
                 />
               </Grid>
-              <Grid item xs={12}>
-                <FloatingActionButtonsSave
-                    onClick={isUpdateMode ? handleUpdateClick : handleSaveClick}
-                />
-              </Grid>
+                <Grid container spacing={2} justifyContent="flex-end">
+                  <Grid item>
+                    <FloatingActionButtonsClean onClick={resetForm} />
+                  </Grid>
+                  <Grid item>
+                    <FloatingActionButtonsSave
+                      onClick={isUpdateMode ? handleUpdateClick : handleSaveClick}
+                    />
+                  </Grid>
+                </Grid>
             </Grid>
           </Grid>
         </Grid>
