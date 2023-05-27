@@ -9,3 +9,4 @@ export { default as SelectGroup } from './SelectGroup';
 export { default as SwitchActive } from './SwitchActive';
 export { default as TextFieldEmail } from './TextFieldEmail';
 export { default as SetPassword } from './SetPassword';
+export { default as FloatingActionButtonsClean } from '../common/FloatingActionButtonsClean';

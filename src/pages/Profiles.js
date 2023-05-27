@@ -7,6 +7,7 @@ import { Grid, Container, Typography, Box } from '@mui/material';
 import {
   ProfileList,
   FloatingActionButtonsSave,
+  FloatingActionButtonsClean,
   TextFieldName,
   SwitchActive,
   SwitchSortByUsed,
@@ -53,9 +54,8 @@ export default function Profiles() {
     const [idValue, setIdValue] = useState("");
     const [isUpdateMode, setIsUpdateMode] = useState(false);
 
-    const handleSaveClick = () => {
-
-      const resetForm = () => {
+    const resetForm = () => {
+        setIdValue("");
         setNameValue("");
         setActiveValue(false);
         setSortByUsedValue(false);
@@ -71,8 +71,11 @@ export default function Profiles() {
         setTextColorValue("#FFFFFF");
         setStopColorValue("#000000");
         setAlignValue("CENTER");
+        setRefreshKey(prevKey => prevKey + 1);
+        setIsUpdateMode(false);
       };
 
+    const handleSaveClick = () => {
       const data = {
         name: nameValue,
         active: activeValue,
@@ -109,7 +112,6 @@ export default function Profiles() {
               setSuccessAlertMessage(`Pomyślnie utworzono profil ${nameValue}`);
               setShowSuccessAlert(true);
               resetForm();
-              setRefreshKey(prevKey => prevKey + 1);
               return response.json();
           })
           .catch((error) => {
@@ -121,25 +123,6 @@ export default function Profiles() {
       };
 
         const handleUpdateClick = () => {
-              const resetForm = () => {
-                setIdValue("");
-                setNameValue("");
-                setActiveValue(false);
-                setSortByUsedValue(false);
-                setShowTitleValue(false);
-                setAllBigValue(false);
-                setShowEmptySlideValue(true);
-                setInvertColorsValue(false);
-                setExpandedListValue(false);
-                setMaxFontValue(20);
-                setMarginValue(1);
-                setMaxMinValue(7);
-                setBackgroundColorValue("#000000");
-                setTextColorValue("#FFFFFF");
-                setStopColorValue("#000000");
-                setAlignValue("CENTER");
-              };
-
               const data = {
                 name: nameValue,
                 active: activeValue,
@@ -176,8 +159,6 @@ export default function Profiles() {
                   handleCloseAlert();
                   setShowSuccessAlert(true);
                   resetForm();
-                  setRefreshKey(prevKey => prevKey + 1);
-                  setIsUpdateMode(false);
                   return response.json();
                 })
                 .catch((error) => {
@@ -352,9 +333,16 @@ export default function Profiles() {
             </Grid>
             </Box>
             <Grid item xs={12}>
-                <FloatingActionButtonsSave
-                    onClick={isUpdateMode ? handleUpdateClick : handleSaveClick}
-                />
+            <Grid container spacing={2} justifyContent="flex-end">
+                  <Grid item>
+                    <FloatingActionButtonsClean onClick={resetForm} />
+                  </Grid>
+                  <Grid item>
+                    <FloatingActionButtonsSave
+                      onClick={isUpdateMode ? handleUpdateClick : handleSaveClick}
+                    />
+                  </Grid>
+                </Grid>
            </Grid>
           </Grid>
         </Grid>
