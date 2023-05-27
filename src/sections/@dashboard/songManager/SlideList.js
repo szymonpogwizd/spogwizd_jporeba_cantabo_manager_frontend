@@ -9,25 +9,43 @@ import DeleteIcon from "@mui/icons-material/Delete";
 export default function CheckboxList({ initialItems, onDeleteItem, idValue }) {
   const [items, setItems] = useState(initialItems || []);
 
-  useEffect(() => {
+useEffect(() => {
+  if (idValue !== "") {
     const headers = {
       Authorization: `Bearer ${localStorage.getItem("token")}`,
     };
+    fetch(`http://localhost:8080/dashboard/songManager/slidesForSong/${idValue}`,
+      { headers }
+    )
+    .then((response) => response.json())
+    .then((data) => {
+      setItems(prevItems => {
+        const newItems = [...prevItems];
+        data.forEach(d => {
+          if (!newItems.some(item => item.id === d.id)) {
+            newItems.push(d);
+          }
+        });
+        return newItems;
+      });
+    });
+  }
+}, [idValue]);
 
-    if (idValue !== "") {
-        fetch(`http://localhost:8080/dashboard/songManager/slidesForSong/${idValue}`,
-            { headers }
-          )
-          .then((response) => response.json())
-          .then((data) => {
-            setItems(data);
-          });
-      }
-  }, [idValue]);
+useEffect(() => {
+  if (initialItems && initialItems.length > 0) {
+    setItems(prevItems => {
+      const newItems = [...prevItems];
+      initialItems.forEach(d => {
+        if (!newItems.some(item => item.id === d.id)) {
+          newItems.push(d);
+        }
+      });
+      return newItems;
+    });
+  }
+}, [initialItems]);
 
-  useEffect(() => {
-    setItems(initialItems || []);
-  }, [initialItems]);
 
   const handleDelete = (value) => () => {
     const newItems = items.filter(item => item.id !== value.id);
@@ -59,7 +77,7 @@ export default function CheckboxList({ initialItems, onDeleteItem, idValue }) {
               sx={{ p: 0 }}
             >
               <ListItemButton role={undefined}>
-                <ListItemText id={labelId} primary={value.previewHtml} />
+                <ListItemText id={labelId} primary={value.body ? value.body : value.previewHtml} />
               </ListItemButton>
             </ListItem>
           );
