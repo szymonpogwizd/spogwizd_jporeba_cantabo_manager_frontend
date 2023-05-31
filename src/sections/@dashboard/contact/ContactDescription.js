@@ -4,12 +4,7 @@ import RadioGroup from "@mui/material/RadioGroup";
 import FormControl from "@mui/material/FormControl";
 import Typography from "@mui/material/Typography";
 
-export default function RadioButtonsGroupAlign({ setAlignValue, alignValue }) {
-  const handleAlignChange = (event) => {
-    const value = event.target.value;
-    setAlignValue(value);
-  };
-
+export default function ContactDescription() {
   return (
     <FormControl sx={{ marginBottom: 2 }}>
       <Typography variant="body1" gutterBottom>
