@@ -50,13 +50,22 @@ export default function UserList({ refreshKey, setNameValue, setIdValue, setIsUp
       }
 
       fetch(`http://localhost:8080/dashboard/users/${id}`, {
-         method: "DELETE",
-         headers
-       })
-        .then(() => {
-          setItemToDelete(id);
-          setSuccessAlertMessage(`Pomyślnie usunięto kategorię pieśni ${item.name}`);
-          setShowSuccessAlert(true);
+        method: "DELETE",
+        headers
+      })
+        .then((response) => {
+          if (response.ok) {
+            setItemToDelete(id);
+            setSuccessAlertMessage(`Pomyślnie usunięto kategorię pieśni ${item.name}`);
+            setShowSuccessAlert(true);
+          } else if (response.status === 417) {
+            response.text().then((errorMessage) => {
+              setAlertMessage(errorMessage);
+              setShowAlert(true);
+            });
+          } else {
+            throw new Error("Wystąpił błąd");
+          }
         })
         .catch((error) => {
           setAlertMessage(`${error.message}`);
