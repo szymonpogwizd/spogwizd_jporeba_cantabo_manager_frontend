@@ -110,22 +110,24 @@ export default function LoginForm() {
         />
       </Stack>
 
-      <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ my: 2 }}>
-        <Stack direction="row" alignItems="center" spacing={0}>
-          <Checkbox name="remember" />
-          <Typography variant="body2">Zapamiętaj mnie</Typography>
+        {/*
+        <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ my: 2 }}>
+          <Stack direction="row" alignItems="center" spacing={0}>
+            <Checkbox name="remember" />
+            <Typography variant="body2">Zapamiętaj mnie</Typography>
+          </Stack>
+          <Link
+            variant="subtitle2"
+            underline="hover"
+            style={{ cursor: 'pointer' }}
+            onClick={handleGoToPasswordRecovery}
+          >
+            Nie pamiętasz hasła?
+          </Link>
         </Stack>
-        <Link
-          variant="subtitle2"
-          underline="hover"
-          style={{ cursor: 'pointer' }}
-          onClick={handleGoToPasswordRecovery}
-        >
-          Nie pamiętasz hasła?
-        </Link>
-      </Stack>
+        */}
 
-      <LoadingButton fullWidth size="large" type="submit" variant="contained" onClick={handleLogin}>
+      <LoadingButton fullWidth size="large" type="submit" variant="contained" onClick={handleLogin} sx={{ my: 3 }}>
         Zaloguj
       </LoadingButton>
     </>

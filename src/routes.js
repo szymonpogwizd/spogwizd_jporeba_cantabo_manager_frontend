@@ -49,10 +49,6 @@ export default function Router() {
       element: <LoginPage />,
     },
     {
-      path: 'passwordRecovery',
-      element: <PasswordRecovery />,
-    },
-    {
       element: <SimpleLayout />,
       children: [
         { element: <Navigate to="/dashboard/app" />, index: true },

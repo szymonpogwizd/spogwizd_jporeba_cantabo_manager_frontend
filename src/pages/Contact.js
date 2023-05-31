@@ -3,7 +3,7 @@ import { Helmet } from 'react-helmet-async';
 import { useTheme } from '@mui/material/styles';
 import { Grid, Container, Typography, } from '@mui/material';
 import {
-RadioGroupAlign,
+ContactDescription,
 ContactForm,
 FloatingActionButtonsSend,
 
@@ -23,7 +23,7 @@ export default function Contact() {
 
         <Grid container spacing={10}>
           <Grid item xs={12} sm={6}>
-            <RadioGroupAlign />
+            <ContactDescription />
           </Grid>
 
           <Grid item xs={12} sm={6}>

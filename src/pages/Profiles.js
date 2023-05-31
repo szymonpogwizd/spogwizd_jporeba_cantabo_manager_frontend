@@ -3,6 +3,9 @@ import { Helmet } from 'react-helmet-async';
 // @mui
 import { useTheme } from '@mui/material/styles';
 import { Grid, Container, Typography, Box } from '@mui/material';
+import Alert from '@mui/material/Alert';
+import AlertTitle from '@mui/material/AlertTitle';
+import Stack from '@mui/material/Stack';
 // sections
 import {
   ProfileList,
@@ -244,6 +247,12 @@ export default function Profiles() {
         <Typography variant="h4" sx={{ mb: 5 }}>
           Profile
         </Typography>
+
+          <Stack sx={{ mb: 5 }}>
+              <Alert variant="filled" severity="info">
+                  <AlertTitle>Info</AlertTitle>
+                   Te ustawienia pozwalają na konfigurację parametrów profilu, jednak ich zmiany nie mają aktualnie wpływu na żadne inne funkcje w projekcie.              </Alert>
+          </Stack>
 
          <Grid container spacing={10}>
 

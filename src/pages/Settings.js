@@ -8,7 +8,7 @@ TextFieldName,
 FloatingActionButtonsSave,
 SwitchActive,
 SetPassword,
-SliderMargin,
+SliderFontSize,
 } from '../sections/@dashboard/settings';
 
 
@@ -33,12 +33,8 @@ return (
                         <SwitchActive />
                         </Grid>
                         <Grid item xs={12}>
-                        <SliderMargin />
+                        <SliderFontSize />
                         </Grid>
-                        <Grid item xs={12}>
-                        <SetPassword />
-                         </Grid>
-
                         <Grid>
                         <FloatingActionButtonsSave />
                         </Grid>
