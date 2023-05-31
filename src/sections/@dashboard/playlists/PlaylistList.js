@@ -17,14 +17,18 @@ export default function PlaylistList({ refreshKey, setIdValue, setIsUpdateMode, 
     const [alertMessage, setAlertMessage] = useState("");
     const [showSuccessAlert, setShowSuccessAlert] = useState(false);
     const [successAlertMessage, setSuccessAlertMessage] = useState("");
-    const [sortPlaylist, setSortPlaylist] = useState("");
+    const [selectedCategory, setSelectedCategory] = useState("");
 
     const headers = {
         Authorization: `Bearer ${localStorage.getItem('token')}`
     };
 
       useEffect(() => {
-        fetch("http://localhost:8080/dashboard/playlist", { headers })
+      let url = "http://localhost:8080/dashboard/playlist";
+          if (selectedCategory) {
+            url += `?category=${selectedCategory}`;
+          }
+          fetch(url, { headers })
           .then((response) => response.json())
           .then((data) => {
             setData(data);
@@ -41,7 +45,7 @@ export default function PlaylistList({ refreshKey, setIdValue, setIsUpdateMode, 
             setItemToDelete(null);
           }
         });
-    }, [itemToDelete, refreshKey]);
+    }, [itemToDelete, refreshKey, selectedCategory]);
 
     const handleDelete = (id) => () => {
       const item = data.find((item) => item.id === id);
@@ -92,8 +96,10 @@ export default function PlaylistList({ refreshKey, setIdValue, setIsUpdateMode, 
 return (
     <div>
       <SearchField handleSearch={handleSearch} />
-        <SelectCategory setSortPlaylist={setSortPlaylist}/>
-
+        <SelectCategory
+          selectedCategory={selectedCategory}
+          setSelectedCategory={setSelectedCategory}
+        />
         {showAlert && (
           <AlertMessage
             severity="error"
@@ -121,17 +127,15 @@ return (
           overflow: "auto",
         }}
       >
-        {data
-            .filter(item => !sortPlaylist || item.playlistCategories.includes(sortPlaylist))
-            .map((item) => {
-                const labelId = `checkbox-list-label-${item.id}`;
+        {data.map((item) => {
+          const labelId = `checkbox-list-label-${item.id}`;
 
-                if (
-                    searchText &&
-                    !item.name.toLowerCase().includes(searchText.toLowerCase())
-                ) {
-                    return null;
-                }
+          if (
+            searchText &&
+            !item.name.toLowerCase().includes(searchText.toLowerCase())
+          ) {
+            return null;
+          }
 
           return (
             <ListItem
