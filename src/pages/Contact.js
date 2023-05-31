@@ -10,46 +10,26 @@ FloatingActionButtonsSend,
 } from '../sections/@dashboard/contact';
 
 export default function Contact() {
-
-
-return (
+  return (
     <>
       <Helmet>
-        <title> Kontakt | Cantabo Manager </title>
+        <title>Kontakt | Cantabo Manager</title>
       </Helmet>
 
       <Container maxWidth="xl">
-           <Typography variant="h4" sx={{ mb: 5 }}>
-            Kontakt
-            </Typography>
+        <Typography variant="h4" sx={{ mb: 5 }}>
+          Kontakt
+        </Typography>
 
-            <Grid container spacing ={10}>
+        <Grid container spacing={10}>
+          <Grid item xs={12} sm={6}>
+            <RadioGroupAlign />
+          </Grid>
 
-                <Grid item xs ={12} sm={6}>
-                 {/* Lewa strona */}
-                 <Grid>
-                        <Grid item xs={12}>
-                         <RadioGroupAlign />
-                        </Grid>
-                    </Grid>
-                 </Grid>
-
-                  <Grid item xs={12} sm={6}>
-                  {/* Prawa strona */}
-                  <Grid>
-                    <Grid item xs={12}>
-                     <ContactForm/>
-                    </Grid>
-                     <Grid item xs={12}>
-                       <FloatingActionButtonsSend />
-                    </Grid>
-                    </Grid>
-
-                  </Grid>
-
-
-            </Grid>
-
+          <Grid item xs={12} sm={6}>
+            <ContactForm />
+          </Grid>
+        </Grid>
       </Container>
     </>
   );
