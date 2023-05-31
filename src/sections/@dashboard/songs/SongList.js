@@ -20,14 +20,18 @@ export default function CheckboxList() {
     const [showSuccessAlert, setShowSuccessAlert] = useState(false);
     const [successAlertMessage, setSuccessAlertMessage] = useState("");
     const [errorCount, setErrorCount] = useState(0);
-    const [sortSong, setSortSong] = useState("");
+    const [selectedCategory, setSelectedCategory] = useState("");
 
     const headers = {
       Authorization: `Bearer ${localStorage.getItem('token')}`
     };
 
     useEffect(() => {
-        fetch("http://localhost:8080/dashboard/songs", { headers })
+        let url = "http://localhost:8080/dashboard/songs";
+            if (selectedCategory) {
+              url += `?category=${selectedCategory}`;
+            }
+            fetch(url, { headers })
           .then((response) => response.json())
           .then((data) => {
           setData(data);
@@ -44,7 +48,7 @@ export default function CheckboxList() {
           setItemToDelete(null);
         }
       });
-  }, [itemToDelete]);
+  }, [itemToDelete, selectedCategory]);
 
     const handleDelete = (id) => () => {
       const item = data.find((item) => item.id === id);
@@ -126,8 +130,11 @@ return (
           />
         )}
 
-      <SelectCategory setSortSong={setSortSong}/>
-      <List
+        <SelectCategory
+          selectedCategory={selectedCategory}
+          setSelectedCategory={setSelectedCategory}
+        />
+        <List
         sx={{
           width: "100%",
           bgcolor: "background.paper",
@@ -135,17 +142,15 @@ return (
           overflow: "auto",
         }}
       >
-        {data
-            .filter(item => !sortSong || item.songCategories.includes(sortSong))
-            .map((item) => {
-                const labelId = `checkbox-list-label-${item.id}`;
+        {data.map((item) => {
+          const labelId = `checkbox-list-label-${item.id}`;
 
-                if (
-                    searchText &&
-                    !item.name.toLowerCase().includes(searchText.toLowerCase())
-                ) {
-                    return null;
-                }
+          if (
+            searchText &&
+            !item.name.toLowerCase().includes(searchText.toLowerCase())
+          ) {
+            return null;
+          }
 
           return (
             <ListItem
