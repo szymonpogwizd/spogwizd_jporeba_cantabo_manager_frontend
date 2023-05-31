@@ -4,7 +4,7 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 
-export default function SelectLabels({ setSortPlaylist }) {
+export default function SelectCategory({ selectedCategory, setSelectedCategory }) {
     const [playlistCategory, setPlaylistCategory] = React.useState('');
     const [data, setData] = useState([]);
 
@@ -22,7 +22,7 @@ export default function SelectLabels({ setSortPlaylist }) {
 
   const handleChange = (event: SelectChangeEvent) => {
     setPlaylistCategory(event.target.value);
-    setSortPlaylist(event.target.value);
+    setSelectedCategory(event.target.value);
   };
 
   return (

@@ -28,10 +28,6 @@ export default function TransferList() {
   const [left, setLeft] = useState([]);
   const [right, setRight] = useState([]);
   const [searchText, setSearchText] = useState("");
-
-  const leftChecked = intersection(checked, left);
-  const rightChecked = intersection(checked, right);
-
   const [nameValue, setNameValue] = useState("");
   const [showAlert, setShowAlert] = useState(false);
   const [alertMessage, setAlertMessage] = useState("");
@@ -40,20 +36,23 @@ export default function TransferList() {
   const [refreshKey, setRefreshKey] = useState(0);
   const [errorCount, setErrorCount] = useState(0);
   const [selectedCategories, setSelectedCategories] = useState([]);
-  const [sortSong, setSortSong] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("");
 
-const handleToggle = (value) => () => {
-  const currentIndex = checked.indexOf(value);
-  const newChecked = [...checked];
+  const leftChecked = intersection(checked, left);
+  const rightChecked = intersection(checked, right);
 
-  if (currentIndex === -1) {
-    newChecked.push(value);
-  } else {
-    newChecked.splice(currentIndex, 1);
-  }
+  const handleToggle = (value) => () => {
+    const currentIndex = checked.indexOf(value);
+    const newChecked = [...checked];
 
-  setChecked(newChecked);
-};
+    if (currentIndex === -1) {
+      newChecked.push(value);
+    } else {
+      newChecked.splice(currentIndex, 1);
+    }
+
+    setChecked(newChecked);
+  };
 
   const handleCheckedRight = () => {
     setRight(right.concat(leftChecked));
@@ -72,7 +71,11 @@ const handleToggle = (value) => () => {
       Authorization: `Bearer ${localStorage.getItem('token')}`
     };
 
-    return fetch("http://localhost:8080/dashboard/songs", { headers })
+    let url = "http://localhost:8080/dashboard/songs";
+    if (selectedCategory) {
+      url += `?category=${selectedCategory}`;
+    }
+    return fetch(url, { headers })
       .then((response) => response.json())
       .then((data) => {
         setLeft(data);
@@ -84,71 +87,69 @@ const handleToggle = (value) => () => {
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [selectedCategory]);
 
-    const resetForm = () => {
-      setNameValue("");
-      setSelectedCategories([]);
-      setRight([]);
-      setRefreshKey(prevKey => prevKey + 1);
+  const resetForm = () => {
+    setNameValue("");
+    setSelectedCategories([]);
+    setRight([]);
+    setRefreshKey(prevKey => prevKey + 1);
+  };
+
+  const handleSaveClick = () => {
+    const data = {
+      name: nameValue,
+      playlistCategories: selectedCategories,
+      songs: right,
     };
 
-   const handleSaveClick = () => {
+    fetch("http://localhost:8080/dashboard/playlistCreate", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${localStorage.getItem('token')}`
+      },
+      body: JSON.stringify(data),
+    })
+      .then((response) => {
+        if (!response.ok) {
+          return response.text().then((errorText) => {
+            throw new Error(errorText);
+          });
+        }
+        handleCloseAlert();
+        setSuccessAlertMessage(`Pomyślnie utworzono playliste ${nameValue}`);
+        setShowSuccessAlert(true);
+        resetForm();
+        fetchData().then(() => {
+          setRefreshKey(prevKey => prevKey + 1);
+        });
+        return response.json();
+      })
+      .catch((error) => {
+        handleCloseSuccessAlert();
+        setErrorCount(prevCount => prevCount + 1);
+        setAlertMessage(`[${errorCount}] ${error.message}`);
+        setShowAlert(true);
+      });
+  };
 
+  const handleNameChange = (event) => {
+    const value = event.target.value;
+    setNameValue(value);
+  };
 
-        const data = {
-          name: nameValue,
-          playlistCategories: selectedCategories,
-          songs: right,
-        };
+  const handleCloseAlert = () => {
+    setShowAlert(false);
+  };
 
-          fetch("http://localhost:8080/dashboard/playlistCreate", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              "Authorization": `Bearer ${localStorage.getItem('token')}`
-            },
-            body: JSON.stringify(data),
-          })
-            .then((response) => {
-              if (!response.ok) {
-                return response.text().then((errorText) => {
-                  throw new Error(errorText);
-                });
-              }
-              handleCloseAlert();
-              setSuccessAlertMessage(`Pomyślnie utworzono playliste ${nameValue}`);
-              setShowSuccessAlert(true);
-              resetForm();
-              fetchData().then(() => {
-                setRefreshKey(prevKey => prevKey + 1);
-              });
-              return response.json();
-            })
-            .catch((error) => {
-              handleCloseSuccessAlert();
-              setErrorCount(prevCount => prevCount + 1);
-              setAlertMessage(`[${errorCount}] ${error.message}`);
-              setShowAlert(true);
-            });
-        };
+  const handleCloseSuccessAlert = () => {
+    setShowSuccessAlert(false);
+  };
 
-    const handleNameChange = (event) => {
-      const value = event.target.value;
-      setNameValue(value);
-    }
-
-    const handleCloseAlert = () => {
-      setShowAlert(false);
-    };
-
-    const handleCloseSuccessAlert = () => {
-      setShowSuccessAlert(false);
-    };
-
-    const resetAlert = () => {
-      setAlertMessage("");
-    };
+  const resetAlert = () => {
+    setAlertMessage("");
+  };
 
   const handleSearch = (newSearchText) => {
     setSearchText(newSearchText);
@@ -158,16 +159,11 @@ const handleToggle = (value) => () => {
     setSelectedCategories(newCategories);
   };
 
-    const filteredList = left.filter((item) =>
-      (searchText !== "" ? item.name.toLowerCase().includes(searchText.toLowerCase()) : true) &&
-      (sortSong !== "" ? item.songCategories.includes(sortSong) : true)
-    );
-
-const customList = (items) => (
+  const customList = (items) => (
     <Paper sx={{ width: "100%", height: 640, overflow: "auto" }}>
       <List dense component="div" role="list">
-        {items.map((value) => {
-          const labelId = `transfer-list-item-${value.id}-label`;
+        {items.map((value, index) => {
+          const labelId = `transfer-list-item-${index}-label`;
 
           return (
             <ListItem
@@ -197,29 +193,38 @@ const customList = (items) => (
   return (
     <Grid container spacing={2} justifyContent="center" alignItems="center">
       {showAlert && (
-      <AlertMessage
-        severity="error"
-        title="Błąd"
-        message={alertMessage}
-        onClose={handleCloseAlert}
-        resetAlert={resetAlert}
-      />
+        <AlertMessage
+          severity="error"
+          title="Błąd"
+          message={alertMessage}
+          onClose={handleCloseAlert}
+          resetAlert={resetAlert}
+        />
       )}
 
       {showSuccessAlert && (
-      <AlertMessage
-        severity="success"
-        title="Sukces"
-        message={successAlertMessage}
-        onClose={handleCloseSuccessAlert}
-        resetAlert={resetAlert}
-      />
+        <AlertMessage
+          severity="success"
+          title="Sukces"
+          message={successAlertMessage}
+          onClose={handleCloseSuccessAlert}
+          resetAlert={resetAlert}
+        />
       )}
+
       <Grid item xs={12} md={5.5}>
         <SearchField handleSearch={handleSearch} />
-        <SelectCategory setSortSong={setSortSong}/>
-        {customList(filteredList)}
+        <SelectCategory
+          selectedCategory={selectedCategory}
+          setSelectedCategory={setSelectedCategory}
+        />
+        {customList(left.filter((value) =>
+          searchText !== ""
+            ? value.name.toLowerCase().includes(searchText.toLowerCase())
+            : true
+        ))}
       </Grid>
+
       <Grid item xs={12} md={1} sx={{ textAlign: "center" }}>
         <Grid container direction="column" alignItems="center">
           <Button
@@ -246,21 +251,23 @@ const customList = (items) => (
           </Button>
         </Grid>
       </Grid>
+
       <Grid item xs={12} md={5.5}>
         <TextFieldName onChange={handleNameChange} value={nameValue} />
         <CheckboxCategories onChange={handleCategoryChange} value={selectedCategories} />
         {customList(right)}
       </Grid>
+
       <Grid container justifyContent="flex-end">
         <Grid item>
-            <Grid container spacing={2} justifyContent="flex-end">
-              <Grid item>
-                <FloatingActionButtonsClean onClick={resetForm} />
-              </Grid>
-              <Grid item>
-                <FloatingActionButtonsSave onClick={handleSaveClick}/>
-              </Grid>
+          <Grid container spacing={2} justifyContent="flex-end">
+            <Grid item>
+              <FloatingActionButtonsClean onClick={resetForm} />
             </Grid>
+            <Grid item>
+              <FloatingActionButtonsSave onClick={handleSaveClick} />
+            </Grid>
+          </Grid>
         </Grid>
       </Grid>
     </Grid>
