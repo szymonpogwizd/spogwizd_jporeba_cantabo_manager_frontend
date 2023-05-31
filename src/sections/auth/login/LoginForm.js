@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { Link, Stack, IconButton, Typography, InputAdornment, TextField, Checkbox } from '@mui/material';
@@ -15,6 +15,11 @@ export default function LoginForm() {
   const [errorCount, setErrorCount] = useState(0);
   const [showPassword, setShowPassword] = useState(false);
 
+    useEffect(() => {
+      localStorage.removeItem('token');
+      localStorage.removeItem('email');
+    }, []);
+
   const handleGoToPasswordRecovery = () => {
     navigate('/passwordRecovery');
   };
@@ -27,47 +32,52 @@ export default function LoginForm() {
     setPassword(event.target.value);
   };
 
-    const handleLogin = async () => {
-      try {
-        const credentials = {
-          username: usernameValue,
-          password: passwordValue
-        };
-
-        const response = await axios.post('http://127.0.0.1:8080/login', credentials, {
-          responseType: 'json',
-        });
-
-        if (response.status === 200) {
-
-        const authorizationHeader = response.headers.authorization;
-
-          if (authorizationHeader) {
-            const token = authorizationHeader.split(' ')[1];
-            localStorage.setItem('token', token);
-          }
-
-          const data = JSON.parse(response.config.data);
-
-          const email = data.username;
-          if (email) {
-            localStorage.setItem('email', email);
-          }
-
-          navigate('/dashboard', { replace: true });
-        } else {
-              handleCloseAlert();
-              setErrorCount(prevCount => prevCount + 1);
-              setAlertMessage(`[${errorCount}] Błąd logowania`);
-              setShowAlert(true);
-            }
-          } catch (error) {
-            handleCloseAlert();
-            setErrorCount(prevCount => prevCount + 1);
-            setAlertMessage(`[${errorCount}] Błędny login lub hasło`);
-            setShowAlert(true);
-          }
+const handleLogin = async () => {
+  try {
+    const credentials = {
+      username: usernameValue,
+      password: passwordValue
     };
+
+    const response = await axios.post('http://127.0.0.1:8080/login', credentials, {
+      responseType: 'json',
+    });
+
+    if (response.status === 200) {
+      const authorizationHeader = response.headers.authorization;
+
+      if (authorizationHeader) {
+        const token = authorizationHeader.split(' ')[1];
+        localStorage.setItem('token', token);
+      }
+
+      const data = JSON.parse(response.config.data);
+      const email = data.username;
+      if (email) {
+        localStorage.setItem('email', email);
+      }
+
+      navigate('/dashboard', { replace: true });
+    } else {
+      handleCloseAlert();
+      setErrorCount(prevCount => prevCount + 1);
+      setAlertMessage(`[${errorCount}] Błąd logowania`);
+      setShowAlert(true);
+    }
+  } catch (error) {
+    if (error.isAxiosError && error.response === undefined) {
+      handleCloseAlert();
+      setErrorCount(prevCount => prevCount + 1);
+      setAlertMessage(`[${errorCount}] Brak połączenia z serwerem`);
+      setShowAlert(true);
+    } else {
+      handleCloseAlert();
+      setErrorCount(prevCount => prevCount + 1);
+      setAlertMessage(`[${errorCount}] Błędny login lub hasło`);
+      setShowAlert(true);
+    }
+  }
+};
 
       const handleCloseAlert = () => {
         setShowAlert(false);

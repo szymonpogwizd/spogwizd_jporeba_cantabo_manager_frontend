@@ -38,7 +38,7 @@ export default function Router() {
         { path: 'profiles', element: <ProtectedRoute><Profiles /></ProtectedRoute> },
         { path: 'songManager', element: <ProtectedRoute><SongManager /></ProtectedRoute> },
         { path: 'playlistCreate', element: <ProtectedRoute><PlaylistCreate /></ProtectedRoute> },
-        {path: 'playlist', element: <ProtectedRoute><Playlist/></ProtectedRoute> },
+        { path: 'playlist', element: <ProtectedRoute><Playlist/></ProtectedRoute> },
         { path: 'groups', element: <SuperAdminRoute><Groups /></SuperAdminRoute> },
         { path: 'settings', element: <ProtectedRoute><Settings /></ProtectedRoute> },
         { path: 'contact', element: <ProtectedRoute><Contact /></ProtectedRoute>}
@@ -51,7 +51,7 @@ export default function Router() {
     {
       element: <SimpleLayout />,
       children: [
-        { element: <Navigate to="/dashboard/app" />, index: true },
+        { element: <Navigate to="/login" />, index: true },
         { path: '404', element: <Page404 /> },
         { path: '403', element: <Page403 /> },
         { path: '*', element: <Navigate to="/404" /> },
