@@ -138,7 +138,7 @@ return (
         sx={{
           width: "100%",
           bgcolor: "background.paper",
-          height: "50vh",
+          height: "46vh",
           overflow: "auto",
         }}
       >

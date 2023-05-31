@@ -289,7 +289,7 @@ export default function Profiles() {
             <Box
               sx={{
                 width: "100%",
-                height: "61.4vh",
+                height: "48vh",
                 overflow: "auto",
               }}
             >
