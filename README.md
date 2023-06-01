@@ -10,6 +10,8 @@
 
 - Szablon strony: https://www.figma.com/proto/iwI1gZzRM3w42Z4F1IGOh5/Cantabo-Manager?node-id=49-1019&scaling=contain&page-id=0%3A1&starting-point-node-id=49%3A1019&show-proto-sidebar=1 <br>
 
+- Dokumentacja uruchomienia aplikacji: https://github.com/szymonpogwizd/spogwizd_jporeba_cantabo_manager_frontend/blob/main/LaunchDocumentation.md <br>
+
 ### Autorzy: 
 - Szymon Pogwizd 
 - Jakub Poręba
