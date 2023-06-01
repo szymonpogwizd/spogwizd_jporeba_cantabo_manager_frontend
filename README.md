@@ -6,7 +6,7 @@
 
 - Backend: https://github.com/szymonpogwizd/spogwizd_jporeba_cantabo_manager <br>
 
-- Dokumentacja: https://github.com/szymonpogwizd/spogwizd_jporeba_cantabo_manager_frontend/blob/main/Documentation.pdf <br> <br>
+- Dokumentacja: https://github.com/szymonpogwizd/spogwizd_jporeba_cantabo_manager_frontend/blob/main/Documentation.pdf <br>
 
 - Szablon strony: https://github.com/szymonpogwizd/spogwizd_jporeba_cantabo_manager_frontend/blob/main/PageTemplate.pdf <br>
 
